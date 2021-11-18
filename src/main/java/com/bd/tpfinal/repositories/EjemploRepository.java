@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 //@Repository
 public interface EjemploRepository
-        //extends CrudRepository<Long, Object>
+        //extends Repository<Long, Object>
     {
 
     /*
