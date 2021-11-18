@@ -1,44 +1,111 @@
 package com.bd.tpfinal.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "item")
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_item", unique = true, updatable = false)
+    private Long id;
 
+    @Column(nullable = false)
     private int quantity;
 
+    @Column(length = 500)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_order", nullable = false)
     private Order order;
 
+  //  @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
-    public int getQuantity() {
-        return quantity;
-    }
+    @Version
+    @Column(name = "version")
+    private int version;
 
+    public Item() {}
+
+    public Item(int quantity, String description, Product product) {
+        this.quantity = quantity;
+        this.description = description;
+        this.product = product;
+    }
+    /**
+     * Getter.
+     *
+     * @return el producto.
+     */
+    public Supplier getProductSupplier() {
+        Supplier productSupplier= this.product.getSupplier();
+        return productSupplier;
+    }
+    /**
+     * Getter.
+     *
+     * @return la cantidad del item.
+     */
+    public int getQuantity() {
+        return this.quantity;
+    }
+    /**
+     * Setter.
+     *
+     * @param quantity es la cantidad del item.
+     */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
+    /**
+     * Getter.
+     *
+     * @return la descripción del item.
+     */
     public String getDescription() {
-        return description;
+        return this.description;
     }
-
+    /**
+     * Setter.
+     *
+     * @param description es la descripción del item.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
     public Order getOrder() {
-        return order;
+        return this.order;
     }
 
     public void setOrder(Order order) {
-        this.order = order;
+        this.order  = order;
     }
 
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

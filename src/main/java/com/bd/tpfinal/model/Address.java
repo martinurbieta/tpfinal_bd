@@ -1,59 +1,143 @@
 package com.bd.tpfinal.model;
 
-import java.util.List;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "address")
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_address", unique = true, updatable = false)
+    private Long id;
 
+    @Column(length = 500)
     private String name;
 
+    @Column(length = 500)
     private String address;
 
+    @Column(length = 500)
     private String apartment;
 
-    private float[] coords;
+    @Column(name = "coord_x",nullable = false)
+    private float coordX;
 
+    @Column(name = "coord_y",nullable = false)
+    private float coordY;
+
+    @Column(length = 500)
     private String description;
 
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    private List<Order> orders;
+    @Version
+    @Column(name = "version")
+    private int version;
 
-    public String getName() {
-        return name;
+    public Address(){}
+
+    public Address(String name, String address, String apartment, float coordX, float coordY, String description){
+        this.name=name;
+        this.address=address;
+        this.apartment=apartment;
+        this.coordX=coordX;
+        this.coordY=coordY;
+        this.description=description;
     }
-
+    /**
+     * Getter.
+     *
+     * @return el nombre de la dirección.
+     */
+    public String getName() {return this.name;}
+    /**
+     * Setter.
+     *
+     * @param name es el nombre de la dirección.
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * Getter.
+     *
+     * @return el domicilio dirección.
+     */
     public String getAddress() {
         return address;
     }
-
+    /**
+     * Setter.
+     *
+     * @param address es el domicilio de la dirección.
+     */
     public void setAddress(String address) {
         this.address = address;
     }
-
+    /**
+     * Getter.
+     *
+     * @return el departamento de la dirección.
+     */
     public String getApartment() {
         return apartment;
     }
-
+    /**
+     * Setter.
+     *
+     * @param apartment es el departamento de la dirección.
+     */
     public void setApartment(String apartment) {
         this.apartment = apartment;
     }
-
-    public float[] getCoords() {
-        return coords;
+    /**
+     * Getter.
+     *
+     * @return las coordenadas X de la dirección.
+     */
+    public float getCoordX() {
+        return coordX;
     }
-
-    public void setCoords(float[] coords) {
-        this.coords = coords;
+    /**
+     * Setter.
+     *
+     * @param coordX es el arreglo de las coordenadas X de la dirección.
+     */
+    public void setCoordX(float coordX) {
+        this.coordX = coordX;
     }
-
+    /**
+     * Getter.
+     *
+     * @return las coordenadas Y de la dirección.
+     */
+    public float getCoordY() {
+        return coordY;
+    }
+    /**
+     * Setter.
+     *
+     * @param coordY es el arreglo de las coordenadas Y de la dirección.
+     */
+    public void setCoordY(float coordY) {
+        this.coordY = coordY;
+    }
+    /**
+     * Getter.
+     *
+     * @return la descripción de la dirección.
+     */
     public String getDescription() {
         return description;
     }
-
+    /**
+     * Setter.
+     *
+     * @param description es la descripción de la dirección.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
@@ -66,11 +150,15 @@ public class Address {
         this.client = client;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public int getVersion() {
+        return version;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
