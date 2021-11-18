@@ -31,7 +31,7 @@ La utilización de contenedores Docker es opcional.
 
 El modelo a persistir se trata de un sistema de delivery similar a soluciones existentes en el mercado (como PedidosYa, Rappi, etc.). Dicho modelo posee el siguiente diagrama de clases:
 
-INSERTAR UML
+![Diagrama de clases](https://github.com/fedediclaudio/tpfinal_bd/blob/main/Diragrama%20de%20clases.png)
 
 La aplicación dispone de un conjunto de usuarios (*User*) que pueden ser de dos tipos: repartidores (*DeliveryMan*), los cuales se encargan de llevar los pedidos generados por, el segundo tipo de usuarios, los clientes (*Client*). Cada usuario posee, además de ciertos datos propios del usuario, un atributo que determina si está activo (*active*) en el sistema, así como también un puntaje (*score*). Este puntaje se calcula de diferente manera dependiendo del tipo de usuario: un cliente suma un punto por cada pedido finalizado y resta un punto cuando cancela uno ya confirmado y asignado; un repartidor suma un punto cuando completa una entrega mientras que resta dos puntos cuando rechaza un pedido que le fue asignado.
 
@@ -39,7 +39,7 @@ Cada cliente posee un conjunto de direcciones (*Address*) guardadas en el sistem
 
 Las órdenes (*Order*) poseen, además de sus datos básicos, un estado (*OrderState*), que irá cambiando a medida que la entrega avanza. Este estado, define el comportamiento dinámico ante las diferentes acciones que los usuarios pueden realizar sobre un pedido. Inicialmente, el estado del pedido será pendiente (*Pending*). Una vez confirmado por el cliente, el pedido se asigna a un repartidor libre y pasa a un estado de asignado (*Assigned*). Dicho repartidor puede rechazar el pedido (descontando su puntaje), en cuyo caso el estado pasa a un estado de cancelado (*Cancelled*), o puede aceptarlo y comenzar con el reparto del mismo, así este último pasa a un estado de en proceso (*Sent*). Una vez entregado, el pedido pasa a un estado de finalizado (*Finished*) y se actualizan los puntajes. Antes de que el pedido fuera aceptado por el repartidor, este puede ser cancelado por el cliente en cualquier momento, llevándolo a un estado de cancelado (*Cancelled*). El siguiente diagrama muestra de una manera gráfica la transición de estados de un pedido:
 
-INSERTAR ESTADOS
+![Estados](https://github.com/fedediclaudio/tpfinal_bd/blob/main/State.png)
 
 Cada orden se compone de una serie de items (*Item*), cada uno se trata de un producto solicitado con una cantidad del mismo. Opcionalmente el cliente puede agregar una descripción o aclaración sobre el producto ordenado.
 
