@@ -1,14 +1,13 @@
 package com.bd.tpfinal.model;
 
-public class Cancel extends OrderStatus{
+import java.util.Date;
 
-    private boolean cancelledByClient;
+public class Cancelled extends OrderStatus{
 
-    public boolean isCancelledByClient() {
-        return cancelledByClient;
-    }
+    public Cancelled() {}
 
-    public void setCancelledByClient(boolean cancelledByClient) {
-        this.cancelledByClient = cancelledByClient;
-    }
+    public Cancelled(Order order) {super(order, "Cancelled");}
+
+    public Cancelled(Order order, Date startDate) {super(order, "Cancelled", startDate);}
+
 }

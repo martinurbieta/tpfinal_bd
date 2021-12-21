@@ -1,14 +1,30 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+import java.util.Calendar;
 import java.util.Date;
 
+@Embeddable
 public abstract class OrderStatus {
 
+    @Column(name = "state")
     private String name;
 
+    @Column(name = "state_start_date")
     private Date startDate;
 
+    @Transient
     private Order order;
+
+    public OrderStatus(){}
+
+    public OrderStatus(Order order, String name) {
+        this.name = name;
+        this.order = order;
+        this.startDate = Calendar.getInstance().getTime();
+    }
 
     public String getName() {
         return name;
@@ -24,6 +40,14 @@ public abstract class OrderStatus {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public boolean canAddItem() { return false; }
@@ -62,11 +86,30 @@ public abstract class OrderStatus {
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public Order getOrder() {
-        return order;
-    }
+    //
+//    /*
+//     * Debido a la incompatibilidad de Hibernet y JPA con embebeber la clases hijas, una solucion es instanciar
+//     * el estado de manera manual.
+//     * La clase que se recupera, si bien es un OrderStatus, no es una clase concreta.
+//     */
+//    public void setStatusByName(){
+//        switch (orderStatus.getName()){
+//            case "Pending":
+//                this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate()));
+//                break;
+//            case "Assigned":
+//                this.setOrderStatus(new Assigned(this, this.orderStatus.getStartDate()));
+//                break;
+//            case "Sent":
+//                this.setOrderStatus(new Sent(this, this.orderStatus.getStartDate()));
+//                break;
+//            case "Delivered":
+//                this.setOrderStatus(new Delivered(this, this.orderStatus.getStartDate()));
+//                break;
+//            case "Cancelled":
+//                this.setOrderStatus(new Cancelled(this, this.orderStatus.getStartDate()));
+//                break;
+//        }
+//    }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

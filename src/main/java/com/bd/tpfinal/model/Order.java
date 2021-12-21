@@ -1,29 +1,57 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "order_")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_order", unique = true, updatable = false)
     private int number;
 
+    @Column(nullable = false, updatable = false)
     private Date dateOfOrder;
 
+    @Column(length = 500)
     private String comments;
 
+    @Column(nullable = false)
     private float totalPrice;
 
+    @Embedded
     private OrderStatus status;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_delivery_man", nullable = true)
     private DeliveryMan deliveryMan;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
+    @Column(nullable = false, length = 100)
     private Address address;
-
+//no me queda claro como implementar qualifications en JPA.
     private Qualification qualification;
-
+//Idem
     private List<Item> items;
+
+    public Order(){}
+
+    public Order(Date dateOfOrder, String address, String comments, float coordX, float coordY,  float totalPrice, Client client){
+        this.dateOfOrder = dateOfOrder;
+   //     this.address = address;
+        this.comments = comments;
+   //     this.coordX = coordX; tiene que ir a Adresss
+   //     this.coordY = coordY; tiene que ir a Address
+        this.totalPrice = totalPrice;
+  //      this.client = client;
+  //      this.deliveryMan = null;
+  //      this.orderStatus = new Pending(this);
 
     public int getNumber() {
         return number;
@@ -104,4 +132,5 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
 }
