@@ -42,36 +42,23 @@ public class Order {
 
     public Order(){}
 
-    public Order(Date dateOfOrder, String address, String comments, float coordX, float coordY,  float totalPrice, Client client){
+    public Order(Date dateOfOrder, String address, String comments, float totalPrice, Client client){
         this.dateOfOrder = dateOfOrder;
-   //     this.address = address;
         this.comments = comments;
-   //     this.coordX = coordX; tiene que ir a Adresss
-   //     this.coordY = coordY; tiene que ir a Address
         this.totalPrice = totalPrice;
   //      this.client = client;
   //      this.deliveryMan = null;
   //      this.orderStatus = new Pending(this);
 
-    public int getNumber() {
-        return number;
-    }
+    public int getNumber() {return number;}
 
-    public void setNumber(int number) {
-        this.number = number;
-    }
+    public void setNumber(int number) {this.number = number;}
 
-    public Date getDateOfOrder() {
-        return dateOfOrder;
-    }
+    public Date getDateOfOrder() {return dateOfOrder;}
 
-    public void setDateOfOrder(Date dateOfOrder) {
-        this.dateOfOrder = dateOfOrder;
-    }
+    public void setDateOfOrder(Date dateOfOrder) {this.dateOfOrder = dateOfOrder;}
 
-    public String getComments() {
-        return comments;
-    }
+    public String getComments() {return comments;}
 
     public void setComments(String comments) {
         this.comments = comments;
