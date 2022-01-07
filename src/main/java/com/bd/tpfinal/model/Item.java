@@ -1,13 +1,21 @@
 package com.bd.tpfinal.model;
 
+@Entity
+@Table(name = "item")
 public class Item {
 
+    @Column(nullable = false)
     private int quantity;
 
+    @Column(length = 500)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_order", nullable = false)
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
     public int getQuantity() {

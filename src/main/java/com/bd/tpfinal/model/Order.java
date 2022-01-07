@@ -25,19 +25,23 @@ public class Order {
     @Embedded
     private OrderStatus status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_delivery_man", nullable = true)
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
     @Column(nullable = false, length = 100)
     private Address address;
-//no me queda claro como implementar qualifications en JPA.
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_qualification", referencedColumnName = "id")
     private Qualification qualification;
-//Idem
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Item> items;
 
     public Order(){}

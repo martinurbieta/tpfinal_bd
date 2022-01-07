@@ -22,15 +22,19 @@ public class Address {
     @Column(length = 500)
     private String apartment;
 
-    @Column(length = 500)
+    @Column(nullable = false)
     private float[] coords;
 
     @Column(length = 500)
     private String description;
 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
     private List<Order> orders;
 
     public Address(){}
@@ -39,7 +43,7 @@ public class Address {
         this.name=name;
         this.address=address;
         this.apartment=apartment;
-        this.coords=[coordX,coordY]; // new array?
+        this.coords=[coordX,coordY]; 
         this.description=description;
     }
     /**

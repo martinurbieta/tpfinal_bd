@@ -4,18 +4,31 @@ import java.util.List;
 
 public class Supplier {
 
+    @Column(nullable = false, updatable = true, length = 50)
     private String name;
 
+    @Column(nullable = false, updatable = true, length = 13)
     private String cuil;
 
+    @Column(length = 50)
     private String address;
 
+    @Column
     private float[] coords;
 
-    private float qualificationOfUsers;
+    @Column
+    private float qualification;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Product> products;
 
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "Supplier_SupplierType", 
+        joinColumns = { @JoinColumn(name = "id_product") }, 
+        inverseJoinColumns = { @JoinColumn(name = "id_supplier_type") }
+    )
     private SupplierType type;
 
     public String getName() {

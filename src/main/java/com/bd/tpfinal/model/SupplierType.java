@@ -4,10 +4,14 @@ import java.util.List;
 
 public class SupplierType {
 
+    @Column(nullable = false, length = 50, updatable=true)
     private String name;
 
+    @Column(length = 500, updatable=true)
     private String description;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier_type", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Supplier> suppliers;
 
     public String getName() {

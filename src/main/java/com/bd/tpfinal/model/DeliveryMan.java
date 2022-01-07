@@ -31,15 +31,14 @@ public class DeliveryMan extends User{
         this.numberOfSuccess = 0;
         this.free = true;
         this.dateOfAdmission = Calendar.getInstance().getTime();
-   //     this.actualOrders = new ArrayList<>();
     }
     public int getNumberOfSuccess() {
       return numberOfSuccess;
-        }
+    }
 
     public void setNumberOfSuccess(int numberOfSuccess) {
         this.numberOfSuccess = numberOfSuccess;
-        }
+    }
 
     public boolean isFree() {
         return free;
@@ -65,23 +64,5 @@ public class DeliveryMan extends User{
         this.ordersPending = ordersPending;
     }
 
-//    public void addnumberOfSuccess(){ this.numberOfSuccess++; }
-//
-//    public List<Order> getActualOrders() {
-//        return actualOrders;
-//    }
-//
-//    public void setActualOrders(List<Order> actualOrders) {
-//        this.actualOrders = actualOrders;
-//    }
-//
-//    public void addOrder(Order order) {
-//        this.actualOrders.add(order);
-//    }
-//
-//    public void deleteOrder(Order order) { this.actualOrders.remove(order); }
-//
-//    public boolean finishOrder(Order order){
-//        return this.actualOrders.remove(order);
-//    }
+    public void addnumberOfSuccess(){ this.numberOfSuccess++; }
 }

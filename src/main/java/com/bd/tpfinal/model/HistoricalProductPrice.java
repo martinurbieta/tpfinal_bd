@@ -4,12 +4,17 @@ import java.util.Date;
 
 public class HistoricalProductPrice {
 
+    @Column(nullable = false, updatable = false)
     private float price;
 
+    @Column(nullable = false, updatable = false)
     private Date startDate;
 
+    @Column(nullable = false, updatable = false)
     private Date finishDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
     public float getPrice() {

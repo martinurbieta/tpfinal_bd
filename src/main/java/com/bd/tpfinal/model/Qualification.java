@@ -2,10 +2,13 @@ package com.bd.tpfinal.model;
 
 public class Qualification {
 
+    @Column(nullable = false, updatable = false)
     private float score;
 
+    @Column(length = 500, updatable=false)
     private String commentary;
 
+    @OneToOne(mappedBy = "qualification")
     private Order order;
 
     public float getScore() {

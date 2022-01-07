@@ -4,10 +4,14 @@ import java.util.List;
 
 public class ProductType {
 
+    @Column(nullable = false, length = 50, updatable=true)
     private String name;
 
+    @Column(length = 500, updatable=true)
     private String description;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product_type", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Product> products;
 
     public String getName() {

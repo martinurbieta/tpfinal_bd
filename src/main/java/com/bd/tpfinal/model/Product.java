@@ -4,17 +4,29 @@ import java.util.List;
 
 public class Product {
 
+    @Column(nullable = false, length = 50, updatable=true)
     private String name;
 
+    @Column(nullable = false, updatable=true)
     private float price;
 
+    @Column(updatable=true)
     private float weight;
 
+    @Column(length = 500, updatable=true)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
-    private ProductType type;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "Product_ProductType", 
+        joinColumns = { @JoinColumn(name = "id_product") }, 
+        inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
+    )
+    private List<ProductType> types;
 
     private List<HistoricalProductPrice> prices;
 
