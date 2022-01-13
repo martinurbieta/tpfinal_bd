@@ -33,7 +33,8 @@ public class Order {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @Column(nullable = false, length = 100)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_order", nullable = false)
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -41,12 +42,13 @@ public class Order {
     private Qualification qualification;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "order_", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Item> items;
 
     public Order(){}
 
-    public Order(Date dateOfOrder, String address, String comments, float totalPrice, Client client){
+    public Order(Date dateOfOrder, String comments, float totalPrice){
+    }
         this.dateOfOrder = dateOfOrder;
         this.comments = comments;
         this.totalPrice = totalPrice;

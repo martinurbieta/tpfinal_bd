@@ -1,8 +1,19 @@
 package com.bd.tpfinal.model;
+import com.sun.tools.javac.comp.Resolve;
 
+import javax.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "product")
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_product", unique = true, updatable = false)
+    private int id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -24,40 +35,86 @@ public class Product {
     @JoinTable(
         name = "Product_ProductType", 
         joinColumns = { @JoinColumn(name = "id_product") }, 
-        inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
+        inverseJoinColumns = { @JoinColumn(name = "id_productType") }
     )
-    private List<ProductType> types;
+    private List<ProductType> productType;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<HistoricalProductPrice> prices;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Item> item;
+
+    public Product(){}
+
+    public Product(String name, float price, float weight, String description){
+    }
+        this.name = name;
+        this.price=price;
+        this.weight=weight
+        this.description = description;
+
+    /**
+     * Getter.
+     *
+     * @return el nombre del producto.
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * Setter.
+     *
+     * @param name es el nombre del producto.
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * Getter.
+     *
+     * @return el precio del producto.
+     */
     public float getPrice() {
         return price;
     }
-
+    /**
+     * Setter.
+     *
+     * @param price es el precio del producto.
+     */
     public void setPrice(float price) {
         this.price = price;
     }
-
+    /**
+     * Getter.
+     *
+     * @return el peso del producto.
+     */
     public float getWeight() {
         return weight;
     }
-
+    /**
+     * Setter.
+     *
+     * @param weight es el peso del producto.
+     */
     public void setWeight(float weight) {
         this.weight = weight;
     }
-
+    /**
+     * Getter.
+     *
+     * @return la descripción del producto.
+     */
     public String getDescription() {
         return description;
     }
-
+    /**
+     * Setter.
+     *
+     * @param description es la descripción del producto.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
@@ -71,11 +128,11 @@ public class Product {
     }
 
     public ProductType getType() {
-        return type;
+        return productType;
     }
 
-    public void setType(ProductType type) {
-        this.type = type;
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
 
     public List<HistoricalProductPrice> getPrices() {

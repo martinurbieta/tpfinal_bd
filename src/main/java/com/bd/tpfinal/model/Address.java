@@ -43,7 +43,7 @@ public class Address {
         this.name=name;
         this.address=address;
         this.apartment=apartment;
-        this.coords=[coordX,coordY]; 
+        this.coords=[coordX,coordY]; //se puede implementar como Supplier.
         this.description=description;
     }
     /**
