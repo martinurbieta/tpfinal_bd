@@ -33,9 +33,9 @@ public class Product {
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-        name = "Product_ProductType", 
+        name = "product_product_type", 
         joinColumns = { @JoinColumn(name = "id_product") }, 
-        inverseJoinColumns = { @JoinColumn(name = "id_productType") }
+        inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
     )
     private List<ProductType> productType;
 

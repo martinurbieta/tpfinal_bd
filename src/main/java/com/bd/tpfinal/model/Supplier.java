@@ -36,7 +36,7 @@ public class Supplier {
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-        name = "Supplier_SupplierType", 
+        name = "supplier_supplier_type", 
         joinColumns = { @JoinColumn(name = "id_product") }, 
         inverseJoinColumns = { @JoinColumn(name = "id_supplier_type") }
     )

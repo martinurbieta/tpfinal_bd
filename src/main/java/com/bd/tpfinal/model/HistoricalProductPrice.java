@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "historicalProductPrice")
+@Table(name = "historical_product_price")
 public class HistoricalProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_historicalProductPrice", unique = true, updatable = false)
+    @Column(name = "id_historical_product_price", unique = true, updatable = false)
     private int id;
 
     @Column(nullable = false, updatable = false)

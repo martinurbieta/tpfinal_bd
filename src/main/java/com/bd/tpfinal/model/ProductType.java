@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "productType")
+@Table(name = "product_type")
 public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_productType", unique = true, updatable = false)
+    @Column(name = "id_product_type", unique = true, updatable = false)
     private int id;
 
     @Column(nullable = false, length = 50, updatable=true)
@@ -21,7 +21,7 @@ public class ProductType {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "product_type", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Product> products;
 
     public ProductType(){}

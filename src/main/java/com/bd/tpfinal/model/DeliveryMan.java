@@ -21,7 +21,7 @@ public class DeliveryMan extends User{
     private Date dateOfAdmission;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "deliveryMan", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "delivery_man", fetch = FetchType.LAZY)
     private List<Order> ordersPending;
 
     public DeliveryMan(){}
