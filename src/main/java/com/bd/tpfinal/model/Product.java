@@ -48,12 +48,12 @@ public class Product {
     public Product(){}
 
     public Product(String name, float price, float weight, String description){
-    }
+
         this.name = name;
         this.price=price;
-        this.weight=weight
+        this.weight=weight;
         this.description = description;
-
+    }
     /**
      * Getter.
      *

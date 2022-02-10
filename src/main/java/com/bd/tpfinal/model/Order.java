@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -45,16 +47,17 @@ public class Order {
     @OneToMany(mappedBy = "order_", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Item> items;
 
-    public Order(){}
-
-    public Order(Date dateOfOrder, String comments, float totalPrice){
+    public Order() {
     }
-        this.dateOfOrder = dateOfOrder;
-        this.comments = comments;
-        this.totalPrice = totalPrice;
-  //      this.client = client;
-  //      this.deliveryMan = null;
-  //      this.orderStatus = new Pending(this);
+
+    public Order(Date dateOfOrder, String comments, float totalPrice) {
+        this.dateOfOrder =dateOfOrder;
+        this.comments =comments;
+        this.totalPrice =totalPrice;
+    //      this.client = client;
+    //      this.deliveryMan = null;
+    //      this.orderStatus = new Pending(this);
+    }
 
     public int getNumber() {return number;}
 

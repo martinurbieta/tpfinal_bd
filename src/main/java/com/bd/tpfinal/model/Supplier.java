@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.tools.javac.comp.Resolve;
 
 import java.util.List;
@@ -25,7 +26,10 @@ public class Supplier {
     private String address;
 
     @Column
-    private float[] coords;
+    private float coordX;
+
+    @Column
+    private float coordY;
 
     @Column
     private float qualificationOfUsers;
@@ -44,14 +48,15 @@ public class Supplier {
 
     public Supplier(){}
 
-    public Supplier(String name,String cuil, String address, float[] coords,float qualificationOfUsers){
-    }
+    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers){
+
         this.name  = name;
         this.cuil =cuil; //debería ser CUIT.
         this.address = address;
-        this.coords= coords
+        this.coordX=coordX;
+        this.coordY=coordY;
         this.qualificationOfUsers  = qualificationOfUsers;
-
+    }
     /**
      * Getter.
      *
@@ -104,19 +109,40 @@ public class Supplier {
     /**
      * Getter.
      *
-     * @return el las coordenadas de la ubicación del proveedor.
+     * @return las coordenadas X de la dirección del proveedor.
      */
-    public float[] getCoords() {
-        return coords;
+    public float getCoordX() {
+        return coordX;
     }
     /**
      * Setter.
      *
-     * @param coords son las coordenadas de la ubicación del proveedor.
+     * @param coordX es el arreglo de las coordenadas X de la dirección del proveedor.
      */
-    public void setCoords(float[] coords) {
-        this.coords = coords;
+    public void setCoordX(float coordX) {
+        this.coordX = coordX;
     }
+    /**
+     * Getter.
+     *
+     * @return las coordenadas Y de la dirección del proveedor.
+     */
+    public float getCoordY() {
+        return coordY;
+    }
+    /**
+     * Setter.
+     *
+     * @param coordY es el arreglo de las coordenadas Y de la dirección del proveedor.
+     */
+    public void setCoordY(float coordY) {
+        this.coordY = coordY;
+    }
+    /**
+     * Getter.
+     *
+     * @return la descripción de la dirección.
+     */
     /**
      * Getter.
      *

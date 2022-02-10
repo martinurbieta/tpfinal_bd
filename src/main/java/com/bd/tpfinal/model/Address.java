@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,7 +25,10 @@ public class Address {
     private String apartment;
 
     @Column(nullable = false)
-    private float[] coords;
+    private float coordX;
+
+    @Column(nullable = false)
+    private float coordY;
 
     @Column(length = 500)
     private String description;
@@ -43,7 +48,8 @@ public class Address {
         this.name=name;
         this.address=address;
         this.apartment=apartment;
-        this.coords=[coordX,coordY]; //se puede implementar como Supplier.
+        this.coordX=coordX;
+        this.coordY=coordY;
         this.description=description;
     }
     /**
@@ -95,18 +101,34 @@ public class Address {
     /**
      * Getter.
      *
-     * @return las coordenadas de la dirección.
+     * @return las coordenadas X de la dirección.
      */
-    public float[] getCoords() {
-        return coords;
+    public float getCoordX() {
+        return coordX;
     }
     /**
      * Setter.
      *
-     * @param coords es el arreglo de las coordenadas X, Y de la dirección.
+     * @param coordX es el arreglo de las coordenadas X de la dirección.
      */
-    public void setCoords(float[] coords) {
-        this.coords = coords;
+    public void setCoordX(float coordX) {
+        this.coordX = coordX;
+    }
+    /**
+     * Getter.
+     *
+     * @return las coordenadas Y de la dirección.
+     */
+    public float getCoordY() {
+        return coordY;
+    }
+    /**
+     * Setter.
+     *
+     * @param coordY es el arreglo de las coordenadas Y de la dirección.
+     */
+    public void setCoordY(float coordY) {
+        this.coordY = coordY;
     }
     /**
      * Getter.

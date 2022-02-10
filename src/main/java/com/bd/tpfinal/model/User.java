@@ -35,7 +35,7 @@ public abstract class User {
 
     protected User(){}
 
-    protected User(String name, String email, String username, String password, Date dateOfBirth){
+    protected User(String name, String email, String username, String password, Date dateOfBirth) {
         this.name = name;
         this.email = email;
         this.username = username;
@@ -43,7 +43,7 @@ public abstract class User {
         this.dateOfBirth = dateOfBirth;
         this.score = 0;
         this.active = true;
-
+    }
     public String getName() {return name;}
 
     public void setName(String name) {this.name = name;}

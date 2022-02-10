@@ -27,10 +27,10 @@ public class Qualification {
     public Qualification(){}
 
     public Qualification(float score, String commentary){
-    }
+
         this.score = score;
         this.commentary  = commentary;
-
+    }
     /**
      * Getter.
      *

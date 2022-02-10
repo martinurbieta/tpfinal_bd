@@ -1,5 +1,7 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import javax.persistence.*;
 
@@ -27,10 +29,10 @@ public class ProductType {
     public ProductType(){}
 
     public ProductType(String name, String description){
-    }
+
         this.name = name;
         this.description = description;
-
+    }
     /**
      * Getter.
      *
