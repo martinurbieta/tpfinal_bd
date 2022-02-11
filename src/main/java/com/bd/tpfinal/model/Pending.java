@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.utils.DeliveryException;
 
 import javax.persistence.Embeddable;
 import java.util.Date;

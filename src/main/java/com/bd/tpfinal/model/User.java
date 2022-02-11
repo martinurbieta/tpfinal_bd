@@ -44,7 +44,9 @@ public abstract class User {
         this.score = 0;
         this.active = true;
     }
+    public String getID() {return id;}
     public String getName() {return name;}
+
 
     public void setName(String name) {this.name = name;}
 

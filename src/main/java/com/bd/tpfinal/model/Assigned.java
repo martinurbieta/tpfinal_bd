@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.Embeddable;
 import java.util.Date;
+import com.bd.tpfinal.utils.DeliveryException;
 
 @Embeddable
 public class Assigned extends OrderStatus{

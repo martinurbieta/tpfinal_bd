@@ -1,13 +1,17 @@
-package com.bd.tpfinal.model;
+package com.bd.delivery.model;
 
+import com.bd.tpfinal.model.*;
+
+import javax.persistence.Embeddable;
 import java.util.Date;
 
-public class Cancelled extends OrderStatus{
+@Embeddable
+public class Cancel extends OrderStatus {
 
-    public Cancelled() {}
+    public Cancel() {}
 
-    public Cancelled(Order order) {super(order, "Cancelled");}
+    public Cancel(Order order) {super(order, "Cancelled");}
 
-    public Cancelled(Order order, Date startDate) {super(order, "Cancelled", startDate);}
+    public Cancel(Order order, Date startDate) {super(order, "Cancelled", startDate);}
 
 }

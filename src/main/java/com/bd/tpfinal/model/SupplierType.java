@@ -27,10 +27,10 @@ public class SupplierType {
     public SupplierType(){}
 
     public SupplierType(String name,String description){
-    }
+
         this.name  = name;
         this.description = description;
-
+    }
     /**
      * Getter.
      *

@@ -30,11 +30,11 @@ public class HistoricalProductPrice {
     public HistoricalProductPrice(){}
 
     public HistoricalProductPrice(float price, Date startDate,Date finishDate){
-    }
-        this.price  = price;
-        this.startDate =startDate
-        this.finishDate = finishDate;
 
+        this.price  = price;
+        this.startDate =startDate;
+        this.finishDate = finishDate;
+    }
     /**
      * Getter.
      *

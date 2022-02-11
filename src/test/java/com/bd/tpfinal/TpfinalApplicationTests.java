@@ -1,6 +1,7 @@
 package com.bd.tpfinal;
 
 import com.bd.tpfinal.services.DeliveryService;
+import com.bd.tpfinal.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,25 +30,32 @@ class TpfinalApplicationTests {
 
 		@Test
 		void creationGetTest(){
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Date dateDeliveryMan1 = new Date() ;
+
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", new Date(1995, 3, 6));
+			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 
 			assertNotNull(this.service.getClientInfo("clienteuno"));
 			assertEquals(this.service.getClientInfo("clienteuno").getEmail(), "clienteuno@mail.com");
+			assertEquals(this.service.getClientInfo("clienteuno").getDateOfBirth(), dateClient1);
 			assertNull(this.service.getClientInfo("clientedos"));
 
 			assertNotNull(this.service.getDeliveryManInfo("dmuno"));
 			assertEquals(this.service.getDeliveryManInfo("dmuno").getEmail(), "dmuno@mail.com");
+			assertEquals(this.service.getDeliveryManInfo("dmuno").getDateOfBirth(), dateDeliveryMan1);
 			assertNull(this.service.getDeliveryManInfo("dmdos"));
 		}
 
 		@Test
 		void editTest(){
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Date dateDeliveryMan1 = new Date() ;
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", new Date(1995, 3, 6));
+			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 
 			client1.setName("Cliente Unooo");
@@ -65,9 +73,11 @@ class TpfinalApplicationTests {
 
 		@Test
 		void desactiveTest(){
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Date dateDeliveryMan1 = new Date() ;
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", new Date(1995, 3, 6));
+			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 
 			this.service.desactiveClient("clienteuno");
@@ -79,9 +89,10 @@ class TpfinalApplicationTests {
 
 		@Test
 		void orderTest() {
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			Order order = new Order(Calendar.getInstance().getTime(), "Calle 1 n1", "Unos productos", 10,10, 100, client1);
+			Order order = new Order(Calendar.getInstance().getTime(), "No comments please", 2000,client1);
 			this.service.newOrderPending(order);
 			long numberOrder = order.getNumber();
 
@@ -91,7 +102,8 @@ class TpfinalApplicationTests {
 			boolean res1 = this.service.assignOrder(numberOrder);
 			assertFalse(res1);
 
-			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", new Date(1995, 3, 6));
+			Date dateDeliveryMan1 = new Date() ;
+			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 
 			boolean res2 = this.service.assignOrder(numberOrder);
@@ -118,7 +130,7 @@ class TpfinalApplicationTests {
 			}
 
 			assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Delivered");
-			assertEquals(this.service.getDeliveryManInfo("dmuno").getNumberOfSuccessfulOrders(), 1);
+			assertEquals(this.service.getDeliveryManInfo("dmuno").getNumberOfSuccess(), 1);
 			assertEquals(this.service.getDeliveryManInfo("dmuno").getScore(), 1);
 			assertEquals(this.service.getClientInfo("clienteuno").getScore(), 1);
 
@@ -126,9 +138,10 @@ class TpfinalApplicationTests {
 
 		@Test
 		void cancel1Test(){
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			Order order = new Order(Calendar.getInstance().getTime(), "Calle 1 n1", "Unos productos", 10,10, 100, client1);
+			Order order = new Order(Calendar.getInstance().getTime(), "No comments please", 2000,client1);
 			order = this.service.newOrderPending(order);
 			long numberOrder = order.getNumber();
 
@@ -150,9 +163,10 @@ class TpfinalApplicationTests {
 
 		@Test
 		void cancel2Test(){
-			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", new Date(1990, 3, 3));
+			Date dateClient1 = new Date() ;
+			Client client1 = new Client("Cliente Uno", "clienteuno@mail.com", "clienteuno", "1234", dateClient1);
 			this.service.newClient(client1);
-			Order order = new Order(Calendar.getInstance().getTime(), "Calle 1 n1", "Unos productos", 10,10, 100, client1);
+			Order order = new Order(Calendar.getInstance().getTime(), "No comments please", 2000,client1);
 			this.service.newOrderPending(order);
 			long numberOrder = order.getNumber();
 
@@ -194,7 +208,8 @@ class TpfinalApplicationTests {
 			assertEquals(order.getOrderStatus().getClass().getName(), "com.bd.delivery.model.Pending");
 			assertEquals(this.service.getOrderinfo(numberOrder).getNumber(), numberOrder);
 
-			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", new Date(1995, 3, 6));
+			Date dateDeliveryMan1 = new Date() ;
+			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 			this.service.assignOrder(numberOrder);
 
@@ -212,7 +227,7 @@ class TpfinalApplicationTests {
 
 			assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Cancelled");
 			assertEquals(this.service.getDeliveryManInfo("dmuno").getScore(), -2);
-			assertEquals(this.service.getDeliveryManInfo("dmuno").getNumberOfSuccessfulOrders(), 0);
+			assertEquals(this.service.getDeliveryManInfo("dmuno").getNumberOfSuccess(), 0);
 			assertEquals(this.service.getAssignedOrders("dmuno").size(), 0);
 		}
 

@@ -1,6 +1,7 @@
 package com.bd.tpfinal.services;
-
-import com.bd.tpfinal.repositories.EjemploRepository;
+import com.bd.tpfinal.model.*;
+import com.bd.tpfinal.repositories.*;
+import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,6 +179,4 @@ public class DeliveryServiceImpl implements DeliveryService{
         order.finish();
         this.orderRepository.save(order);
     }
-}
-
 }

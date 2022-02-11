@@ -29,10 +29,10 @@ public class Item {
     public Item(){}
 
     public Item(int quantity, String description){
-    }
+
         this.quantity = quantity;
         this.description = description;
-
+    }
     /**
      * Getter.
      *

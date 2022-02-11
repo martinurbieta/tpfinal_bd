@@ -25,7 +25,7 @@ public class Order {
     private float totalPrice;
 
     @Embedded
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_delivery_man", nullable = true)
@@ -50,13 +50,13 @@ public class Order {
     public Order() {
     }
 
-    public Order(Date dateOfOrder, String comments, float totalPrice) {
+    public Order(Date dateOfOrder, String comments, float totalPrice,Client client) {
         this.dateOfOrder =dateOfOrder;
         this.comments =comments;
         this.totalPrice =totalPrice;
-    //      this.client = client;
-    //      this.deliveryMan = null;
-    //      this.orderStatus = new Pending(this);
+        this.client = client;
+        this.deliveryMan = null;
+        this.orderStatus = new Pending(this);
     }
 
     public int getNumber() {return number;}
@@ -121,12 +121,12 @@ public class Order {
         this.items = items;
     }
 
-    public OrderStatus getStatus() {
-        return status;
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public void setStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
 }

@@ -106,8 +106,8 @@ public abstract class OrderStatus {
 //            case "Delivered":
 //                this.setOrderStatus(new Delivered(this, this.orderStatus.getStartDate()));
 //                break;
-//            case "Cancelled":
-//                this.setOrderStatus(new Cancelled(this, this.orderStatus.getStartDate()));
+//            case "Cancel":
+//                this.setOrderStatus(new Cancel(this, this.orderStatus.getStartDate()));
 //                break;
 //        }
 //    }
