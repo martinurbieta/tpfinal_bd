@@ -1,7 +1,6 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.tools.javac.comp.Resolve;
 
 import java.util.List;
 import javax.persistence.*;
@@ -44,11 +43,11 @@ public class Supplier {
         joinColumns = { @JoinColumn(name = "id_product") }, 
         inverseJoinColumns = { @JoinColumn(name = "id_supplier_type") }
     )
-    private SupplierType supplierType;
+    private String supplierType;
 
     public Supplier(){}
 
-    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers){
+    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,SupplierType supplierType){
 
         this.name  = name;
         this.cuil =cuil; //debería ser CUIT.
@@ -56,6 +55,7 @@ public class Supplier {
         this.coordX=coordX;
         this.coordY=coordY;
         this.qualificationOfUsers  = qualificationOfUsers;
+        this.supplierType= supplierType.getName();
     }
     /**
      * Getter.
@@ -169,10 +169,14 @@ public class Supplier {
     }
 
     public SupplierType getSupplierType() {
-        return type;
+        return supplierType;
     }
-
-    public void setSupplierType(SupplierType type) {
-        this.type = type;
+    /**
+     * Setter.
+     *
+     * @param aSupplierTypeName es el nombre del tipo de Proveedor.
+     */
+    public void setSupplierType(SupplierType aSupplierTypeName) {
+        this.supplierType = aSupplierTypeName;
     }
 }

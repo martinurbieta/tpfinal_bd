@@ -1,5 +1,4 @@
 package com.bd.tpfinal.model;
-import com.sun.tools.javac.comp.Resolve;
 
 import javax.persistence.*;
 
