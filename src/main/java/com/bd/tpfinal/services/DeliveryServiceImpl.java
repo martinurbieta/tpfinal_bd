@@ -18,6 +18,25 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
+
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
+
+
     @Override
     @Transactional
     public Client newClient(Client client) {
@@ -115,7 +134,7 @@ public class DeliveryServiceImpl implements DeliveryService{
 //        return DeliveryRoot.getOrderList().stream().filter(order ->
 //                order.getNumber() == number).findAny().orElse(null);
         Order order = this.orderRepository.findById(number).orElse(null);
-        if (order != null) order.setStatusByName();
+  //      if (order != null) order.setStatusByName();
         return order;
     }
 
@@ -129,7 +148,8 @@ public class DeliveryServiceImpl implements DeliveryService{
             try {
                 Order order = this.getOrderinfo(number);
                 deliveryMan.getActualOrders().size(); // Inicializar lista LAZY
-                order.assign(deliveryMan);
+                //order.assign(deliveryMan);
+                order.getOrderStatus().assign(deliveryMan);
                 this.orderRepository.save(order);
                 return true;
             } catch (Exception e) {
@@ -149,10 +169,11 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     @Override
     @Transactional
-    public void acceptOrder(long number) throws DeliveryException {
+    public void deliverOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getDeliveryMan().getActualOrders().size(); // Inicializar lista LAZY
-        order.deliver();
+        //order.deliver();
+        order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
 
@@ -160,7 +181,8 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void refuseOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        order.refuse();
+        //order.refuse();
+        order.getOrderStatus().refuse();
         this.orderRepository.save(order);
     }
 
@@ -168,7 +190,8 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void cancelOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        order.cancel();
+        //order.cancel();
+        order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
 
@@ -176,7 +199,8 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void finishOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        order.finish();
+        //order.finish();
+        order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
 }

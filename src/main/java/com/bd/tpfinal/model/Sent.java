@@ -1,9 +1,14 @@
 package com.bd.tpfinal.model;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
+import com.bd.tpfinal.utils.DeliveryException;
 
-@Embeddable
+//@Embeddable
+@Entity
+@Table(name = "order_status")
 public class Sent extends OrderStatus{
 
     public Sent() {}
@@ -23,7 +28,7 @@ public class Sent extends OrderStatus{
     public void finish() throws DeliveryException {
         this.order.setOrderStatus(new Delivered(this.order));
         this.order.getDeliveryMan().addScore(1);
-        this.order.getDeliveryMan().addNumberOfSuccessfulOrders();
+        this.order.getDeliveryMan().addNumberOfSuccess();
         this.order.getClient().addScore(1);
         this.order.getDeliveryMan().setFree(true);
         this.order.getDeliveryMan().deleteOrder(order);

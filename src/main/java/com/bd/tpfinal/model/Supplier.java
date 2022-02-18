@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -169,7 +170,7 @@ public class Supplier {
     }
 
     public SupplierType getSupplierType() {
-        return supplierType;
+        return this.supplierType;
     }
     /**
      * Setter.
@@ -178,5 +179,31 @@ public class Supplier {
      */
     public void setSupplierType(SupplierType aSupplierTypeName) {
         this.supplierType = aSupplierTypeName;
+    }
+    /**
+     * Updater.
+     *
+     * @Return actualiza la calificación de usuarios.
+     */
+ //   agregar método para actualizar la calificación de proveedor.
+
+    /**
+     * Remover.
+     *
+     * @param product a remover del listado de productos.
+     */
+    public void removeProduct(Product product){
+        this.products.remove(product);
+
+    }
+
+    /**
+     * Adder.
+     *
+     * @param product a agergar del listado de productos.
+     */
+    public void addProduct(Product product){
+        this.products.add(product);
+
     }
 }

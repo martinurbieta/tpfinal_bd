@@ -3,6 +3,8 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,23 +26,27 @@ public class Order {
     @Column(nullable = false)
     private float totalPrice;
 
-    @Embedded
+//    @Embedded
+//    private OrderStatus orderStatus;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_order_status", referencedColumnName = "id") // check "ID"
     private OrderStatus orderStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
     @JoinColumn(name = "id_delivery_man", nullable = true)
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_order", nullable = false)
+    @JoinColumn(name = "id_address", nullable = false)
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_qualification", referencedColumnName = "id")
+    @JoinColumn(name = "id_qualification", referencedColumnName = "id") // check ID.
     private Qualification qualification;
 
     @JsonIgnore
@@ -57,6 +63,7 @@ public class Order {
         this.client = client;
         this.deliveryMan = null;
         this.orderStatus = new Pending(this);
+        this.items=new ArrayList<>();
     }
 
     public int getNumber() {return number;}
@@ -111,6 +118,7 @@ public class Order {
 
     public void setQualification(Qualification qualification) {
         this.qualification = qualification;
+        // agregar método para actualizar proveedor)
     }
 
     public List<Item> getItems() {
@@ -128,5 +136,11 @@ public class Order {
     public void setStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
+    /**
+     * Adder.
+     *
+     * @add item to order.
+     */
+    public void addItem(Item item) {this.items.add(item);}
+    }
 
-}

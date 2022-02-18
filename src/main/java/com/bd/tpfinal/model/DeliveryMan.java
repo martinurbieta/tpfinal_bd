@@ -3,6 +3,7 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,9 +21,12 @@ public class DeliveryMan extends User{
     @Column(nullable = false, updatable = false)
     private Date dateOfAdmission;
 
+    @Column(nullable = false, updatable = false)
+    private Order orderAssigned;
+
     @JsonIgnore
     @OneToMany(mappedBy = "delivery_man", fetch = FetchType.LAZY)
-    private List<Order> ordersPending;
+    private List<Order> actualOrders;
 
     public DeliveryMan(){}
 
@@ -31,6 +35,7 @@ public class DeliveryMan extends User{
         this.numberOfSuccess = 0;
         this.free = true;
         this.dateOfAdmission = Calendar.getInstance().getTime();
+        this.actualOrders = new ArrayList<>();
     }
     public int getNumberOfSuccess() {
       return numberOfSuccess;
@@ -56,13 +61,20 @@ public class DeliveryMan extends User{
         this.dateOfAdmission = dateOfAdmission;
     }
 
-    public List<Order> getOrdersPending() {
-        return ordersPending;
+    public List<Order> getActualOrders() {
+        return actualOrders;
     }
 
-    public void setOrdersPending(List<Order> ordersPending) {
-        this.ordersPending = ordersPending;
-    }
+//    public void setOrdersPending(List<Order> ordersPending) {
+//        this.ordersPending = ordersPending;
+//    }
 
-    public void addnumberOfSuccess(){ this.numberOfSuccess++; }
+    public void addNumberOfSuccess(){ this.numberOfSuccess++; }
+
+    /**
+     * Adder.
+     *
+     * @add order to delivery man.
+     */
+    public void addOrder(Order order) {this.actualOrders.add(order);}
 }

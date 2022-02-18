@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "client")
-public class Client extends User{
+public class  Client extends User{
 
     @Column(updatable = false, nullable = false)
     private Date dateOfRegister;
@@ -54,5 +54,7 @@ public class Client extends User{
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
- //   public void addOrder(Order order) { this.orders.add(order); }
+
+    public void addOrder(Order order) { this.orders.add(order); }
+
 }

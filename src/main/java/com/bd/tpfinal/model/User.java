@@ -44,7 +44,7 @@ public abstract class User {
         this.score = 0;
         this.active = true;
     }
-    public String getID() {return id;}
+    public Long getID() {return id;}
     public String getName() {return name;}
 
 
@@ -71,6 +71,8 @@ public abstract class User {
     public void setActive(boolean active) {this.active = active;}
 
     public int getScore() {return score;}
+
+    public int addScore(int points) {return this.score = this.score + points;}
 
     public void setScore(int score) {this.score = score;}
 }

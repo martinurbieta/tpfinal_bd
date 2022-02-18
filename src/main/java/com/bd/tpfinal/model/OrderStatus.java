@@ -1,12 +1,12 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
-@Embeddable
+//@Embeddable
+@Entity
+@Table(name = "order_status")
 public abstract class OrderStatus {
 
     @Column(name = "state")
@@ -14,6 +14,9 @@ public abstract class OrderStatus {
 
     @Column(name = "state_start_date")
     private Date startDate;
+
+    @Column(name = "cancelled_by_client")
+    private boolean cancelledByClient;
 
     @Transient
     private Order order;
@@ -24,6 +27,7 @@ public abstract class OrderStatus {
         this.name = name;
         this.order = order;
         this.startDate = Calendar.getInstance().getTime();
+        this.cancelledByClient=false;
     }
 
     public String getName() {
