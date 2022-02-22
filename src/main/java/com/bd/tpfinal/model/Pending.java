@@ -2,29 +2,30 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
 
 //@Embeddable
 @Entity
 @Table(name = "order_status")
-public class Pending extends OrderStatus {
+public class Pending extends OrderState {
 
-    public Pending() {
-    }
+    public Pending() {}
 
     public Pending(Order order) {
         super(order, "Pending");
     }
 
-    public Pending(Order order, Date startDate) {
-        super(order, "Pending", startDate);
+//    public Pending(Order order, Date startDate) {super(order, "Pending", startDate);
+//    }
+
+    @Override
+    public boolean canAssign() {
+        return true;
     }
 
     @Override
-    public boolean canAssigned() {
+    public boolean canAddItem() {
         return true;
     }
 
@@ -35,7 +36,7 @@ public class Pending extends OrderStatus {
 
     @Override
     public void assign(DeliveryMan deliveryMan) throws DeliveryException {
-        if (this.canAssigned()) {
+        if (this.canAssign()) {
             deliveryMan.addOrder(this.order);
             deliveryMan.setFree(false);
             this.order.setDeliveryMan(deliveryMan);

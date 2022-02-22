@@ -7,7 +7,7 @@ import java.util.Date;
 //@Embeddable
 @Entity
 @Table(name = "order_status")
-public abstract class OrderStatus {
+public abstract class OrderState {
 
     @Column(name = "state")
     private String name;
@@ -19,11 +19,11 @@ public abstract class OrderStatus {
     private boolean cancelledByClient;
 
     @Transient
-    private Order order;
+    public Order order;
 
-    public OrderStatus(){}
+    public OrderState(){}
 
-    public OrderStatus(Order order, String name) {
+    public OrderState(Order order, String name) {
         this.name = name;
         this.order = order;
         this.startDate = Calendar.getInstance().getTime();
@@ -66,27 +66,27 @@ public abstract class OrderStatus {
 
     public boolean canCancel() { return false; }
 
-    public boolean addItem() throws Exception{
+//    public void addItem() throws Exception{
+//        throw new Exception("No se puede realizarse esta accion");
+//    }
+
+    public void assign(DeliveryMan deliveryMan) throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean assign(DeliveryMan deliveryMan) throws Exception{
+    public void refuse() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean refuse() throws Exception{
+    public void deliver() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean deliver() throws Exception{
+    public void cancel() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 
-    public boolean cancel() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
-    }
-
-    public boolean finish() throws Exception{
+    public void finish() throws Exception{
         throw new Exception("No se puede realizarse esta accion");
     }
 

@@ -1,9 +1,9 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Order {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_order_status", referencedColumnName = "id") // check "ID"
-    private OrderStatus orderStatus;
+    private OrderState orderState;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
     @JoinColumn(name = "id_delivery_man", nullable = true)
@@ -62,7 +62,7 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-        this.orderStatus = new Pending(this);
+        this.orderState = new Pending(this);
         this.items=new ArrayList<>();
     }
 
@@ -129,18 +129,21 @@ public class Order {
         this.items = items;
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public OrderState getOrderStatus() {
+        return orderState;
     }
 
-    public void setStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setOrderStatus(OrderState orderState) {
+        this.orderState = orderState;
     }
     /**
      * Adder.
      *
      * @add item to order.
      */
-    public void addItem(Item item) {this.items.add(item);}
+    public void addItem(Item item) throws DeliveryException {
+        if (this.getOrderStatus().canAddItem()){
+            this.items.add(item);
+        }}
     }
 

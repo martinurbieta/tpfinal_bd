@@ -77,4 +77,11 @@ public class DeliveryMan extends User{
      * @add order to delivery man.
      */
     public void addOrder(Order order) {this.actualOrders.add(order);}
+
+    /**
+     * Remover.
+     *
+     * @remove order from delivery man collection.
+     */
+    public void removeOrder(Order order) {this.actualOrders.remove(order);}
 }

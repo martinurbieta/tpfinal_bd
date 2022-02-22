@@ -2,6 +2,7 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class Product {
         this.price=price;
         this.weight=weight;
         this.description = description;
+        this.productType=new ArrayList<>();;
     }
     /**
      * Getter.
@@ -126,13 +128,18 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public ProductType getType() {
+    public List<ProductType> getType() {
         return productType;
     }
 
-    public void setProductType(ProductType productType) {
+    public void setProductType(List<ProductType> productType) {
         this.productType = productType;
     }
+
+    public void addProductType(ProductType productType) {this.productType.add(productType);}
+
+    public void removeProductType(ProductType productType) {this.productType.remove(productType);}
+
 
     public List<HistoricalProductPrice> getPrices() {
         return prices;

@@ -32,7 +32,7 @@ public interface DeliveryService {
 
     public List<Order> getAssignedOrders(String username);
 
-    public void acceptOrder(long number) throws DeliveryException;
+    public void deliverOrder(long number) throws DeliveryException;
 
     public void refuseOrder(long number) throws DeliveryException;
 

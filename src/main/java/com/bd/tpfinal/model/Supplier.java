@@ -48,7 +48,7 @@ public class Supplier {
 
     public Supplier(){}
 
-    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,SupplierType supplierType){
+    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,String supplierType){
 
         this.name  = name;
         this.cuil =cuil; //debería ser CUIT.
@@ -56,7 +56,7 @@ public class Supplier {
         this.coordX=coordX;
         this.coordY=coordY;
         this.qualificationOfUsers  = qualificationOfUsers;
-        this.supplierType= supplierType.getName();
+        this.supplierType= supplierType;
     }
     /**
      * Getter.
@@ -169,15 +169,15 @@ public class Supplier {
         this.products = products;
     }
 
-    public SupplierType getSupplierType() {
-        return this.supplierType;
+    public String getSupplierType() {
+        return supplierType;
     }
     /**
      * Setter.
      *
      * @param aSupplierTypeName es el nombre del tipo de Proveedor.
      */
-    public void setSupplierType(SupplierType aSupplierTypeName) {
+    public void setSupplierType(String aSupplierTypeName) {
         this.supplierType = aSupplierTypeName;
     }
     /**
