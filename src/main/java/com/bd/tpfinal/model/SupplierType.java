@@ -3,10 +3,7 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
-import java.util.List;
 import javax.persistence.*;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "supplierType")

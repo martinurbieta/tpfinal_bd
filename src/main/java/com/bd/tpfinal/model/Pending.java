@@ -2,13 +2,12 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Date;
 
-//@Embeddable
-@Entity
-@Table(name = "order_status")
-public class Pending extends OrderState {
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class Pending extends OrderStatus {
 
     public Pending() {}
 
@@ -16,8 +15,10 @@ public class Pending extends OrderState {
         super(order, "Pending");
     }
 
-//    public Pending(Order order, Date startDate) {super(order, "Pending", startDate);
-//    }
+    public Pending(OrderStatus orderStatus) {
+        super(orderStatus.getOrder(), orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+    }
+    public Pending(Order order, Date startDate) {super(order, "Pending", startDate); }
 
     @Override
     public boolean canAssign() {
@@ -49,7 +50,7 @@ public class Pending extends OrderState {
     @Override
     public void cancel() throws DeliveryException {
         if (this.canCancel()) {
-            this.order.setOrderStatus(new Cancel(this.order));
+            this.order.setOrderStatus(new Cancelled(this.order));
             this.order.getClient().addScore(0); // Pending no penaliza al cliente. Un pedido esta confirmado cuando esta confirmado cuando se asigna repartirdor (segundo bullet)."Resta un punto cuando cancela uno ya confirmado y asignado".
         } else {
             throw new DeliveryException("The order can't be cancelled");

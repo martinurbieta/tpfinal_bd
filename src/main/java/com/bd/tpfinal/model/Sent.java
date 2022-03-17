@@ -8,7 +8,7 @@ import com.bd.tpfinal.utils.DeliveryException;
 //@Embeddable
 @Entity
 @Table(name = "order_status")
-public class Sent extends OrderState {
+public class Sent extends OrderStatus {
 
     public Sent() {}
 

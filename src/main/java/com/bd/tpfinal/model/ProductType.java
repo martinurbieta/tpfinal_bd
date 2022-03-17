@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.*;
 
-import java.util.Date;
-import java.util.List;
-
 @Entity
 @Table(name = "product_type")
 public class ProductType {

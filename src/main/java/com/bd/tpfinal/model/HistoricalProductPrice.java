@@ -3,9 +3,6 @@ package com.bd.tpfinal.model;
 import java.util.Date;
 import javax.persistence.*;
 
-import java.util.Date;
-import java.util.List;
-
 @Entity
 @Table(name = "historical_product_price")
 public class HistoricalProductPrice {

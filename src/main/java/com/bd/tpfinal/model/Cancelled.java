@@ -1,17 +1,21 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.Date;
 
-//@Embeddable
-@Entity
-@Table(name = "order_status")
-public class Cancel extends OrderState {
+import javax.persistence.Embeddable;
 
-    public Cancel() {}
+@Embeddable
+public class Cancelled extends OrderStatus {
 
-    public Cancel(Order order) {super(order, "Cancelled");}
+    public Cancelled() {}
 
-//    public Cancel(Order order, Date startDate) {super(order, "Cancelled", startDate);}
+    public Cancelled(OrderStatus orderStatus) {
+        super(orderStatus.getOrder(), orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+    }
+    public Cancelled(Order order) {super(order, "Cancelled");}
+
+    public Cancelled(Order order, Date startDate) {super(order, "Cancelled", startDate);}
+
+    public Cancelled(Order order, Date startDate, boolean cancelledByClient) {super(order, "Cancelled", startDate, cancelledByClient);}
 
 }

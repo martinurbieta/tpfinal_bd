@@ -116,7 +116,7 @@ class TpfinalApplicationTests {
 			assertEquals(this.service.getAssignedOrders("dmuno").size(), 1);
 
 			try{
-				this.service.acceptOrder(numberOrder);
+				this.service.deliverOrder(numberOrder);
 			}catch (Exception e) {
 				assertTrue(false);
 			}
@@ -238,5 +238,5 @@ class TpfinalApplicationTests {
 	void prueba() {
 		System.out.println("OK!");
 	}
-
+	}
 }

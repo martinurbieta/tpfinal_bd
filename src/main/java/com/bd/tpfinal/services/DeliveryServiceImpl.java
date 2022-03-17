@@ -64,8 +64,6 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Override
     @Transactional(readOnly = true)
     public Client getClientInfo(String username) {
-//        return DeliveryRoot.getClientList().stream().filter(client1 ->
-//                username.equals(client1.getUsername()) && client1.isActive()).findAny().orElse(null);
         return this.clientRepository.findByUsername(username).orElse(null);
     }
 
@@ -115,8 +113,6 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Override
     @Transactional(readOnly = true)
     public DeliveryMan getDeliveryManInfo(String username) {
-//        return DeliveryRoot.getDeliveryManList().stream().filter(dm ->
-//                username.equals(dm.getUsername()) && dm.isActive()).findAny().orElse(null);
         return this.deliveryManRepository.findByUsername(username).orElse(null);
     }
 
@@ -131,24 +127,18 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Override
     @Transactional(readOnly = true)
     public Order getOrderinfo(long number) {
-//        return DeliveryRoot.getOrderList().stream().filter(order ->
-//                order.getNumber() == number).findAny().orElse(null);
         Order order = this.orderRepository.findById(number).orElse(null);
-  //      if (order != null) order.setStatusByName();
         return order;
     }
 
     @Override
     @Transactional
     public boolean assignOrder(long number) {
-//        DeliveryMan deliveryMan = DeliveryRoot.getDeliveryManList().stream().filter(dm ->
-//                dm.isFree() && dm.isActive()).findAny().orElse(null);
         DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
         if (deliveryMan != null) {
             try {
                 Order order = this.getOrderinfo(number);
                 deliveryMan.getActualOrders().size(); // Inicializar lista LAZY
-                //order.assign(deliveryMan);
                 order.getOrderStatus().assign(deliveryMan);
                 this.orderRepository.save(order);
                 return true;
@@ -172,7 +162,6 @@ public class DeliveryServiceImpl implements DeliveryService{
     public void deliverOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getDeliveryMan().getActualOrders().size(); // Inicializar lista LAZY
-        //order.deliver();
         order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
@@ -181,7 +170,6 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void refuseOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        //order.refuse();
         order.getOrderStatus().refuse();
         this.orderRepository.save(order);
     }
@@ -190,7 +178,6 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void cancelOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        //order.cancel();
         order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
@@ -199,8 +186,7 @@ public class DeliveryServiceImpl implements DeliveryService{
     @Transactional
     public void finishOrder(long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
-        //order.finish();
-        order.getOrderStatus().cancel();
+        order.getOrderStatus().finish();
         this.orderRepository.save(order);
     }
 }

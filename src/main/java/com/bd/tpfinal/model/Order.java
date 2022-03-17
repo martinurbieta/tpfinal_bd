@@ -4,6 +4,7 @@ import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,12 +27,8 @@ public class Order {
     @Column(nullable = false)
     private float totalPrice;
 
-//    @Embedded
-//    private OrderStatus orderStatus;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_order_status", referencedColumnName = "id") // check "ID"
-    private OrderState orderState;
+    @Embedded
+    private OrderStatus orderStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
     @JoinColumn(name = "id_delivery_man", nullable = true)
@@ -62,7 +59,7 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-        this.orderState = new Pending(this);
+        this.orderStatus = new Pending(this);
         this.items=new ArrayList<>();
     }
 
@@ -129,12 +126,22 @@ public class Order {
         this.items = items;
     }
 
-    public OrderState getOrderStatus() {
-        return orderState;
+    public OrderStatus getOrderStatus() throws DeliveryException {
+        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
+            try {
+                String name = this.orderStatus.getName();
+                Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
+                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
+                return this.orderStatus;
+            } catch (Throwable t){
+                throw new DeliveryException(t.getMessage());
+            }
+        } else
+            return this.orderStatus;
     }
 
-    public void setOrderStatus(OrderState orderState) {
-        this.orderState = orderState;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
     /**
      * Adder.
