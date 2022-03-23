@@ -1,13 +1,12 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.bd.tpfinal.utils.DeliveryException;
 
-//@Embeddable
-@Entity
-@Table(name = "order_status")
+@Embeddable
 public class Sent extends OrderStatus {
 
     public Sent() {}

@@ -25,10 +25,21 @@ public class Item {
 
     public Item(){}
 
-    public Item(int quantity, String description){
+    public Item(int quantity, String description, Product product){
 
         this.quantity = quantity;
         this.description = description;
+        this.product = product;
+    }
+
+    /**
+     * Getter.
+     *
+     * @return el producto.
+     */
+    public Supplier getProductSupplier() {
+        Supplier productSupplier= this.product.getSupplier()
+        return productSupplier;
     }
     /**
      * Getter.

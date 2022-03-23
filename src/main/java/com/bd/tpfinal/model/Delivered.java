@@ -1,7 +1,8 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.Embeddable;
 import java.util.Date;
-
+@Embeddable
 public class Delivered extends OrderStatus {
 
     public Delivered() {}

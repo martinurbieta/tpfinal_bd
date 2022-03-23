@@ -3,6 +3,7 @@ package com.bd.tpfinal.model;
 import javax.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -46,13 +47,15 @@ public class Product {
 
     public Product(){}
 
-    public Product(String name, float price, float weight, String description){
+    public Product(String name, float price, float weight, String description, Supplier supplier){
 
         this.name = name;
         this.price=price;
         this.weight=weight;
         this.description = description;
-        this.productType=new ArrayList<>();;
+        this.productType=new ArrayList<>();
+        this.supplier = supplier;
+        this.prices=new ArrayList<>();
     }
     /**
      * Getter.
@@ -146,5 +149,32 @@ public class Product {
 
     public void setPrices(List<HistoricalProductPrice> prices) {
         this.prices = prices;
+    }
+
+    /**
+     * Setter.
+     *
+     * @param price es el nuevo precio del producto.
+     */
+
+    /**
+     * Getter.
+     *
+     * @return lastOldPriceFinishDate es la fecha final validez del ultimo precio historico.
+     */
+    public Date getLastOldPriceFinishDate() {
+        HistoricalProductPrice lastOldPrice = this.prices.get(this.prices.size()-1);
+        Date lastOldPriceFinishDate = lastOldPrice.getFinishDate();
+        return lastOldPriceFinishDate;
+    }
+
+    public void setNewPrice(float newPrice) {
+        Date lastOldPriceFinishDate = getLastOldPriceFinishDate();
+        Date newHistoricalPriceStartDate = lastOldPriceFinishDate;
+        Date newHistoricalPriceFinishDate = new Date();
+        HistoricalProductPrice newHistoricalProductPrice = new HistoricalProductPrice(this.price, newHistoricalPriceStartDate,newHistoricalPriceStartDate);
+        this.prices.add(newHistoricalProductPrice);
+        this.price = newPrice;
+
     }
 }

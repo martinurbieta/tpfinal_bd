@@ -3,14 +3,15 @@ package com.bd.tpfinal.model;
 
 import java.util.Date;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.bd.tpfinal.utils.DeliveryException;
 
-//@Embeddable
-@Entity
-@Table(name = "order_status")
+import java.util.Date;
+
+@Embeddable
 public class Assigned extends OrderStatus {
 
     public Assigned() {}

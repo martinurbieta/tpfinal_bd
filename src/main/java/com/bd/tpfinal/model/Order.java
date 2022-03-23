@@ -69,6 +69,11 @@ public class Order {
 
     public Date getDateOfOrder() {return dateOfOrder;}
 
+    public Supplier getItemProductSupplier(){
+        Supplier itemProductSupplier = this.items.get(0).getProductSupplier();
+        return itemProductSupplier;
+    }
+
     public void setDateOfOrder(Date dateOfOrder) {this.dateOfOrder = dateOfOrder;}
 
     public String getComments() {return comments;}
