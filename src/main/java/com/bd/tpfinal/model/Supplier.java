@@ -1,7 +1,9 @@
 package com.bd.tpfinal.model;
 
+import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -43,6 +45,10 @@ public class Supplier {
     )
     private String supplierType;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "qualification", fetch = FetchType.LAZY, orphanRemoval = false)
+    private List<Qualification> qualifications;
+
     public Supplier(){}
 
     public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,String supplierType){
@@ -54,6 +60,7 @@ public class Supplier {
         this.coordY=coordY;
         this.qualificationOfUsers  = qualificationOfUsers;
         this.supplierType= supplierType;
+        this.qualifications = new ArrayList<>();
     }
     /**
      * Getter.
@@ -202,5 +209,23 @@ public class Supplier {
     public void addProduct(Product product){
         this.products.add(product);
 
+    }
+
+    public float calcNewScore(List<Qualification> qualifications){
+        double newAverageScore = qualifications.stream()
+                .mapToDouble(Qualification::getScore)
+                .average()
+                .orElse(0.0);
+        return (float)newAverageScore;
+    }
+
+    public void updateScore(Qualification qualification){
+        this.addQualification(qualification);
+        float newScore = this.calcNewScore(this.qualifications);
+        this.setQualificationOfUsers(newScore);
+    }
+
+    public void addQualification(Qualification aNewqualification){
+            this.qualifications.add(aNewqualification);
     }
 }

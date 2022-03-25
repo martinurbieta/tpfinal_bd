@@ -78,6 +78,8 @@ public abstract class OrderStatus {
 
     public boolean canRefuse() { return false; }
 
+    public boolean canQualify() { return false; }
+
     public boolean canDeliver() { return false; }
 
     public boolean canFinish() { return false; }

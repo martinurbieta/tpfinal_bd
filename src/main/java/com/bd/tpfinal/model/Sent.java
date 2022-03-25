@@ -24,6 +24,11 @@ public class Sent extends OrderStatus {
     }
 
     @Override
+    public boolean canQualify() {
+        return true;
+    }
+
+    @Override
     public void finish() throws DeliveryException {
         this.order.setOrderStatus(new Delivered(this.order));
         this.order.getDeliveryMan().addScore(1);

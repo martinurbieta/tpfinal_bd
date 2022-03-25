@@ -157,5 +157,12 @@ public class Order {
         if (this.getOrderStatus().canAddItem()){
             this.items.add(item);
         }}
+
+
+    public void setQualification(float score, String commentary) throws DeliveryException {
+        if (this.getOrderStatus().canQualify()){
+            qualification = new Qualification(score,commentary);
+            this.getItemProductSupplier().updateScore(qualification);
+        }}
     }
 
