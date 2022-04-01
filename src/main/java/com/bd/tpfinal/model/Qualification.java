@@ -2,13 +2,9 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "qualification")
+@Embeddable
+
 public class Qualification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_qualification", unique = true, updatable = false)
-    private int id;
 
     @Column(nullable = false, updatable = false)
     private float score;
@@ -16,10 +12,7 @@ public class Qualification {
     @Column(length = 500, updatable=false)
     private String commentary;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_qualification", nullable = false)
-    private Order order;
-
+//
     public Qualification(){}
 
     public Qualification(float score, String commentary){

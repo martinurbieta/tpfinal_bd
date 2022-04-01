@@ -42,9 +42,11 @@ public class Order {
     @JoinColumn(name = "id_address", nullable = false)
     private Address address;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_qualification", referencedColumnName = "id") // check ID.
+    @Embedded
     private Qualification qualification;
+
+    @Embedded
+    private Supplier supplier;
 
     @JsonIgnore
     @OneToMany(mappedBy = "order_", fetch = FetchType.LAZY, orphanRemoval = false)
@@ -118,10 +120,6 @@ public class Order {
         return qualification;
     }
 
-    public void setQualification(Qualification qualification) {
-        this.qualification = qualification;
-        // agregar método para actualizar proveedor)
-    }
 
     public List<Item> getItems() {
         return items;
@@ -162,6 +160,7 @@ public class Order {
     public void setQualification(float score, String commentary) throws DeliveryException {
         if (this.getOrderStatus().canQualify()){
             qualification = new Qualification(score,commentary);
+            supplier = this.getItemProductSupplier().getName();
             this.getItemProductSupplier().updateScore(qualification);
         }}
     }

@@ -211,21 +211,17 @@ public class Supplier {
 
     }
 
-    public float calcNewScore(List<Qualification> qualifications){
+
+
+    public void updateScore(Qualification aNewQualification){
+        this.qualifications.add(aNewQualification);
+
         double newAverageScore = qualifications.stream()
                 .mapToDouble(Qualification::getScore)
                 .average()
                 .orElse(0.0);
-        return (float)newAverageScore;
+        newAverageScore=(float)newAverageScore;
+        this.setQualificationOfUsers(newAverageScore);
     }
 
-    public void updateScore(Qualification qualification){
-        this.addQualification(qualification);
-        float newScore = this.calcNewScore(this.qualifications);
-        this.setQualificationOfUsers(newScore);
-    }
-
-    public void addQualification(Qualification aNewqualification){
-            this.qualifications.add(aNewqualification);
-    }
 }
