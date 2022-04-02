@@ -45,7 +45,8 @@ public class Order {
     @Embedded
     private Qualification qualification;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_supplier", referencedColumnName = "id") // check ID.
     private Supplier supplier;
 
     @JsonIgnore
