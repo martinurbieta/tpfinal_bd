@@ -21,11 +21,11 @@ public class DeliveryMan extends User{
     @Column(nullable = false, updatable = false)
     private Date dateOfAdmission;
 
-    @Column(nullable = false, updatable = false)
-    private Order orderAssigned;
+//    @Column(nullable = false, updatable = false)
+//    private Order orderAssigned;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "delivery_man", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "deliveryMan", fetch = FetchType.LAZY) //antes delivery_man
     private List<Order> actualOrders;
 
     public DeliveryMan(){}
@@ -68,6 +68,9 @@ public class DeliveryMan extends User{
 //    public void setOrdersPending(List<Order> ordersPending) {
 //        this.ordersPending = ordersPending;
 //    }
+    public void setActualOrders(List<Order> actualOrders) {
+        this.actualOrders = actualOrders;
+    }
 
     public void addNumberOfSuccess(){ this.numberOfSuccess++; }
 

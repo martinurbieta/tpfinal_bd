@@ -13,7 +13,7 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier", unique = true, updatable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, updatable = true, length = 50)
     private String name;
@@ -37,21 +37,17 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Product> products;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "supplier_supplier_type", 
-        joinColumns = { @JoinColumn(name = "id_product") }, 
-        inverseJoinColumns = { @JoinColumn(name = "id_supplier_type") }
-    )
-    private String supplierType;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @JoinColumn(name = "id_supplier_type", nullable = false)
+    private SupplierType supplierType;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "qualification", fetch = FetchType.LAZY, orphanRemoval = false)
-    private List<Qualification> qualifications;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "qualification", fetch = FetchType.LAZY, orphanRemoval = false)
+//    private List<Qualification> qualifications;
 
     public Supplier(){}
 
-    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,String supplierType){
+    public Supplier(String name,String cuil, String address, float coordX, float coordY,float qualificationOfUsers,SupplierType supplierType){
 
         this.name  = name;
         this.cuil =cuil; //debería ser CUIT.
@@ -60,7 +56,7 @@ public class Supplier {
         this.coordY=coordY;
         this.qualificationOfUsers  = qualificationOfUsers;
         this.supplierType= supplierType;
-        this.qualifications = new ArrayList<>();
+    //    this.qualifications = new ArrayList<>();
     }
     /**
      * Getter.
@@ -173,16 +169,16 @@ public class Supplier {
         this.products = products;
     }
 
-    public String getSupplierType() {
+    public SupplierType getSupplierType() {
         return supplierType;
     }
     /**
      * Setter.
      *
-     * @param aSupplierTypeName es el nombre del tipo de Proveedor.
+     * @param aSupplierType es el nombre del tipo de Proveedor.
      */
-    public void setSupplierType(String aSupplierTypeName) {
-        this.supplierType = aSupplierTypeName;
+    public void setSupplierType(SupplierType aSupplierType) {
+        this.supplierType = aSupplierType;
     }
     /**
      * Updater.
@@ -213,15 +209,15 @@ public class Supplier {
 
 
 
-    public void updateScore(Qualification aNewQualification){
-        this.qualifications.add(aNewQualification);
-
-        double newAverageScore = qualifications.stream()
-                .mapToDouble(Qualification::getScore)
-                .average()
-                .orElse(0.0);
-        newAverageScore=(float)newAverageScore;
-        this.setQualificationOfUsers(newAverageScore);
-    }
+//    public void updateScore(Qualification aNewQualification){
+//        this.qualifications.add(aNewQualification);
+//
+//        double newAverageScore = qualifications.stream()
+//                .mapToDouble(Qualification::getScore)
+//                .average()
+//                .orElse(0.0);
+//        newAverageScore=(float)newAverageScore;
+//        this.setQualificationOfUsers(newAverageScore);
+//    }
 
 }

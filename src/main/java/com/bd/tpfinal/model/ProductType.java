@@ -20,7 +20,7 @@ public class ProductType {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product_type", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, orphanRemoval = false) // before product_type
     private List<Product> products;
 
     public ProductType(){}

@@ -12,6 +12,10 @@ public class Qualification {
     @Column(length = 500, updatable=false)
     private String commentary;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "id_order", nullable = true)
+    private Order order;
+
 //
     public Qualification(){}
 
@@ -54,11 +58,11 @@ public class Qualification {
         this.commentary = commentary;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+//    public Order getOrder() {
+//        return this.order;
+//    }
+//
+//    public void setOrder(Order order) {
+//        this.order = order;
+//    }
 }

@@ -1,6 +1,10 @@
 package com.bd.tpfinal.controllers;
 
+import com.bd.tpfinal.model.Client;
+import com.bd.tpfinal.model.DeliveryMan;
+import com.bd.tpfinal.model.Order;
 import com.bd.tpfinal.services.DeliveryService;
+import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,10 +92,10 @@ public class DeliveryController {
         return this.service.assignOrder(number);
     }
 
-    @PutMapping(path = "/order/{number}/accept")
-    public void acceptOrder(long number) throws DeliveryException {
-        this.service.acceptOrder(number);
-    }
+//    @PutMapping(path = "/order/{number}/accept")
+//    public void acceptOrder(long number) throws DeliveryException {
+//        this.service.acceptOrder(number);
+//    }
 
     @PutMapping(path = "/order/{number}/refuse")
     public void refuseOrder(long number) throws DeliveryException {

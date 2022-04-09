@@ -6,12 +6,12 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "supplierType")
+@Table(name = "supplier_type")
 public class SupplierType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier_type", unique = true, updatable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -20,7 +20,7 @@ public class SupplierType {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier_type", fetch = FetchType.LAZY, orphanRemoval = false) //debería ser ManyToMany
+    @OneToMany(mappedBy = "supplierType", fetch = FetchType.LAZY, orphanRemoval = false) //before supplier_type
     private List<Supplier> suppliers;
 
     public SupplierType(){}

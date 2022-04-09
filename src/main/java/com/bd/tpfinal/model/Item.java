@@ -7,7 +7,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item", unique = true, updatable = false)
-    private int id;
+    private int idItem;
 
     @Column(nullable = false)
     private int quantity;
@@ -15,8 +15,8 @@ public class Item {
     @Column(length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_order", nullable = false)
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_", referencedColumnName = "id_order", nullable = false)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +30,7 @@ public class Item {
         this.quantity = quantity;
         this.description = description;
         this.product = product;
+
     }
 
     /**
@@ -38,7 +39,7 @@ public class Item {
      * @return el producto.
      */
     public Supplier getProductSupplier() {
-        Supplier productSupplier= this.product.getSupplier()
+        Supplier productSupplier= this.product.getSupplier();
         return productSupplier;
     }
     /**

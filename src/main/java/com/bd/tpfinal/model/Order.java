@@ -16,7 +16,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_order", unique = true, updatable = false)
-    private int number;
+    private Long number;
 
     @Column(nullable = false, updatable = false)
     private Date dateOfOrder;
@@ -30,11 +30,11 @@ public class Order {
     @Embedded
     private OrderStatus orderStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_delivery_man", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
+    @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false)
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
@@ -46,12 +46,14 @@ public class Order {
     private Qualification qualification;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_supplier", referencedColumnName = "id") // check ID.
+    @JoinColumn(name = "id_supplier")
     private Supplier supplier;
 
+    //MappingException: Repeated column in mapping for entity: com.bd.tpfinal.model.Order column: id_order (should be mapped with insert="false" update="false")
+    //https://stackoverflow.com/questions/47690719/repeated-column-in-mapping-for-entity-on-id-field
     @JsonIgnore
-    @OneToMany(mappedBy = "order_", fetch = FetchType.LAZY, orphanRemoval = false)
-    private List<Item> items;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
+   private List<Item> items;
 
     public Order() {
     }
@@ -64,11 +66,12 @@ public class Order {
         this.deliveryMan = null;
         this.orderStatus = new Pending(this);
         this.items=new ArrayList<>();
+        this.address=null;
     }
 
-    public int getNumber() {return number;}
+    public Long getNumber() {return number;}
 
-    public void setNumber(int number) {this.number = number;}
+    public void setNumber(Long number) {this.number = number;}
 
     public Date getDateOfOrder() {return dateOfOrder;}
 
@@ -158,11 +161,11 @@ public class Order {
         }}
 
 
-    public void setQualification(float score, String commentary) throws DeliveryException {
-        if (this.getOrderStatus().canQualify()){
-            qualification = new Qualification(score,commentary);
-            supplier = this.getItemProductSupplier().getName();
-            this.getItemProductSupplier().updateScore(qualification);
-        }}
+//    public void setQualification(float score, String commentary) throws DeliveryException {
+//        if (this.getOrderStatus().canQualify()){
+//            qualification = new Qualification(score,commentary);
+//            supplier = this.getItemProductSupplier().getName();
+//            this.getItemProductSupplier().updateScore(qualification);
+//        }}
     }
 
