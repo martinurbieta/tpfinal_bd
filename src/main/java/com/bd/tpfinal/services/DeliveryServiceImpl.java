@@ -4,13 +4,12 @@ import com.bd.tpfinal.repositories.*;
 import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DeliveryServiceImpl implements DeliveryService{
-
-    @Autowired
-    private EjemploRepository repository;
 
     @Autowired
     private DeliveryManRepository deliveryManRepository;

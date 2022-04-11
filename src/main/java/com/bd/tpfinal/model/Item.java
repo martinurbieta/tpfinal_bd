@@ -16,7 +16,7 @@ public class Item {
     private String description;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_", referencedColumnName = "id_order", nullable = false)
+    @JoinColumn(name = "order_", nullable = false)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +48,7 @@ public class Item {
      * @return la cantidad del item.
      */
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
     /**
      * Setter.
@@ -64,7 +64,7 @@ public class Item {
      * @return la descripción del item.
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
     /**
      * Setter.
@@ -76,7 +76,7 @@ public class Item {
     }
 
     public Order getOrder() {
-        return order;
+        return this.order;
     }
 
     public void setOrder(Order order) {
@@ -84,7 +84,7 @@ public class Item {
     }
 
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public void setProduct(Product product) {

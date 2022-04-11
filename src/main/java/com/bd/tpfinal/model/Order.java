@@ -15,7 +15,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_order", unique = true, updatable = false)
+    //@Column(name = "id_order", unique = true, updatable = false)
     private Long number;
 
     @Column(nullable = false, updatable = false)
@@ -52,7 +52,7 @@ public class Order {
     //MappingException: Repeated column in mapping for entity: com.bd.tpfinal.model.Order column: id_order (should be mapped with insert="false" update="false")
     //https://stackoverflow.com/questions/47690719/repeated-column-in-mapping-for-entity-on-id-field
     @JsonIgnore
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
    private List<Item> items;
 
     public Order() {
@@ -126,7 +126,7 @@ public class Order {
 
 
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(List<Item> items) {

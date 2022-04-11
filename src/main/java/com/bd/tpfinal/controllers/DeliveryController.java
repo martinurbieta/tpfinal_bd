@@ -1,8 +1,6 @@
-package com.bd.tpfinal.controllers;
+package com.bd.tpfinal.controller;
 
-import com.bd.tpfinal.model.Client;
-import com.bd.tpfinal.model.DeliveryMan;
-import com.bd.tpfinal.model.Order;
+import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.DeliveryService;
 import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +13,13 @@ import java.util.List;
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
 public class DeliveryController {
 
-//    @Autowired
-//    private DeliveryService service;
-
-    @GetMapping("/test")
-    public String test(){
-        return "OK!";
-    }
-
-
     @Autowired
     public DeliveryService service;
+
+//    @GetMapping("/test")
+//    public String test(){
+//        return "OK!";
+//    }
 
     @PostMapping(path = "/client")
     public Client newClient(@RequestBody Client client){
