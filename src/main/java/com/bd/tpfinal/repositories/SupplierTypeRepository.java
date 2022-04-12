@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface SupplierTypeRepository extends CrudRepository<SupplierType, Long> {
-    public Optional<SupplierType> findSupplierTypeById(Long anId);
+    public Optional<SupplierType> findSupplierTypeById(long anId);
 
 
 }

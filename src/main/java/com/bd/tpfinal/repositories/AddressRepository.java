@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AddressRepository extends CrudRepository<Address, int> {
-    public Optional<Address> findAddressById(int anId);
+public interface AddressRepository extends CrudRepository<Address, Long> {
+    public Optional<Address> findAddressById(long anId);
 
 
 }

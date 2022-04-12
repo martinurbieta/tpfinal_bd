@@ -11,8 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends CrudRepository<Item, Long> {
-    public List<Item> findItemsByOrderID (Long id_order);
-    public Optional<Item> findItemWithID(int idItem);
+    public List<Item> findItemByOrderNumber (Long aNumber);
+    public Optional<Item> findItemById(long anId);
 
 
 }

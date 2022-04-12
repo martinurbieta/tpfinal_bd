@@ -7,7 +7,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item", unique = true, updatable = false)
-    private int idItem;
+    private long id;
 
     @Column(nullable = false)
     private int quantity;

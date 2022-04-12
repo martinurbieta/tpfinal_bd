@@ -11,7 +11,7 @@ public class SupplierType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier_type", unique = true, updatable = false)
-    private Long id;
+    private long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;

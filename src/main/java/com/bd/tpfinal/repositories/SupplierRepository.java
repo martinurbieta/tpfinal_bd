@@ -9,8 +9,8 @@ package com.bd.tpfinal.repositories;
         import java.util.Optional;
 
 @Repository
-public interface SupplierRepository extends CrudRepository<Supplier, Long> {
-        public Optional<Supplier> findSupplierById(Long anId);
+public interface SupplierRepository extends CrudRepository<Supplier, Long> { 
+        public Optional<Supplier> findSupplierById(long anId);
 
 
 }

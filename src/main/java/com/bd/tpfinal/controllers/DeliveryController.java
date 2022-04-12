@@ -107,9 +107,9 @@ public class DeliveryController {
         this.service.finishOrder(number);
     }
 
-    @GetMapping(path = "/address/{id_address}")
-    public Address getAddress(@PathVariable int id_address){
-        return this.service.getAddress(id_address);
+    @GetMapping(path = "/address/{id}")
+    public Address getAddress(@PathVariable long id){
+        return this.service.getAddress(id);
     }
 
     @PostMapping(path = "/address")
@@ -117,9 +117,9 @@ public class DeliveryController {
         return this.service.createAddress(newAddress);
     }
 
-    @GetMapping(path = "/supplierType/{id_supplier_type}")
-    public SupplierType getSupplierType(@PathVariable long id_supplier_type){
-        return this.service.getSupplierType(id_supplier_type);
+    @GetMapping(path = "/supplierType/{id}")
+    public SupplierType getSupplierType(@PathVariable long id){
+        return this.service.getSupplierType(id);
     }
 
     @PostMapping(path = "/supplierType")
@@ -127,9 +127,9 @@ public class DeliveryController {
         return this.service.createSupplierType(newsSupplierType);
     }
 
-    @GetMapping(path = "/supplier/{id_supplier}")
-    public Supplier getSupplier(@PathVariable long id_supplier){
-        return this.service.getSupplier(id_supplier);
+    @GetMapping(path = "/supplier/{id}")
+    public Supplier getSupplier(@PathVariable long id){
+        return this.service.getSupplier(id);
     }
 
     @PostMapping(path = "/supplier")
@@ -144,10 +144,10 @@ public class DeliveryController {
 
     @GetMapping(path = "/order/{items}")
     public List<Item> getItemsByOrderID(@PathVariable long number){
-        return this.service.getItemsByOrderID(number);
+        return this.service.getItemsByOrderNumber(number);
     }
-    @DeleteMapping(path = "/item/{idItem}")
-    public Object deleteItem(@PathVariable int idItem){
-        return this.service.deleteItem(this.service.findItemWithID(idItem);
+    @DeleteMapping(path = "/item/{id}")
+    public Object deleteItem(@PathVariable long id){
+        return this.service.deleteItem(this.service.getItemWithID(id));
     }
 }

@@ -43,15 +43,15 @@ public interface DeliveryService {
 
     public void finishOrder(long number) throws DeliveryException;
 
-    public Address getAddress(int id_address);
+    public Address getAddress(long id);
 
     public Address createAddress(Address newAddress);
 
-    public SupplierType getSupplierType(Long id_supplier_type);
+    public SupplierType getSupplierType(long id);
 
     public SupplierType createSupplierType(SupplierType newsSupplierType);
 
-    public Supplier getSupplier(Long id_supplier);
+    public Supplier getSupplier(long id);
 
     public Supplier createSupplier(Supplier newsSupplier);
 
@@ -59,8 +59,8 @@ public interface DeliveryService {
     
     Object deleteItem(Item item);
 
-    List<Item> getItemsByOrderID(Long id);
+    List<Item> getItemsByOrderNumber(Long number);
 
-    public Item findItemWithID(int idItem);
+    public Item getItemWithID(long id);
 }
 
