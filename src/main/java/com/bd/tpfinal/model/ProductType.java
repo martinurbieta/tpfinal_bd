@@ -23,6 +23,10 @@ public class ProductType {
     @OneToMany(mappedBy = "productType", fetch = FetchType.LAZY, orphanRemoval = false) // before product_type
     private List<Product> products;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     public ProductType(){}
 
     public ProductType(String name, String description){

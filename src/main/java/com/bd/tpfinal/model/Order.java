@@ -49,8 +49,10 @@ public class Order {
     @JoinColumn(name = "id_supplier")
     private Supplier supplier;
 
-    //MappingException: Repeated column in mapping for entity: com.bd.tpfinal.model.Order column: id_order (should be mapped with insert="false" update="false")
-    //https://stackoverflow.com/questions/47690719/repeated-column-in-mapping-for-entity-on-id-field
+    @Version
+    @Column(name = "version")
+    private int version;
+
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
    private List<Item> items;
@@ -159,6 +161,14 @@ public class Order {
         if (this.getOrderStatus().canAddItem()){
             this.items.add(item);
         }}
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
 
 //    public void setQualification(float score, String commentary) throws DeliveryException {

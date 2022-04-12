@@ -31,6 +31,10 @@ public class Product {
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
         name = "product_product_type", 

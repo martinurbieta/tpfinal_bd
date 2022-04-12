@@ -24,6 +24,10 @@ public class HistoricalProductPrice {
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     public HistoricalProductPrice(){}
 
     public HistoricalProductPrice(float price, Date startDate,Date finishDate){

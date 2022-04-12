@@ -23,6 +23,10 @@ public class SupplierType {
     @OneToMany(mappedBy = "supplierType", fetch = FetchType.LAZY, orphanRemoval = false) //before supplier_type
     private List<Supplier> suppliers;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     public SupplierType(){}
 
     public SupplierType(String name,String description){

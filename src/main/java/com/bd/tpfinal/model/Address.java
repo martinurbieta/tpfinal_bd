@@ -42,6 +42,12 @@ public class Address {
     @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
     private List<Order> orders;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
+
+
     public Address(){}
 
     public Address(String name, String address, String apartment, float coordX, float coordY, String description){

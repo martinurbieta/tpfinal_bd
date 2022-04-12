@@ -23,6 +23,10 @@ public class Item {
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     public Item(){}
 
     public Item(int quantity, String description, Product product){

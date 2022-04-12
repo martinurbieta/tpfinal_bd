@@ -28,6 +28,8 @@ public class DeliveryMan extends User{
     @OneToMany(mappedBy = "deliveryMan", fetch = FetchType.LAZY) //antes delivery_man
     private List<Order> actualOrders;
 
+
+
     public DeliveryMan(){}
 
     public DeliveryMan(String name, String email, String username, String password, Date dateOfBirth) {
@@ -87,4 +89,6 @@ public class DeliveryMan extends User{
      * @remove order from delivery man collection.
      */
     public void removeOrder(Order order) {this.actualOrders.remove(order);}
+
+
 }

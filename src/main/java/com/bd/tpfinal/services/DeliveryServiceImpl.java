@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService{
@@ -31,6 +32,9 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     @Autowired
     private SupplierRepository supplierRepository;
+
+    @Autowired
+    private SupplierTypeRepository supplierTypeRepository;
 
     @Autowired
     private ProductTypeRepository productTypeRepository;
@@ -188,4 +192,59 @@ public class DeliveryServiceImpl implements DeliveryService{
         order.getOrderStatus().finish();
         this.orderRepository.save(order);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Address getAddress(int id_address) {
+        return this.addressRepository.findById(id_address).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Address createAddress(Address newAddress) {
+        return this.addressRepository.save(newAddress);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SupplierType getSupplierType(Long id_supplier_type) {
+        return this.supplierTypeRepository.findById(id_supplier_type).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public SupplierType createSupplierType(SupplierType newSupplierType) {
+        return this.supplierTypeRepository.save(newSupplierType);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public Supplier getSupplier(Long id_supplier) {
+        return this.supplierRepository.findById(id_supplier).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Supplier createSupplier(Supplier newSupplier) {
+        return this.supplierRepository.save(newSupplier);
+    }
+
+
+
+    @Override
+    @Transactional
+    public Object deleteItem(Item item) {
+        try {
+            this.itemRepository.delete(item);
+        } catch (Exception e){
+            return e;
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public List<Item> getItemsByOrderID(Long id_order) {
+        Optional<Order> order = this.orderRepository.findById(id_order);
+        List<Item> items = order.isPresent() ? order.get().getItems() : null;
+        return items;
 }

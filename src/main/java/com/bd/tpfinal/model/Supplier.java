@@ -41,6 +41,10 @@ public class Supplier {
     @JoinColumn(name = "id_supplier_type", nullable = false)
     private SupplierType supplierType;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
 //    @JsonIgnore
 //    @OneToMany(mappedBy = "qualification", fetch = FetchType.LAZY, orphanRemoval = false)
 //    private List<Qualification> qualifications;
