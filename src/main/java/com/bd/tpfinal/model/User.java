@@ -2,21 +2,58 @@ package com.bd.tpfinal.model;
 
 import java.util.Date;
 
-public abstract class User {
+import javax.persistence.*;
 
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_user", nullable = false)
+    private Long id;
+
+    @Column(length = 50, nullable = false)
     private String name;
 
-    private String username;
-
-    private String password;
-
+    @Column(length = 50, unique = true, nullable = false)
     private String email;
 
+    @Column(length = 50, updatable = false, unique = true, nullable = false)
+    private String username;
+
+    @Column(length = 50, nullable = false)
+    private String password;
+
+    @Column
     private Date dateOfBirth;
 
-    private boolean scrore;
+    @Column
+    private boolean active;
 
+    @Column
     private int score;
+
+    protected User() {
+    }
+
+    public User(String name, String email, String username, String password, Date dateOfBirth) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.score = 0;
+        this.active = true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -58,12 +95,17 @@ public abstract class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean isScrore() {
-        return scrore;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setScrore(boolean scrore) {
-        this.scrore = scrore;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
+    public void addScore(int scoreObtained) {
+        this.score = this.score + scoreObtained;
     }
 
     public int getScore() {
@@ -73,4 +115,6 @@ public abstract class User {
     public void setScore(int score) {
         this.score = score;
     }
+
+
 }

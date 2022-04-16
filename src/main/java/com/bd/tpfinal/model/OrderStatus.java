@@ -1,18 +1,50 @@
 package com.bd.tpfinal.model;
 
-import java.util.Date;
+import com.bd.tpfinal.utils.Final_dbException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.persistence.*;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+@Embeddable
 public abstract class OrderStatus {
 
+
+    @Column(name = "state", insertable = false, updatable = false)
     private String name;
 
-    private Date startDate;
+    @Column(name = "state_start_date", insertable = false, updatable = false)
+    protected Date startDate;
 
-    private Order order;
+    @Transient
+    protected Order order;
+
+    public OrderStatus(){}
+
+    public OrderStatus(Order order, String name) {
+        this.name = name;
+        this.order = order;
+        this.startDate = Calendar.getInstance().getTime();
+    }
+
+    public OrderStatus(Order order, String name, Date startDate){
+        this.name = name;
+        this.order = order;
+        this.startDate = startDate;
+    }
+
+    public OrderStatus(Order order) {
+
+    }
 
     public String getName() {
         return name;
     }
+
+
 
     public void setName(String name) {
         this.name = name;
@@ -38,28 +70,28 @@ public abstract class OrderStatus {
 
     public boolean canCancel() { return false; }
 
-    public boolean addItem() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public boolean addItem() throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
-    public boolean assign(DeliveryMan deliveryMan) throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public void assign(DeliveryMan deliveryMan) throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
-    public boolean refuse() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public boolean refuse() throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
-    public boolean deliver() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public void deliver() throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
-    public boolean cancel() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public void cancel() throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
-    public boolean finish() throws Exception{
-        throw new Exception("No se puede realizarse esta accion");
+    public void finish() throws Final_dbException{
+        throw new Final_dbException("No se puede realizarse esta accion");
     }
 
     public Order getOrder() {

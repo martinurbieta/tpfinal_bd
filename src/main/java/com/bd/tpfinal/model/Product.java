@@ -1,8 +1,16 @@
 package com.bd.tpfinal.model;
 
+import javax.persistence.*;
+
+
 import java.util.List;
 
+@Entity
+@Table(name="product")
 public class Product {
+    @Id
+    @Column(name = "id_product", nullable = false)
+    private Long id_product;
 
     private String name;
 
@@ -12,11 +20,32 @@ public class Product {
 
     private String description;
 
-    private Supplier supplier;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {})
+    private List<Item> items;
 
-    private ProductType type;
+    @ManyToMany
+    private List<Supplier> suppliers;
 
-    private List<HistoricalProductPrice> prices;
+    @ManyToMany
+    private List<ProductType> types;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {})
+    @JoinColumn(name = "historicalproductprice_id")
+    private HistoricalProductPrice historicalproductprice;
+
+
+
+    public Product() {
+    }
+
+    public Long getId_product() {
+        return id_product;
+    }
+
+    public void setId_product(Long id_product) {
+        this.id_product = id_product;
+    }
 
     public String getName() {
         return name;
@@ -50,27 +79,33 @@ public class Product {
         this.description = description;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public List<Supplier> getSupplier() {
+        return suppliers;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setSupplier(List<Supplier> suppliers) {
+        this.suppliers = suppliers;
     }
 
-    public ProductType getType() {
-        return type;
+    public List<ProductType> getType() {
+        return types;
     }
 
-    public void setType(ProductType type) {
-        this.type = type;
+    public void setType(List<ProductType> types) {
+        this.types = types;
     }
 
-    public List<HistoricalProductPrice> getPrices() {
-        return prices;
+
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
-    public void setPrices(List<HistoricalProductPrice> prices) {
-        this.prices = prices;
+    public HistoricalProductPrice getHistoricalproductprice() {
+        return historicalproductprice;
+    }
+
+    public void setHistoricalproductprice(HistoricalProductPrice historicalproductprice) {
+        this.historicalproductprice = historicalproductprice;
     }
 }
