@@ -1,17 +1,8 @@
 package com.bd.tpfinal.model;
 
-import org.hibernate.boot.model.source.spi.FetchCharacteristics;
-
 import java.util.Date;
-import java.util.List;
-import  javax.persistence.*;
 
-@Entity
-@Table(name="historicalproductprice")
 public class HistoricalProductPrice {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     private float price;
 
@@ -19,19 +10,7 @@ public class HistoricalProductPrice {
 
     private Date finishDate;
 
-    @OneToMany(mappedBy = "historicalproductprice", fetch = FetchType.LAZY)
-    private List<Product> products;
-
-    public HistoricalProductPrice() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Product product;
 
     public float getPrice() {
         return price;
@@ -57,14 +36,11 @@ public class HistoricalProductPrice {
         this.finishDate = finishDate;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
-
-
 }
-

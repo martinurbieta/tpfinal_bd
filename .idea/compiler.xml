@@ -6,17 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tpfinal_bd-grupo9_jpa" />
         <module name="tpfinal" />
-        <module name="tpfinal_bd-main" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tpfinal" options="-parameters" />
-      <module name="tpfinal_bd-grupo9_jpa" options="-parameters" />
-      <module name="tpfinal_bd-main" options="-parameters" />
     </option>
   </component>
 </project>
