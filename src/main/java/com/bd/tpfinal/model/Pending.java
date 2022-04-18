@@ -38,7 +38,6 @@ public class Pending extends OrderStatus {
     @Override
     public void assign(DeliveryMan deliveryMan) throws DeliveryException {
         if (this.canAssign()) {
-            deliveryMan.addOrder(this.order);
             deliveryMan.setFree(false);
             this.order.setDeliveryMan(deliveryMan);
             this.order.setOrderStatus(new Assigned(this.order));

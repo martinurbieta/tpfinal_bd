@@ -15,8 +15,8 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_order", unique = true, updatable = false)
-    private int number;
+    //@Column(name = "id_order", unique = true, updatable = false)
+    private Long number;
 
     @Column(nullable = false, updatable = false)
     private Date dateOfOrder;
@@ -30,24 +30,32 @@ public class Order {
     @Embedded
     private OrderStatus orderStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_delivery_man", nullable = true)
-    private DeliveryMan deliveryMan;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_client", nullable = false)
-    private Client client;
+    @Embedded
+    private Qualification qualification;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_address", nullable = false)
     private Address address;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
+    @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false)
+    private DeliveryMan deliveryMan;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
+    @JoinColumn(name = "id_client", nullable = false)
+    private Client client;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_qualification", referencedColumnName = "id") // check ID.
-    private Qualification qualification;
+    @JoinColumn(name = "id_supplier")
+    private Supplier supplier;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "order_", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_order")
     private List<Item> items;
 
     public Order() {
@@ -61,17 +69,17 @@ public class Order {
         this.deliveryMan = null;
         this.orderStatus = new Pending(this);
         this.items=new ArrayList<>();
+        this.address=null;
     }
 
-    public int getNumber() {return number;}
+    public Long getNumber() {return number;}
 
-    public void setNumber(int number) {this.number = number;}
+    public void setNumber(Long number) {this.number = number;}
 
     public Date getDateOfOrder() {return dateOfOrder;}
 
     public Supplier getItemProductSupplier(){
-        Supplier itemProductSupplier = this.items.get(0).getProductSupplier();
-        return itemProductSupplier;
+        return this.items.get(0).getProductSupplier();
     }
 
     public void setDateOfOrder(Date dateOfOrder) {this.dateOfOrder = dateOfOrder;}
@@ -118,13 +126,9 @@ public class Order {
         return qualification;
     }
 
-    public void setQualification(Qualification qualification) {
-        this.qualification = qualification;
-        // agregar método para actualizar proveedor)
-    }
 
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(List<Item> items) {
@@ -156,6 +160,23 @@ public class Order {
     public void addItem(Item item) throws DeliveryException {
         if (this.getOrderStatus().canAddItem()){
             this.items.add(item);
-        }}
+        } else {
+            throw new DeliveryException("En el estado actual no puede agregar items");
+        }
     }
 
+    public void setQualification(Qualification qualification) throws DeliveryException {
+        if (this.getOrderStatus().canQualify()){
+            this.qualification = qualification;
+        } else {
+            throw new DeliveryException("En el estado actual no puede calificar");
+        }
+    }
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+}

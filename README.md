@@ -83,13 +83,13 @@ Se deberán implementar en la aplicación endpoints para realizar las siguient
 
 - Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
 
-- Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
+X Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
 
   actualizar la calificación del proveedor.
 
-- Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
-- Eliminar un producto de los ofrecidos por un proveedor.
+X Eliminar un producto de los ofrecidos por un proveedor.
 
 - Obtener todos los proveedores de un cierto tipo.
 

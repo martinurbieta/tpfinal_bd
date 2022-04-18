@@ -12,6 +12,10 @@ public abstract class User {
     @Column(name = "id_user")
     private Long id;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     @Column(length = 50, nullable = false)
     private String name;
 
@@ -75,4 +79,12 @@ public abstract class User {
     public int addScore(int points) {return this.score = this.score + points;}
 
     public void setScore(int score) {this.score = score;}
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

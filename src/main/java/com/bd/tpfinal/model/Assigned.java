@@ -4,12 +4,8 @@ package com.bd.tpfinal.model;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import com.bd.tpfinal.utils.DeliveryException;
-
-import java.util.Date;
 
 @Embeddable
 public class Assigned extends OrderStatus {
@@ -59,7 +55,6 @@ public class Assigned extends OrderStatus {
         if(this.canRefuse()) {
             this.order.setOrderStatus(new Cancelled(this.order));
             this.order.getDeliveryMan().addScore(-2);
-            this.order.getDeliveryMan().removeOrder(order);
             this.order.getDeliveryMan().setFree(true);
             this.order.setDeliveryMan(null);
         } else {
@@ -71,7 +66,6 @@ public class Assigned extends OrderStatus {
     public void cancel() throws DeliveryException {
         if(this.canCancel()){
             this.order.setOrderStatus(new Cancelled(this.order));
-            this.order.getDeliveryMan().removeOrder(order);
             this.order.getClient().addScore(-1);
             this.order.getDeliveryMan().setFree(true);
             this.order.setDeliveryMan(null);

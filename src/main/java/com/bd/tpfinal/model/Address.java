@@ -1,19 +1,15 @@
 package com.bd.tpfinal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "address")
 public class Address {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_address", unique = true, updatable = false)
-    private int number;
+    private long id;
 
     @Column(length = 500)
     private String name;
@@ -38,9 +34,11 @@ public class Address {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY, cascade = {}, orphanRemoval = false)
-    private List<Order> orders;
+    @Version
+    @Column(name = "version")
+    private int version;
+
+
 
     public Address(){}
 
@@ -153,21 +151,5 @@ public class Address {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-    /**
-     * Getter.
-     *
-     * @return una colección que contiene los las órdenes de la dirección.
-     */
-    public List<Order> getOrders() {
-        return orders;
-    }
-    /**
-     * Setter.
-     *
-     * @param orders una colección que contiene las órdenes de la dirección.
-     */
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 }

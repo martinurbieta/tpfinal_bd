@@ -24,13 +24,16 @@ public class HistoricalProductPrice {
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     public HistoricalProductPrice(){}
 
-    public HistoricalProductPrice(float price, Date startDate,Date finishDate){
-
+    public HistoricalProductPrice(Product product, float price, Date startDate) {        
+        this.product  = product;
         this.price  = price;
         this.startDate =startDate;
-        this.finishDate = finishDate;
     }
     /**
      * Getter.

@@ -1,17 +1,14 @@
 package com.bd.tpfinal.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "supplierType")
+@Table(name = "supplier_type")
 public class SupplierType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier_type", unique = true, updatable = false)
-    private int id;
+    private long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -19,9 +16,9 @@ public class SupplierType {
     @Column(length = 500, updatable=true)
     private String description;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "supplier_type", fetch = FetchType.LAZY, orphanRemoval = false) //debería ser ManyToMany
-    private List<Supplier> suppliers;
+    @Version
+    @Column(name = "version")
+    private int version;
 
     public SupplierType(){}
 
@@ -63,13 +60,5 @@ public class SupplierType {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Supplier> getSuppliers() {
-        return suppliers;
-    }
-
-    public void setSuppliers(List<Supplier> suppliers) {
-        this.suppliers = suppliers;
     }
 }

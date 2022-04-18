@@ -7,7 +7,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item", unique = true, updatable = false)
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private int quantity;
@@ -16,29 +16,27 @@ public class Item {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_order", nullable = false)
-    private Order order;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
-    public Item(){}
+    @Version
+    @Column(name = "version")
+    private int version;
 
-    public Item(int quantity, String description, Product product){
+    public Item() {}
 
+    public Item(int quantity, String description, Product product) {
         this.quantity = quantity;
         this.description = description;
         this.product = product;
     }
-
     /**
      * Getter.
      *
      * @return el producto.
      */
     public Supplier getProductSupplier() {
-        Supplier productSupplier= this.product.getSupplier()
+        Supplier productSupplier= this.product.getSupplier();
         return productSupplier;
     }
     /**
@@ -47,7 +45,7 @@ public class Item {
      * @return la cantidad del item.
      */
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
     /**
      * Setter.
@@ -63,7 +61,7 @@ public class Item {
      * @return la descripción del item.
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
     /**
      * Setter.
@@ -74,16 +72,8 @@ public class Item {
         this.description = description;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public void setProduct(Product product) {

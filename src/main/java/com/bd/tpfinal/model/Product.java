@@ -3,7 +3,6 @@ package com.bd.tpfinal.model;
 import javax.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,7 +12,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_product", unique = true, updatable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -31,7 +30,11 @@ public class Product {
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @Version
+    @Column(name = "version")
+    private int version;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinTable(
         name = "product_product_type", 
         joinColumns = { @JoinColumn(name = "id_product") }, 
@@ -39,23 +42,23 @@ public class Product {
     )
     private List<ProductType> productType;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<HistoricalProductPrice> prices;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Item> item;
-
     public Product(){}
 
     public Product(String name, float price, float weight, String description, Supplier supplier){
-
         this.name = name;
         this.price=price;
         this.weight=weight;
         this.description = description;
         this.productType=new ArrayList<>();
         this.supplier = supplier;
-        this.prices=new ArrayList<>();
+    }
+    /**
+     * Getter.
+     *
+     * @return el id del producto.
+     */
+    public Long getId() {
+        return this.id;
     }
     /**
      * Getter.
@@ -143,12 +146,12 @@ public class Product {
     public void removeProductType(ProductType productType) {this.productType.remove(productType);}
 
 
-    public List<HistoricalProductPrice> getPrices() {
-        return prices;
+    public List<ProductType> getProductType() {
+        return this.productType;
     }
 
-    public void setPrices(List<HistoricalProductPrice> prices) {
-        this.prices = prices;
+    public void setProductType(List<ProductType> productType) {
+        this.productType = productType;
     }
 
     /**
@@ -157,24 +160,12 @@ public class Product {
      * @param price es el nuevo precio del producto.
      */
 
-    /**
-     * Getter.
-     *
-     * @return lastOldPriceFinishDate es la fecha final validez del ultimo precio historico.
-     */
-    public Date getLastOldPriceFinishDate() {
-        HistoricalProductPrice lastOldPrice = this.prices.get(this.prices.size()-1);
-        Date lastOldPriceFinishDate = lastOldPrice.getFinishDate();
-        return lastOldPriceFinishDate;
-    }
-
-    public void setNewPrice(float newPrice) {
-        Date lastOldPriceFinishDate = getLastOldPriceFinishDate();
-        Date newHistoricalPriceStartDate = lastOldPriceFinishDate;
-        Date newHistoricalPriceFinishDate = new Date();
-        HistoricalProductPrice newHistoricalProductPrice = new HistoricalProductPrice(this.price, newHistoricalPriceStartDate,newHistoricalPriceStartDate);
-        this.prices.add(newHistoricalProductPrice);
-        this.price = newPrice;
-
+    public void update(Product product) {
+        this.setName(product.getName());
+        this.setWeight(product.getWeight());
+        this.setName(product.getName());
+        this.setDescription(product.getDescription());
+        this.setSupplier(product.getSupplier());
+        this.setPrice(product.getPrice());
     }
 }

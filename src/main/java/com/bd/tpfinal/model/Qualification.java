@@ -2,23 +2,15 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "qualification")
+@Embeddable
+
 public class Qualification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_qualification", unique = true, updatable = false)
-    private int id;
 
     @Column(nullable = false, updatable = false)
     private float score;
 
     @Column(length = 500, updatable=false)
     private String commentary;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_qualification", nullable = false)
-    private Order order;
 
     public Qualification(){}
 
@@ -61,11 +53,11 @@ public class Qualification {
         this.commentary = commentary;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+//    public Order getOrder() {
+//        return this.order;
+//    }
+//
+//    public void setOrder(Order order) {
+//        this.order = order;
+//    }
 }

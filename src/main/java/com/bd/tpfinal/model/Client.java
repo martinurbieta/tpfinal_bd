@@ -3,7 +3,6 @@ package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +16,7 @@ public class  Client extends User{
 
     @JsonIgnore
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    private List<Order> orders;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_order")
     private List<Address> addresses;
 
     public Client(){}
@@ -28,7 +24,6 @@ public class  Client extends User{
     public Client(String name, String email, String username, String password, Date dateOfBirth) {
         super(name, email, username, password, dateOfBirth);
         this.dateOfRegister = Calendar.getInstance().getTime();
-        this.orders = new ArrayList<>();
     }
 
     public Date getDateOfRegister() {
@@ -39,14 +34,6 @@ public class  Client extends User{
         this.dateOfRegister = dateOfRegister;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -54,7 +41,5 @@ public class  Client extends User{
     public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
-
-    public void addOrder(Order order) { this.orders.add(order); }
 
 }
