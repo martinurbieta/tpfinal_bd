@@ -54,7 +54,7 @@ public class Order {
     private int version;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
     private List<Item> items;
 

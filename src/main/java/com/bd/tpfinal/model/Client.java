@@ -15,8 +15,8 @@ public class  Client extends User{
     private Date dateOfRegister;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_order")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client")
     private List<Address> addresses;
 
     public Client(){}

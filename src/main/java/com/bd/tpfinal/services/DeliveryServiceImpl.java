@@ -109,7 +109,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     public void addHistoricalProductPrice(Product product, float price) throws DeliveryException {
         Date now = new Date();
-        HistoricalProductPrice actualPrice = this.historicalProductPriceRepository.findFirstByIdProductByStartDateDesc(product.getId()).orElse(null);
+        HistoricalProductPrice actualPrice = this.historicalProductPriceRepository.findFirstByProductIdOrderByStartDateDesc(product.getId()).orElse(null);
         if (actualPrice != null) {
             HistoricalProductPrice newPrice = new HistoricalProductPrice(product, price, now);
             actualPrice.setFinishDate(now);
@@ -237,7 +237,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public Address getAddress(long id) {
-        return this.addressRepository.findAddressById(id).orElse(null);
+        return this.addressRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -305,7 +305,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     public void deleteProduct(Long id) throws DeliveryException {
         try {
             this.productRepository.deleteById(id);
-            this.historicalProductPriceRepository.deleteByIdProduct(id);
+            this.historicalProductPriceRepository.deleteByProductId(id);
         } catch (Exception e) {
             throw new DeliveryException(e.getMessage());
         }

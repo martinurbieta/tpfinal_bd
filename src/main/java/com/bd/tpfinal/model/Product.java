@@ -150,7 +150,7 @@ public class Product {
         return this.productType;
     }
 
-    public void setProductType(List<ProductType> productType) {
+    public void setPrices(List<ProductType> productType) {
         this.productType = productType;
     }
 

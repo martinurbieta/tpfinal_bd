@@ -99,16 +99,6 @@ public class DeliveryController {
         return this.service.getOrderinfo(number);
     }
 
-/*    @GetMapping(path = "/deliveryMan/{username}/orders")
-    public List<Order> getAssignedOrders(@PathVariable String username){
-        return this.service.getAssignedOrders(username);
-      }
-*/
-//    @PutMapping(path = "/order/{number}/accept")
-//    public void acceptOrder(long number) throws DeliveryException {
-//        this.service.acceptOrder(number);
-//    }
-
     @PutMapping(path = "/order/{number}/refuse")
     public void refuseOrder(long number) throws DeliveryException {
         this.service.refuseOrder(number);

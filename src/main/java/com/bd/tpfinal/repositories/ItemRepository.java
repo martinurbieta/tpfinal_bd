@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends CrudRepository<Item, Long> {
-    public List<Item> findByOrderNumber (Long aNumber);
-
 }
