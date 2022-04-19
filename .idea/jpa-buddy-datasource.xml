@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="2df4e052-8ad4-499a-9506-580bd38d514b" name="tpfinal_bd" url="jdbc:mysql://localhost/tpfinal_bd?useSSL=false&amp;allowMultiQueries=true&amp;serverTimezone=UTC" driverClass="com.mysql.jdbc.Driver" />
+    </data-sources>
+  </component>
+</project>
