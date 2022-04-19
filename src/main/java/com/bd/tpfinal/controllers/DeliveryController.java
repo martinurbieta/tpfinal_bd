@@ -1,4 +1,4 @@
-package com.bd.tpfinal.controllers;
+package com.bd.tpfinal.controller;
 
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.DeliveryService;

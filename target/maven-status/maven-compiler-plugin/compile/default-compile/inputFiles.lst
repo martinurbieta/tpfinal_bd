@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\model\SupplierType.java
 C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\model\Product.java
 C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\model\User.java
@@ -33,6 +34,8 @@ C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\utils\DeliveryE
 C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\repositories\OrderRepository.java
 C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\repositories\SupplierRepository.java
 =======
+=======
+>>>>>>> d0f38456a983c5aafe38d6f24dd58b5c1f9de587
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/model/Assigned.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/model/Supplier.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/model/HistoricalProductPrice.java
@@ -65,4 +68,7 @@ C:\Users\blasc\Proyectos\tpfinal_bd\src\main\java\com\bd\tpfinal\repositories\Su
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/utils/DeliveryException.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/model/DeliveryMan.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd/src/main/java/com/bd/tpfinal/repositories/SupplierRepository.java
+<<<<<<< HEAD
+>>>>>>> d0f38456a983c5aafe38d6f24dd58b5c1f9de587
+=======
 >>>>>>> d0f38456a983c5aafe38d6f24dd58b5c1f9de587

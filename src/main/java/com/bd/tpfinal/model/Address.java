@@ -37,8 +37,6 @@ public class Address {
     @Column(name = "version")
     private int version;
 
-
-
     public Address(){}
 
     public Address(String name, String address, String apartment, float coordX, float coordY, String description){
