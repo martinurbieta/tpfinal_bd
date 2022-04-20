@@ -18,6 +18,7 @@ com/bd/tpfinal/model/Supplier.class
 com/bd/tpfinal/model/Sent.class
 com/bd/tpfinal/model/HistoricalProductPrice.class
 com/bd/tpfinal/model/Cancelled.class
+com/bd/tpfinal/repositories/HistoricalProductPriceRepository.class
 com/bd/tpfinal/model/Assigned.class
 com/bd/tpfinal/repositories/ClientRepository.class
 com/bd/tpfinal/repositories/AddressRepository.class

@@ -11,7 +11,7 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, updatable = true, length = 50)
     private String name;
@@ -22,10 +22,10 @@ public class Supplier {
     @Column(length = 50)
     private String address;
 
-    @Column
+    @Column(name = "coord_x")
     private float coordX;
 
-    @Column
+    @Column(name = "coord_y")
     private float coordY;
 
     @Column
@@ -61,7 +61,7 @@ public class Supplier {
      * @return el id del proveedor.
      */
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
     /**

@@ -20,14 +20,12 @@ public class DeliveryController {
     public String test(){
         return "OK!";
     }
-    @GetMapping(path = "/address/{id}")
-    public Address getAddress(@PathVariable long id){
-        return this.service.getAddress(id);
-    }
+
+
 
     @PostMapping(path = "/address")
-    public Address createAddress(@RequestBody Address newAddress){
-        return this.service.createAddress(newAddress);
+    public Address createAddress(@RequestBody Address address){
+        return this.service.createAddress(address);
     }
 
     @PostMapping(path = "/client") //ok
@@ -40,6 +38,7 @@ public class DeliveryController {
         return this.service.editClient(username, client);
     }
 
+
     @DeleteMapping(path = "/client/{username}") //ok
     public void desactiveClient(@PathVariable String username){
         this.service.desactiveClient(username);
@@ -48,6 +47,10 @@ public class DeliveryController {
     @GetMapping(path = "/client/{username}") //ok
     public Client getClient(@PathVariable String username){
         return this.service.getClientInfo(username);
+    }
+
+    @GetMapping(path = "/address/{id}")
+    public Address getAddress(@PathVariable Long id){ return this.service.getAddressWithID(id);
     }
 
 /*    @GetMapping(path = "/client/{username}/orders")
@@ -81,7 +84,7 @@ public class DeliveryController {
     }
 
     @DeleteMapping(path = "/item/{id}")
-    public Object deleteItem(@PathVariable long id){
+    public Object deleteItem(@PathVariable Long id){
         return this.service.deleteItem(this.service.getItemWithID(id));
     }
     @PostMapping(path = "/order")
@@ -90,37 +93,37 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/order/{items}")
-    public List<Item> getItemsByOrderID(@PathVariable long number){
+    public List<Item> getItemsByOrderID(@PathVariable Long number){
         return this.service.getItemsByOrderNumber(number);
     }
 
     @GetMapping(path = "/order/{number}")
-    public Order getOrder(@PathVariable long number){
+    public Order getOrder(@PathVariable Long number){
         return this.service.getOrderinfo(number);
     }
 
     @PutMapping(path = "/order/{number}/refuse")
-    public void refuseOrder(long number) throws DeliveryException {
+    public void refuseOrder(Long number) throws DeliveryException {
         this.service.refuseOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/cancel")
-    public void cancelOrder(long number) throws DeliveryException{
+    public void cancelOrder(Long number) throws DeliveryException{
         this.service.cancelOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/confirm")
-    public DeliveryMan confirmOrder(@PathVariable long number) throws DeliveryException{
+    public DeliveryMan confirmOrder(@PathVariable Long number) throws DeliveryException{
         return this.service.confirmOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/finish")
-    public void finishOrder(long number) throws DeliveryException {
+    public void finishOrder(Long number) throws DeliveryException {
         this.service.finishOrder(number);
     }
 
     @PostMapping(path = "/order/{number}/qualify")
-    public void qualifyOrder(long number, @RequestBody Qualification qualification) throws DeliveryException {
+    public void qualifyOrder(Long number, @RequestBody Qualification qualification) throws DeliveryException {
         this.service.qualifyOrder(number, qualification);
     }
 
@@ -130,7 +133,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/product/bySupplier/{id}")
-    public List<Product> getProductBySupplier(@PathVariable long id){
+    public List<Product> getProductBySupplier(@PathVariable Long id){
         return this.service.getProductBySupplier(id);
     }
 
@@ -140,7 +143,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/supplierType/{id}")
-    public SupplierType getSupplierType(@PathVariable long id){
+    public SupplierType getSupplierType(@PathVariable Long id){
         return this.service.getSupplierType(id);
     }
 
@@ -150,7 +153,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/supplier/{id}")
-    public Supplier getSupplier(@PathVariable long id){
+    public Supplier getSupplier(@PathVariable Long id){
         return this.service.getSupplier(id);
     }
 

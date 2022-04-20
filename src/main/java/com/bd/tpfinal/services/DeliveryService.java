@@ -15,6 +15,8 @@ public interface DeliveryService {
 
     public Client getClientInfo(String username);
 
+    public Address getAddressWithID(Long id);
+
 //    public List<Order> getClientOrders(String username);
 
     public DeliveryMan newDeliveryMan(DeliveryMan deliveryMan);
@@ -29,33 +31,33 @@ public interface DeliveryService {
 
     public Order newOrderPending(Order order);
 
-    public Order getOrderinfo(long number);
+    public Order getOrderinfo(Long number);
 
-    public DeliveryMan confirmOrder(long number) throws DeliveryException;
+    public DeliveryMan confirmOrder(Long number) throws DeliveryException;
 
-    public void deliverOrder(long number) throws DeliveryException;
+    public void deliverOrder(Long number) throws DeliveryException;
 
-    public void refuseOrder(long number) throws DeliveryException;
+    public void refuseOrder(Long number) throws DeliveryException;
 
-    public void cancelOrder(long number) throws DeliveryException;
+    public void cancelOrder(Long number) throws DeliveryException;
 
-    public void finishOrder(long number) throws DeliveryException;
+    public void finishOrder(Long number) throws DeliveryException;
 
-    public void qualifyOrder(long number, Qualification qualification) throws DeliveryException;
+    public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException;
 
-    public Address getAddress(long id);
 
-    public Address createAddress(Address newAddress);
 
-    public SupplierType getSupplierType(long id);
+    public Address createAddress(Address address);
+
+    public SupplierType getSupplierType(Long id);
 
     public SupplierType createSupplierType(SupplierType newsSupplierType);
 
-    public Supplier getSupplier(long id);
+    public Supplier getSupplier(Long id);
 
     public Supplier createSupplier(Supplier newsSupplier);
 
-    public Item createItem(Item newsItem);
+    public Item createItem(Item item);
     
     Object deleteItem(Item item);
 
@@ -63,9 +65,9 @@ public interface DeliveryService {
 
     List<Item> getItemsByOrderNumber(Long number);
 
-    public Item getItemWithID(long id);
+    public Item getItemWithID(Long id);
 
-    public List<Product> getProductBySupplier(long id);
+    public List<Product> getProductBySupplier(Long id);
 
 }
 

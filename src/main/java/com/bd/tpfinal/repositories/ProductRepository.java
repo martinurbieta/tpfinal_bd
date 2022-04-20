@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {
-    public List<Product> findBySupplierId(long aSupplierId);
+    public List<Product> findBySupplierId(Long aSupplierId);
 
 }

@@ -8,7 +8,7 @@ public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_product_type", unique = true, updatable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -59,5 +59,17 @@ public class ProductType {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

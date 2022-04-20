@@ -159,14 +159,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderinfo(long number) {
+    public Order getOrderinfo(Long number) {
         Order order = this.orderRepository.findById(number).orElse(null);
         return order;
     }
 
     @Override
     @Transactional
-    public DeliveryMan confirmOrder(long number) throws DeliveryException {
+    public DeliveryMan confirmOrder(Long number) throws DeliveryException {
         DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
         if (deliveryMan != null) {
             try {
@@ -193,7 +193,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 */
     @Override
     @Transactional
-    public void deliverOrder(long number) throws DeliveryException {
+    public void deliverOrder(Long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
@@ -201,7 +201,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void refuseOrder(long number) throws DeliveryException {
+    public void refuseOrder(Long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getOrderStatus().refuse();
         this.orderRepository.save(order);
@@ -209,7 +209,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void cancelOrder(long number) throws DeliveryException {
+    public void cancelOrder(Long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getOrderStatus().cancel();
         this.orderRepository.save(order);
@@ -217,7 +217,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void finishOrder(long number) throws DeliveryException {
+    public void finishOrder(Long number) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.getOrderStatus().finish();
         this.orderRepository.save(order);
@@ -225,7 +225,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void qualifyOrder(long number, Qualification qualification) throws DeliveryException {
+    public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
         Order order = this.getOrderinfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getItemProductSupplier();
@@ -236,8 +236,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Address getAddress(long id) {
-        return this.addressRepository.findById(id).orElse(null);
+    public Address getAddressWithID(Long id) {
+        Optional<Address> address = this.addressRepository.findAddressById(id);
+        return address.orElse(null);
     }
 
     @Override
@@ -248,7 +249,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductBySupplier(long id) {
+    public List<Product> getProductBySupplier(Long id) {
         List<Product> products = this.productRepository.findBySupplierId(id);
         ListIterator<Product> iterator = products.listIterator();
         while (iterator.hasNext()) {
@@ -260,7 +261,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     
     @Override
     @Transactional(readOnly = true)
-    public SupplierType getSupplierType(long id) {
+    public SupplierType getSupplierType(Long id) {
         return this.supplierTypeRepository.findSupplierTypeById(id).orElse(null);
     }
 
@@ -272,7 +273,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Supplier getSupplier(long id) {
+    public Supplier getSupplier(Long id) {
         return this.supplierRepository.findById(id).orElse(null);
     }
 
@@ -321,7 +322,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Item getItemWithID(long id) {
+    public Item getItemWithID(Long id) {
         Optional<Item> item = this.itemRepository.findById(id);
         return item.orElse(null);
     }

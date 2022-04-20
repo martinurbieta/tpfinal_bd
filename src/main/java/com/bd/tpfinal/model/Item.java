@@ -7,7 +7,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private int quantity;
@@ -78,5 +78,17 @@ public class Item {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

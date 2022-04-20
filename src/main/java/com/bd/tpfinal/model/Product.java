@@ -160,6 +160,14 @@ public class Product {
      * @param price es el nuevo precio del producto.
      */
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public void update(Product product) {
         this.setName(product.getName());
         this.setWeight(product.getWeight());
