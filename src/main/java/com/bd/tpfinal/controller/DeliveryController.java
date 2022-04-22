@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// https://go.postman.co/workspace/Team-Workspace~9df97e40-07a0-45e0-8a84-fb11ba783d14/collection/20436870-42d92330-e996-4970-bb71-fa18e2a0d0c1?action=share&creator=20436870
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
@@ -87,6 +87,7 @@ public class DeliveryController {
     public Object deleteItem(@PathVariable Long id){
         return this.service.deleteItem(this.service.getItemWithID(id));
     }
+
     @PostMapping(path = "/order")
     public Order newOrder(@RequestBody Order order){
         return this.service.newOrderPending(order);

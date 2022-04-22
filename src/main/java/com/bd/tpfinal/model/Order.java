@@ -2,6 +2,8 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 
@@ -38,7 +40,7 @@ public class Order {
     private Address address;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false)
+    @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false,nullable = true)
     private DeliveryMan deliveryMan;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
@@ -53,7 +55,7 @@ public class Order {
     @Column(name = "version")
     private int version;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
     private List<Item> items;
@@ -128,7 +130,7 @@ public class Order {
 
 
     public List<Item> getItems() {
-        return this.items;
+        return items;
     }
 
     public void setItems(List<Item> items) {
