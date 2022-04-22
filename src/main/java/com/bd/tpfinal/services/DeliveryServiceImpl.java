@@ -159,8 +159,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderinfo(Long number) {
-        Order order = this.orderRepository.findById(number).orElse(null);
+    public Order getOrderInfo(Long number) {
+        Order order = this.orderRepository.findOrderByNumber(number).orElse(null);
         return order;
     }
 
@@ -170,7 +170,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
         if (deliveryMan != null) {
             try {
-                Order order = this.getOrderinfo(number);
+                Order order = this.getOrderInfo(number);
                 order.getOrderStatus().assign(deliveryMan);
                 this.deliveryManRepository.save(deliveryMan);
                 this.orderRepository.save(order);
@@ -194,7 +194,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void deliverOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
@@ -202,7 +202,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void refuseOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse();
         this.orderRepository.save(order);
     }
@@ -210,7 +210,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void cancelOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
@@ -218,7 +218,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void finishOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish();
         this.orderRepository.save(order);
     }
@@ -226,7 +226,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getItemProductSupplier();
         Long count = this.orderRepository.countBySupplierId(supplier.getId());
@@ -249,8 +249,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductBySupplier(Long id) {
-        List<Product> products = this.productRepository.findBySupplierId(id);
+    public List<Product> getProductBySupplierId(Long id) {
+        List<Product> products = this.productRepository.findProductBySupplierId(id);
         ListIterator<Product> iterator = products.listIterator();
         while (iterator.hasNext()) {
             Product product = iterator.next();
@@ -261,14 +261,32 @@ public class DeliveryServiceImpl implements DeliveryService {
     
     @Override
     @Transactional(readOnly = true)
-    public SupplierType getSupplierType(Long id) {
+    public SupplierType getSupplierTypeById(Long id) {
         return this.supplierTypeRepository.findSupplierTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductType getProductTypeById(Long id) {
+        return this.productTypeRepository.findProductTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product getProductById(Long id) {
+        return this.productRepository.findProductById(id).orElse(null);
     }
 
     @Override
     @Transactional
     public SupplierType createSupplierType(SupplierType newSupplierType) {
         return this.supplierTypeRepository.save(newSupplierType);
+    }
+
+    @Override
+    @Transactional
+    public ProductType newProductType(ProductType aProductType) {
+        return this.productTypeRepository.save(aProductType);
     }
 
     @Override
@@ -315,7 +333,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public List<Item> getItemsByOrderNumber(Long number) {
-        Optional<Order> order = this.orderRepository.findByNumber(number);
+        Optional<Order> order = this.orderRepository.findOrderByNumber(number);
         List<Item> items = order.isPresent() ? order.get().getItems() : null;
         return items;
     }

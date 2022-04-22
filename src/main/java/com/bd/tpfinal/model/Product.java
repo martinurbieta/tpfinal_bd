@@ -26,7 +26,7 @@ public class Product {
     @Column(length = 500, updatable=true)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
@@ -34,7 +34,7 @@ public class Product {
     @Column(name = "version")
     private int version;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
         name = "product_product_type", 
         joinColumns = { @JoinColumn(name = "id_product") }, 
@@ -133,7 +133,7 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public List<ProductType> getType() {
+    public List<ProductType> getProductType() {
         return productType;
     }
 
@@ -144,11 +144,6 @@ public class Product {
     public void addProductType(ProductType productType) {this.productType.add(productType);}
 
     public void removeProductType(ProductType productType) {this.productType.remove(productType);}
-
-
-    public List<ProductType> getProductType() {
-        return this.productType;
-    }
 
     public void setPrices(List<ProductType> productType) {
         this.productType = productType;

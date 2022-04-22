@@ -23,7 +23,7 @@ public class DeliveryController {
 
 
 
-    @PostMapping(path = "/address")
+    @PostMapping(path = "/address")  //ok
     public Address createAddress(@RequestBody Address address){
         return this.service.createAddress(address);
     }
@@ -49,7 +49,7 @@ public class DeliveryController {
         return this.service.getClientInfo(username);
     }
 
-    @GetMapping(path = "/address/{id}")
+    @GetMapping(path = "/address/{id}")  // ok
     public Address getAddress(@PathVariable Long id){ return this.service.getAddressWithID(id);
     }
 
@@ -68,12 +68,12 @@ public class DeliveryController {
         return this.service.editDeliveryMan(username, deliveryMan);
     }
 
-    @DeleteMapping(path = "/deliveryMan/{username}")
+    @DeleteMapping(path = "/deliveryMan/{username}") // ok
     public void desactiveDeliveryMan(@PathVariable String username){
         this.service.desactiveDeliveryMan(username);
     }
 
-    @GetMapping(path = "/deliveryMan/{username}")
+    @GetMapping(path = "/deliveryMan/{username}") // ok
     public DeliveryMan getDeliveryMan(@PathVariable String username){
         return this.service.getDeliveryManInfo(username);
     }
@@ -99,7 +99,7 @@ public class DeliveryController {
 
     @GetMapping(path = "/order/{number}")
     public Order getOrder(@PathVariable Long number){
-        return this.service.getOrderinfo(number);
+        return this.service.getOrderInfo(number);
     }
 
     @PutMapping(path = "/order/{number}/refuse")
@@ -132,34 +132,49 @@ public class DeliveryController {
         return this.service.editProduct(id, product);
     }
 
-    @GetMapping(path = "/product/bySupplier/{id}")
+    @GetMapping(path = "/product/bySupplier/{id}") //ok
     public List<Product> getProductBySupplier(@PathVariable Long id){
-        return this.service.getProductBySupplier(id);
+        return this.service.getProductBySupplierId(id);
     }
 
-    @DeleteMapping(path = "/product/{id}")
+    @DeleteMapping(path = "/product/{id}") //ok
     public void deleteProduct(@PathVariable Long id) throws DeliveryException{
         this.service.deleteProduct(id);
     }
 
-    @GetMapping(path = "/supplierType/{id}")
-    public SupplierType getSupplierType(@PathVariable Long id){
-        return this.service.getSupplierType(id);
+    @GetMapping(path = "/supplierType/{id}")  // ok
+    public SupplierType getSupplierTypeById(@PathVariable Long id){
+        return this.service.getSupplierTypeById(id);
     }
 
-    @PostMapping(path = "/supplierType")
+    @PostMapping(path = "/supplierType")  // ok
     public SupplierType createSupplierType(@RequestBody SupplierType newsSupplierType){
         return this.service.createSupplierType(newsSupplierType);
     }
 
-    @GetMapping(path = "/supplier/{id}")
+    @GetMapping(path = "/supplier/{id}") //ok
     public Supplier getSupplier(@PathVariable Long id){
         return this.service.getSupplier(id);
     }
 
-    @PostMapping(path = "/supplier")
+    @PostMapping(path = "/supplier")  // ok
     public Supplier createSupplier(@RequestBody Supplier newsSupplier){
         return this.service.createSupplier(newsSupplier);
     }
 
+    @PostMapping(path = "/productType")
+    public ProductType newProductType(@RequestBody ProductType aProductType){
+        return this.service.newProductType(aProductType);
+    }
+
+    @GetMapping(path = "/productType/{id}")  //ok
+    public ProductType getProductTypeById(@PathVariable Long id){
+        return this.service.getProductTypeById(id);
+    }
+
+    @GetMapping(path = "/product/{id}") // ok
+    public Product getProductById(@PathVariable Long id){ return this.service.getProductById(id);
+
+
+    }
 }

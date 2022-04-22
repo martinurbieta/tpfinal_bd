@@ -31,7 +31,7 @@ public interface DeliveryService {
 
     public Order newOrderPending(Order order);
 
-    public Order getOrderinfo(Long number);
+    public Order getOrderInfo(Long number);
 
     public DeliveryMan confirmOrder(Long number) throws DeliveryException;
 
@@ -49,13 +49,19 @@ public interface DeliveryService {
 
     public Address createAddress(Address address);
 
-    public SupplierType getSupplierType(Long id);
+    public SupplierType getSupplierTypeById(Long id);
+
+    public ProductType getProductTypeById(Long id);
+
+    public Product getProductById(Long id);
 
     public SupplierType createSupplierType(SupplierType newsSupplierType);
 
     public Supplier getSupplier(Long id);
 
     public Supplier createSupplier(Supplier newsSupplier);
+
+    public ProductType newProductType(ProductType aProductType);
 
     public Item createItem(Item item);
     
@@ -67,7 +73,7 @@ public interface DeliveryService {
 
     public Item getItemWithID(Long id);
 
-    public List<Product> getProductBySupplier(Long id);
+    public List<Product> getProductBySupplierId(Long id);
 
 }
 

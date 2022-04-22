@@ -32,10 +32,10 @@ public class Supplier {
     private float qualification;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, orphanRemoval = false)
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinColumn(name = "id_supplier_type", nullable = false)
     private SupplierType type;
 
@@ -211,6 +211,13 @@ public class Supplier {
     public void addProduct(Product product){
         this.products.add(product);
 
+    }
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
    public void updateScore(Qualification aNewQualification, Long qualifications){
