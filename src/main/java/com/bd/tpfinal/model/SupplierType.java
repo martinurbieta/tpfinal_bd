@@ -8,7 +8,7 @@ public class SupplierType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier_type", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 50, updatable=true)
     private String name;
@@ -60,5 +60,17 @@ public class SupplierType {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

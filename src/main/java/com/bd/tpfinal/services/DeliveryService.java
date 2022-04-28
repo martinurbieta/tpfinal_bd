@@ -17,6 +17,8 @@ public interface DeliveryService {
 
     public Client getClientInfo(String username);
 
+    public Address getAddressWithID(Long id);
+
 //    public List<Order> getClientOrders(String username);
 
     public DeliveryMan newDeliveryMan(DeliveryMan deliveryMan);
@@ -47,13 +49,17 @@ public interface DeliveryService {
 
     public Address getAddress(long id);
 
-    public Address createAddress(Address newAddress);
+    public Address createAddress(Address address);
 
-    public SupplierType getSupplierType(long id);
+    public SupplierType getSupplierTypeById(Long id);
+
+    public ProductType getProductTypeById(Long id);
+
+    public Product getProductById(Long id);
 
     public SupplierType createSupplierType(SupplierType newsSupplierType);
 
-    public Supplier getSupplier(long id);
+    public Supplier getSupplier(Long id);
 
     public Supplier createSupplier(Map<String, Object> data);
 
@@ -69,9 +75,9 @@ public interface DeliveryService {
 
     List<Item> getItemsByOrderNumber(Long number);
 
-    public Item getItemWithID(long id);
+    public Item getItemWithID(Long id);
 
-    public List<Product> getProductBySupplier(long id);
+    public List<Product> getProductBySupplierId(Long id);
 
 }
 

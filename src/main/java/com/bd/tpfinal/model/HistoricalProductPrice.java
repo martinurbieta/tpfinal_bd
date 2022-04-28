@@ -9,7 +9,7 @@ public class HistoricalProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_historical_product_price", unique = true, updatable = false)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, updatable = false)
     private float price;
@@ -90,5 +90,17 @@ public class HistoricalProductPrice {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

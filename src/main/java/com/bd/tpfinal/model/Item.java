@@ -7,7 +7,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_item", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private int quantity;
@@ -15,7 +15,7 @@ public class Item {
     @Column(length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
@@ -78,5 +78,17 @@ public class Item {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

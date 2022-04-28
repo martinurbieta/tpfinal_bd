@@ -98,7 +98,7 @@ class TpfinalApplicationTests {
 			long numberOrder = order.getNumber();
 
 			//assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Pending");
-			assertTrue(this.service.getOrderinfo(numberOrder).getNumber() == order.getNumber());
+			assertTrue(this.service.getOrderInfo(numberOrder).getNumber() == order.getNumber());
 
 			DeliveryMan res1 = this.service.confirmOrder(numberOrder);
 
@@ -109,8 +109,8 @@ class TpfinalApplicationTests {
 			DeliveryMan res2 = this.service.confirmOrder(numberOrder);
 
 			//assertTrue(this.service.getOrderinfo(numberOrder).getDeliveryMan() != null);
-			assertEquals(this.service.getOrderinfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
-			assertFalse(this.service.getOrderinfo(numberOrder).getDeliveryMan().isFree());
+			assertEquals(this.service.getOrderInfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
+			assertFalse(this.service.getOrderInfo(numberOrder).getDeliveryMan().isFree());
 			//assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Assigned");
 //			assertEquals(this.service.getAssignedOrders("dmuno").size(), 1);
 
@@ -144,10 +144,10 @@ class TpfinalApplicationTests {
 			order = this.service.newOrderPending(order);
 			long numberOrder = order.getNumber();
 
-			Order order1 = this.service.getOrderinfo(order.getNumber());
+			Order order1 = this.service.getOrderInfo(order.getNumber());
 
 			//assertEquals(order1.getOrderStatus().getClass().getName(), "com.bd.delivery.model.Pending");
-			assertTrue(this.service.getOrderinfo(numberOrder).getNumber() == numberOrder);
+			assertTrue(this.service.getOrderInfo(numberOrder).getNumber() == numberOrder);
 
 			try{
 				this.service.cancelOrder(numberOrder);
@@ -170,7 +170,7 @@ class TpfinalApplicationTests {
 			long numberOrder = order.getNumber();
 
 		//	assertEquals(order.getOrderStatus().getClass().getName(), "com.bd.delivery.model.Pending");
-			assertEquals(this.service.getOrderinfo(numberOrder).getNumber(), numberOrder);
+			assertEquals(this.service.getOrderInfo(numberOrder).getNumber(), numberOrder);
 
 			Date dateDeliveryMan1 = new Date() ;
 			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
@@ -178,8 +178,8 @@ class TpfinalApplicationTests {
 
 			this.service.confirmOrder(numberOrder);
 
-			assertTrue(this.service.getOrderinfo(numberOrder).getDeliveryMan() != null);
-			assertEquals(this.service.getOrderinfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
+			assertTrue(this.service.getOrderInfo(numberOrder).getDeliveryMan() != null);
+			assertEquals(this.service.getOrderInfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
 			assertFalse(this.service.getDeliveryManInfo("dmuno").isFree());
 	//		assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Assigned");
 //			assertEquals(this.service.getAssignedOrders("dmuno").size(), 1);
@@ -208,15 +208,15 @@ class TpfinalApplicationTests {
 
 
 	//		assertEquals(order.getOrderStatus().getClass().getName(), "com.bd.delivery.model.Pending");
-			assertEquals(this.service.getOrderinfo(numberOrder).getNumber(), numberOrder);
+			assertEquals(this.service.getOrderInfo(numberOrder).getNumber(), numberOrder);
 
 			Date dateDeliveryMan1 = new Date() ;
 			DeliveryMan deliveryMan1 = new DeliveryMan("Dm Uno", "dmuno@mail.com", "dmuno", "1234", dateDeliveryMan1);
 			this.service.newDeliveryMan(deliveryMan1);
 			this.service.confirmOrder(numberOrder);
 
-			assertTrue(this.service.getOrderinfo(numberOrder).getDeliveryMan() != null);
-			assertEquals(this.service.getOrderinfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
+			assertTrue(this.service.getOrderInfo(numberOrder).getDeliveryMan() != null);
+			assertEquals(this.service.getOrderInfo(numberOrder).getDeliveryMan().getUsername(), "dmuno");
 			assertFalse(this.service.getDeliveryManInfo("dmuno").isFree());
 	//		assertEquals(this.service.getOrderinfo(numberOrder).getOrderStatus().getClass().getName(), "com.bd.delivery.model.Assigned");
 //			assertEquals(this.service.getAssignedOrders("dmuno").size(), 1);

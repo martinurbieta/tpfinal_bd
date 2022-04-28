@@ -11,7 +11,7 @@ public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_supplier", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, updatable = true, length = 50)
     private String name;
@@ -22,20 +22,20 @@ public class Supplier {
     @Column(length = 50)
     private String address;
 
-    @Column
+    @Column(name = "coord_x")
     private float coordX;
 
-    @Column
+    @Column(name = "coord_y")
     private float coordY;
 
     @Column
     private float qualification;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, orphanRemoval = false)
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinColumn(name = "id_supplier_type", nullable = false)
     private SupplierType type;
 
@@ -61,7 +61,7 @@ public class Supplier {
      * @return el id del proveedor.
      */
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
     /**
@@ -211,6 +211,13 @@ public class Supplier {
     public void addProduct(Product product){
         this.products.add(product);
 
+    }
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
    public void updateScore(Qualification aNewQualification, Long qualifications){

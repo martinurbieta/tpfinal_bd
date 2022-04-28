@@ -8,7 +8,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_address", unique = true, updatable = false)
-    private long id;
+    private Long id;
 
     @Column(length = 500)
     private String name;
@@ -19,17 +19,17 @@ public class Address {
     @Column(length = 500)
     private String apartment;
 
-    @Column(nullable = false)
+    @Column(name = "coord_x",nullable = false)
     private float coordX;
 
-    @Column(nullable = false)
+    @Column(name = "coord_y",nullable = false)
     private float coordY;
 
     @Column(length = 500)
     private String description;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
@@ -148,5 +148,17 @@ public class Address {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

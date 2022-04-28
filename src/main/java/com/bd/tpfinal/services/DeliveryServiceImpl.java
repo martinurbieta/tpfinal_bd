@@ -178,18 +178,18 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderinfo(long number) {
-        Order order = this.orderRepository.findById(number).orElse(null);
+    public Order getOrderInfo(Long number) {
+        Order order = this.orderRepository.findOrderByNumber(number).orElse(null);
         return order;
     }
 
     @Override
     @Transactional
-    public DeliveryMan confirmOrder(long number) throws DeliveryException {
+    public DeliveryMan confirmOrder(Long number) throws DeliveryException {
         DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
         if (deliveryMan != null) {
             try {
-                Order order = this.getOrderinfo(number);
+                Order order = this.getOrderInfo(number);
                 order.getOrderStatus().assign(deliveryMan);
                 this.deliveryManRepository.save(deliveryMan);
                 this.orderRepository.save(order);
@@ -212,40 +212,40 @@ public class DeliveryServiceImpl implements DeliveryService {
 */
     @Override
     @Transactional
-    public void deliverOrder(long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+    public void deliverOrder(Long number) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
 
     @Override
     @Transactional
-    public void refuseOrder(long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+    public void refuseOrder(Long number) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse();
         this.orderRepository.save(order);
     }
 
     @Override
     @Transactional
-    public void cancelOrder(long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+    public void cancelOrder(Long number) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
 
     @Override
     @Transactional
-    public void finishOrder(long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+    public void finishOrder(Long number) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish();
         this.orderRepository.save(order);
     }
 
     @Override
     @Transactional
-    public void qualifyOrder(long number, Qualification qualification) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+    public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getItemProductSupplier();
         Long count = this.orderRepository.countBySupplierId(supplier.getId());
@@ -255,8 +255,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Address getAddress(long id) {
-        return this.addressRepository.findById(id).orElse(null);
+    public Address getAddressWithID(Long id) {
+        Optional<Address> address = this.addressRepository.findAddressById(id);
+        return address.orElse(null);
     }
 
     @Override
@@ -267,8 +268,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductBySupplier(long id) {
-        List<Product> products = this.productRepository.findBySupplierId(id);
+    public List<Product> getProductBySupplierId(Long id) {
+        List<Product> products = this.productRepository.findProductBySupplierId(id);
         ListIterator<Product> iterator = products.listIterator();
         while (iterator.hasNext()) {
             Product product = iterator.next();
@@ -279,8 +280,20 @@ public class DeliveryServiceImpl implements DeliveryService {
     
     @Override
     @Transactional(readOnly = true)
-    public SupplierType getSupplierType(long id) {
+    public SupplierType getSupplierTypeById(Long id) {
         return this.supplierTypeRepository.findSupplierTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductType getProductTypeById(Long id) {
+        return this.productTypeRepository.findProductTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product getProductById(Long id) {
+        return this.productRepository.findProductById(id).orElse(null);
     }
 
     @Override
@@ -290,8 +303,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
+    public ProductType newProductType(ProductType aProductType) {
+        return this.productTypeRepository.save(aProductType);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public Supplier getSupplier(long id) {
+    public Supplier getSupplier(Long id) {
         return this.supplierRepository.findById(id).orElse(null);
     }
 
@@ -337,14 +356,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public List<Item> getItemsByOrderNumber(Long number) {
-        Optional<Order> order = this.orderRepository.findByNumber(number);
+        Optional<Order> order = this.orderRepository.findOrderByNumber(number);
         List<Item> items = order.isPresent() ? order.get().getItems() : null;
         return items;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Item getItemWithID(long id) {
+    public Item getItemWithID(Long id) {
         Optional<Item> item = this.itemRepository.findById(id);
         return item.orElse(null);
     }
