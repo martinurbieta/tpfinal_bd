@@ -1,8 +1,10 @@
 package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface DeliveryService {
@@ -53,13 +55,17 @@ public interface DeliveryService {
 
     public Supplier getSupplier(long id);
 
-    public Supplier createSupplier(Supplier newsSupplier);
+    public Supplier createSupplier(Map<String, Object> data);
 
-    public Item createItem(Item newsItem);
-    
     Object deleteItem(Item item);
 
+    public Item createItem(Item newsItem);
+
     public void deleteProduct(Long id) throws DeliveryException;
+
+    Product createProduct(Map<String, Object> data);
+
+    public ProductType createProductType(ProductType newProductType);
 
     List<Item> getItemsByOrderNumber(Long number);
 

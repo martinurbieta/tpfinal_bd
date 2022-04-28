@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -132,11 +133,21 @@ public class DeliveryController {
     @GetMapping(path = "/product/bySupplier/{id}")
     public List<Product> getProductBySupplier(@PathVariable long id){
         return this.service.getProductBySupplier(id);
-    }
 
+    }
     @DeleteMapping(path = "/product/{id}")
     public void deleteProduct(@PathVariable Long id) throws DeliveryException{
         this.service.deleteProduct(id);
+    }
+
+    @PostMapping(path = "/product")
+    public Product createProduct(@RequestBody Map<String, Object> data) {
+        return this.service.createProduct(data);
+    }
+
+    @PostMapping(path = "/productType")
+    public ProductType createProductType(@RequestBody ProductType productType) {
+        return this.service.createProductType(productType);
     }
 
     @GetMapping(path = "/supplierType/{id}")
@@ -155,8 +166,9 @@ public class DeliveryController {
     }
 
     @PostMapping(path = "/supplier")
-    public Supplier createSupplier(@RequestBody Supplier newsSupplier){
-        return this.service.createSupplier(newsSupplier);
+    public Supplier createSupplier(@RequestBody Map<String, Object> data){
+        return this.service.createSupplier(data
+        );
     }
 
 }

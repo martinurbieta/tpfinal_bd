@@ -2,14 +2,15 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -129,11 +130,29 @@ public class DeliveryServiceImpl implements DeliveryService {
                 this.addHistoricalProductPrice(actual, product.getPrice());
             }
             actual.update(product);
-        } else {
             throw new DeliveryException("El producto con ese número no existe");
+        } else {
         }
         return actual;
     }
+
+    @Override
+    @Transactional
+    public Product createProduct(Map<String, Object> data) {
+        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        List<Long> productTypes = Stream.of(data.get("productTypes").toString().replaceAll( "(\\[|\\]|\\s)", "").split(",")).map(c->Long.parseLong(c)).collect(Collectors.toList());
+        Optional<Supplier> supplier = this.supplierRepository.findById(Long.parseLong(data.get("supplier_id").toString()));
+        Product product = mapper.convertValue(data, Product.class);
+        product.setSupplier(supplier.get());
+        return this.productRepository.save(product);
+    }
+
+    @Override
+    @Transactional
+    public ProductType createProductType(ProductType newProductType) {
+        return this.productTypeRepository.save(newProductType);
+    }
+
     @Override
     @Transactional
     public void desactiveDeliveryMan(String username) {
@@ -278,7 +297,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public Supplier createSupplier(Supplier newSupplier) {
+    public Supplier createSupplier(Map<String, Object> data) {
+        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        Optional<SupplierType> type = this.supplierTypeRepository.findById(Long.parseLong(data.get("type").toString()));
+        Supplier newSupplier = mapper.convertValue(data, Supplier.class);
+        newSupplier.setSupplierType(type.get());
         return this.supplierRepository.save(newSupplier);
     }
 
