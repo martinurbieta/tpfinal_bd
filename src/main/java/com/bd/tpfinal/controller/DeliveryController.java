@@ -164,8 +164,8 @@ public class DeliveryController {
     }
 
     @PostMapping(path = "/supplier")  // ok
-    public Supplier createSupplier(@RequestBody Supplier newsSupplier){
-        return this.service.createSupplier(newsSupplier);
+    public Supplier createSupplier(Map<String, Object> data){
+        return this.service.createSupplier(data);
     }
 
     @GetMapping(path = "/productType/{id}")  //ok

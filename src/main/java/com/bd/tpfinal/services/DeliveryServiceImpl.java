@@ -254,6 +254,11 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    public Address getAddress(Long id) {
+        return null;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Address getAddressWithID(Long id) {
         Optional<Address> address = this.addressRepository.findAddressById(id);
@@ -300,12 +305,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public SupplierType createSupplierType(SupplierType newSupplierType) {
         return this.supplierTypeRepository.save(newSupplierType);
-    }
-
-    @Override
-    @Transactional
-    public ProductType newProductType(ProductType aProductType) {
-        return this.productTypeRepository.save(aProductType);
     }
 
     @Override
