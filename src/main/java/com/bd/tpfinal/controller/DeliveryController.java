@@ -91,7 +91,7 @@ public class DeliveryController {
         return this.service.newOrderPending(order);
     }
 
-    @GetMapping(path = "/order/{items}")
+    @GetMapping(path = "/item/order/{number}")
     public List<Item> getItemsByOrderID(@PathVariable Long number){
         return this.service.getItemsByOrderNumber(number);
     }
