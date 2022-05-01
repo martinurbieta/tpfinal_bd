@@ -2,8 +2,7 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -55,7 +54,7 @@ public class Order {
     @Column(name = "version")
     private int version;
 
-    //@JsonIgnore
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
     private List<Item> items;
@@ -69,7 +68,7 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-        this.orderStatus = new Pending(this);
+        this.orderStatus = new Pending();
         this.items=new ArrayList<>();
         this.address=null;
     }
@@ -130,7 +129,7 @@ public class Order {
 
 
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(List<Item> items) {
@@ -174,6 +173,14 @@ public class Order {
             throw new DeliveryException("En el estado actual no puede calificar");
         }
     }
+    public Supplier getSupplier() {
+        return this.supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
     public int getVersion() {
         return version;
     }

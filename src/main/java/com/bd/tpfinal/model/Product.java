@@ -26,7 +26,7 @@ public class Product {
     @Column(length = 500, updatable=true)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
@@ -34,11 +34,11 @@ public class Product {
     @Column(name = "version")
     private int version;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinTable(
-        name = "product_product_type", 
-        joinColumns = { @JoinColumn(name = "id_product") }, 
-        inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
+            name = "product_product_type",
+            joinColumns = { @JoinColumn(name = "id_product") },
+            inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
     )
     private List<ProductType> productType;
 
@@ -133,7 +133,7 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public List<ProductType> getProductType() {
+    public List<ProductType> getType() {
         return productType;
     }
 
@@ -145,15 +145,14 @@ public class Product {
 
     public void removeProductType(ProductType productType) {this.productType.remove(productType);}
 
+
+    public List<ProductType> getProductType() {
+        return this.productType;
+    }
+
     public void setPrices(List<ProductType> productType) {
         this.productType = productType;
     }
-
-    /**
-     * Setter.
-     *
-     * @param price es el nuevo precio del producto.
-     */
 
     public int getVersion() {
         return version;

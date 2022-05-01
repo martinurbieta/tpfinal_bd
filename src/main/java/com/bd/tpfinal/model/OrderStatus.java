@@ -2,11 +2,16 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.hibernate.annotations.Parent;
+
 import java.util.Calendar;
 import java.util.Date;
 
 @Embeddable
 public abstract class OrderStatus {
+    @Transient
+    @Parent
+    public Order order;
 
     @Column(name = "state")
     private String name;
@@ -17,27 +22,23 @@ public abstract class OrderStatus {
     @Column(name = "cancelled_by_client")
     private boolean cancelledByClient;
 
-    @Transient
-    public Order order;
-
     public OrderStatus(){}
 
-    private void init (Order order, String name, Date startDate, boolean cancelledByClient) {
+    private void init (String name, Date startDate, boolean cancelledByClient) {
         this.name = name;
-        this.order = order;
         this.startDate = startDate;
         this.cancelledByClient=cancelledByClient;
     }
-    public OrderStatus(Order order, String name) {
-        this.init(order, name, Calendar.getInstance().getTime(), false);
+    public OrderStatus(String name) {
+        this.init(name, Calendar.getInstance().getTime(), false);
     }
 
-    public OrderStatus(Order order, String name, Date startDate) {
-        this.init(order, name, startDate, false);
+    public OrderStatus(String name, Date startDate) {
+        this.init(name, startDate, false);
     }
 
-    public OrderStatus(Order order, String name, Date startDate, boolean cancelledByClient) {
-        this.init(order, name, startDate, cancelledByClient);
+    public OrderStatus(String name, Date startDate, boolean cancelledByClient) {
+        this.init(name, startDate, cancelledByClient);
     }
 
     public String getName() {
@@ -55,21 +56,13 @@ public abstract class OrderStatus {
     public boolean getCancelledByClient() {
         return cancelledByClient;
     }
-    
+
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
     public void setCancelledByClient(boolean cancelledByClient) {
         this.cancelledByClient = cancelledByClient;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public boolean canAddItem() { return false; }

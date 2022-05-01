@@ -6,10 +6,10 @@ import javax.persistence.*;
 
 public class Qualification {
 
-    @Column(nullable = false, updatable = false)
+    @Column
     private float score;
 
-    @Column(length = 500, updatable=false)
+    @Column(length = 500)
     private String commentary;
 
     public Qualification(){}

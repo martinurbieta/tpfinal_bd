@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
-    public Optional<Order> findOrderByNumber(Long aNumber);
+    public Optional<Order> findByNumber(Long aNumber);
     public Long countBySupplierId(Long aIdSupplier);
 }
-

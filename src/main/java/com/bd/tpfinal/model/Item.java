@@ -1,6 +1,4 @@
 package com.bd.tpfinal.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -17,14 +15,14 @@ public class Item {
     @Column(length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_order", nullable = false)
+    private Order order;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
-
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_order")
-    private Order order;
 
     @Version
     @Column(name = "version")
@@ -94,11 +92,6 @@ public class Item {
     public void setVersion(int version) {
         this.version = version;
     }
-
-    public Order getOrder() {return order;
-    }
-
-    public void setOrder(Order order) {this.order = order;}
 
     public Long getId() {
         return id;

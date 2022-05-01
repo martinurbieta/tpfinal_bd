@@ -32,10 +32,10 @@ public class Supplier {
     private float qualification;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, orphanRemoval = false)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @JoinColumn(name = "id_supplier_type", nullable = false)
     private SupplierType type;
 
@@ -191,7 +191,7 @@ public class Supplier {
      *
      * @Return actualiza la calificación de usuarios.
      */
- //   agregar método para actualizar la calificación de proveedor.
+    //   agregar método para actualizar la calificación de proveedor.
 
     /**
      * Remover.
@@ -212,17 +212,10 @@ public class Supplier {
         this.products.add(product);
 
     }
-    public int getVersion() {
-        return version;
-    }
 
-    public void setVersion(int version) {
-        this.version = version;
+    public void updateScore(Qualification aNewQualification, Long qualifications){
+        float newAverageScore = (qualifications*this.getQualification()+aNewQualification.getScore())/(qualifications+1);
+        this.setQualification(newAverageScore);
     }
-
-   public void updateScore(Qualification aNewQualification, Long qualifications){
-       float newAverageScore = (qualifications*this.getQualification()+aNewQualification.getScore())/(qualifications+1);
-       this.setQualification(newAverageScore);
-   }
 
 }

@@ -4,22 +4,23 @@ package com.bd.tpfinal.model;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 import com.bd.tpfinal.utils.DeliveryException;
+import org.hibernate.annotations.Parent;
 
 @Embeddable
 public class Assigned extends OrderStatus {
 
-    public Assigned() {}
     public Assigned(OrderStatus orderStatus) {
-        super(orderStatus.getOrder(), orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+        super(orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
     }
-    public Assigned(Order order){
-        super(order, "Assigned");
+    public Assigned(){
+        super("Assigned");
     }
 
-    public Assigned(Order order, Date startDate){
-        super(order, "Assigned", startDate);
+    public Assigned(Date startDate){
+        super("Assigned", startDate);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class Assigned extends OrderStatus {
     @Override
     public void deliver() throws DeliveryException {
         if(this.canDeliver()) {
-            this.order.setOrderStatus(new Sent(this.order));
+            this.order.setOrderStatus(new Sent());
         } else {
             throw new DeliveryException("The order can't be delivered");
         }
@@ -53,7 +54,7 @@ public class Assigned extends OrderStatus {
     @Override
     public void refuse() throws DeliveryException {
         if(this.canRefuse()) {
-            this.order.setOrderStatus(new Cancelled(this.order));
+            this.order.setOrderStatus(new Cancelled());
             this.order.getDeliveryMan().addScore(-2);
             this.order.getDeliveryMan().setFree(true);
             this.order.setDeliveryMan(null);
@@ -65,7 +66,7 @@ public class Assigned extends OrderStatus {
     @Override
     public void cancel() throws DeliveryException {
         if(this.canCancel()){
-            this.order.setOrderStatus(new Cancelled(this.order));
+            this.order.setOrderStatus(new Cancelled());
             this.order.getClient().addScore(-1);
             this.order.getDeliveryMan().setFree(true);
             this.order.setDeliveryMan(null);

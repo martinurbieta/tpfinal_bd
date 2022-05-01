@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-// https://go.postman.co/workspace/Team-Workspace~9df97e40-07a0-45e0-8a84-fb11ba783d14/collection/20436870-42d92330-e996-4970-bb71-fa18e2a0d0c1?action=share&creator=20436870
+
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT ,RequestMethod.DELETE})
@@ -21,15 +21,14 @@ public class DeliveryController {
     public String test(){
         return "OK!";
     }
-    @GetMapping(path = "/address/{id}") //ok
-    public Address getAddress(@PathVariable long id){
+    @GetMapping(path = "/address/{id}")
+    public Address getAddress(@PathVariable Long id){
         return this.service.getAddress(id);
     }
 
-
-    @PostMapping(path = "/address")  //ok
-    public Address createAddress(@RequestBody Address address){
-        return this.service.createAddress(address);
+    @PostMapping(path = "/address")
+    public Address createAddress(@RequestBody Address newAddress){
+        return this.service.createAddress(newAddress);
     }
 
     @PostMapping(path = "/client") //ok
@@ -52,11 +51,11 @@ public class DeliveryController {
         return this.service.getClientInfo(username);
     }
 
-/*    @GetMapping(path = "/client/{username}/orders")
-    public List<Order> getClientOrders(@PathVariable String username){
-        return this.service.getClientOrders(username);
-    }
-*/
+    /*    @GetMapping(path = "/client/{username}/orders")
+        public List<Order> getClientOrders(@PathVariable String username){
+            return this.service.getClientOrders(username);
+        }
+    */
     @PostMapping(path = "/deliveryMan") //ok
     public DeliveryMan newDeliveryMan(@RequestBody DeliveryMan deliveryMan){
         return this.service.newDeliveryMan(deliveryMan);
@@ -67,12 +66,12 @@ public class DeliveryController {
         return this.service.editDeliveryMan(username, deliveryMan);
     }
 
-    @DeleteMapping(path = "/deliveryMan/{username}") // ok
+    @DeleteMapping(path = "/deliveryMan/{username}")
     public void desactiveDeliveryMan(@PathVariable String username){
         this.service.desactiveDeliveryMan(username);
     }
 
-    @GetMapping(path = "/deliveryMan/{username}") // ok
+    @GetMapping(path = "/deliveryMan/{username}")
     public DeliveryMan getDeliveryMan(@PathVariable String username){
         return this.service.getDeliveryManInfo(username);
     }
@@ -83,22 +82,23 @@ public class DeliveryController {
     }
 
     @DeleteMapping(path = "/item/{id}")
-    public Object deleteItem(@PathVariable long id){
+    public Object deleteItem(@PathVariable Long id){
         return this.service.deleteItem(this.service.getItemWithID(id));
     }
+
     @PostMapping(path = "/order")
-    public Order newOrder(@RequestBody Order order){
-        return this.service.newOrderPending(order);
+    public Order newOrder(@RequestBody Map<String, Object> data) throws DeliveryException {
+        return this.service.newOrderPending(data);
     }
 
-    @GetMapping(path = "/item/order/{number}")
+    @GetMapping(path = "/order/{items}")
     public List<Item> getItemsByOrderID(@PathVariable Long number){
         return this.service.getItemsByOrderNumber(number);
     }
 
     @GetMapping(path = "/order/{number}")
     public Order getOrder(@PathVariable Long number){
-        return this.service.getOrderInfo(number);
+        return this.service.getOrderinfo(number);
     }
 
     @PutMapping(path = "/order/{number}/refuse")
@@ -131,14 +131,16 @@ public class DeliveryController {
         return this.service.editProduct(id, product);
     }
 
-    @GetMapping(path = "/product/bySupplier/{id}") //ok
-    public List<Product> getProductBySupplier(@PathVariable Long id) {
-        return this.service.getProductBySupplierId(id);
+    @GetMapping(path = "/product/bySupplier/{id}")
+    public List<Product> getProductBySupplier(@PathVariable Long id){
+        return this.service.getProductBySupplier(id);
+
     }
-    @DeleteMapping(path = "/product/{id}") //ok
+    @DeleteMapping(path = "/product/{id}")
     public void deleteProduct(@PathVariable Long id) throws DeliveryException{
         this.service.deleteProduct(id);
     }
+
     @PostMapping(path = "/product")
     public Product createProduct(@RequestBody Map<String, Object> data) {
         return this.service.createProduct(data);
@@ -149,33 +151,24 @@ public class DeliveryController {
         return this.service.createProductType(productType);
     }
 
-    @GetMapping(path = "/supplierType/{id}")  // ok
-    public SupplierType getSupplierType(@PathVariable long id){
-        return this.service.getSupplierTypeById(id);
+    @GetMapping(path = "/supplierType/{id}")
+    public SupplierType getSupplierType(@PathVariable Long id){
+        return this.service.getSupplierType(id);
     }
-    @PostMapping(path = "/supplierType")  // ok
+
+    @PostMapping(path = "/supplierType")
     public SupplierType createSupplierType(@RequestBody SupplierType newsSupplierType){
         return this.service.createSupplierType(newsSupplierType);
     }
 
-    @GetMapping(path = "/supplier/{id}") //ok
+    @GetMapping(path = "/supplier/{id}")
     public Supplier getSupplier(@PathVariable Long id){
         return this.service.getSupplier(id);
     }
 
-    @PostMapping(path = "/supplier")  // ok
-    public Supplier createSupplier(Map<String, Object> data){
+    @PostMapping(path = "/supplier")
+    public Supplier createSupplier(@RequestBody Map<String, Object> data){
         return this.service.createSupplier(data);
     }
 
-    @GetMapping(path = "/productType/{id}")  //ok
-    public ProductType getProductTypeById(@PathVariable Long id){
-        return this.service.getProductTypeById(id);
-    }
-
-    @GetMapping(path = "/product/{id}") // ok
-    public Product getProductById(@PathVariable Long id){ return this.service.getProductById(id);
-
-
-    }
 }

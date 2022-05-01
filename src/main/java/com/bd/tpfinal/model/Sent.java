@@ -7,16 +7,12 @@ import com.bd.tpfinal.utils.DeliveryException;
 @Embeddable
 public class Sent extends OrderStatus {
 
-    public Sent() {}
+    public Sent() { super("Sent"); }
 
-    public Sent(Order order){
-        super(order, "Sent");
-    }
-
-//    public Sent(Order order, Date startDate){
+    //    public Sent(Order order, Date startDate){
 //        super(order, "Sent", startDate);
 //    }
-@Override
+    @Override
     public boolean canFinish() {
         return true;
     }
@@ -28,7 +24,7 @@ public class Sent extends OrderStatus {
 
     @Override
     public void finish() throws DeliveryException {
-        this.order.setOrderStatus(new Delivered(this.order));
+        this.order.setOrderStatus(new Delivered());
         this.order.getDeliveryMan().addScore(1);
         this.order.getDeliveryMan().addNumberOfSuccess();
         this.order.getClient().addScore(1);
