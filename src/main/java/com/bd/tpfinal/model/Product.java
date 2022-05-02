@@ -26,7 +26,7 @@ public class Product {
     @Column(length = 500, updatable=true)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
@@ -34,7 +34,7 @@ public class Product {
     @Column(name = "version")
     private int version;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "product_product_type",
             joinColumns = { @JoinColumn(name = "id_product") },

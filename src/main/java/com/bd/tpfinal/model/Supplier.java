@@ -32,10 +32,10 @@ public class Supplier {
     private float qualification;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, orphanRemoval = false)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, orphanRemoval = false)
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE}) // cambiado de ALL a MERGE según stackoverflow. https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
     @JoinColumn(name = "id_supplier_type", nullable = false)
     private SupplierType type;
 

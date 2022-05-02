@@ -49,23 +49,34 @@ public interface DeliveryService {
 
     Address createAddress(Address newAddress);
 
-    SupplierType getSupplierType(Long id);
+    SupplierType getSupplierTypeById(Long id);
 
-    SupplierType createSupplierType(SupplierType newsSupplierType);
+    ProductType getProductTypeById(Long id);
 
-    Supplier getSupplier(Long id);
+    Product getProductById(Long id);
 
-    Supplier createSupplier(Map<String, Object> data);
-    
+
+    Supplier getSupplierById(Long id);
+// BLAS
+ //   Supplier createSupplier(Map<String, Object> data);
+
+    Supplier createSupplier(Supplier newSupplier);
+
+
     Object deleteItem(Item item);
 
     Item createItem(Item newsItem);
 
     void deleteProduct(Long id) throws DeliveryException;
+  //BLAS
+  //  Product createProduct(Map<String, Object> data);
 
-    Product createProduct(Map<String, Object> data);
+    SupplierType createSupplierType(SupplierType newsSupplierType);
 
     ProductType createProductType(ProductType newProductType);
+
+    Product createProduct(Product newProduct);
+
 
     List<Item> getItemsByOrderNumber(Long number);
 

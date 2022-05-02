@@ -139,22 +139,18 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         return actual;
     }
+//    BLAS
+//    @Override
+//    @Transactional
+//    public Product createProduct(Map<String, Object> data) {
+//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//        Product product = mapper.convertValue(data, Product.class);
+//        List<Long> productTypes = mapper.convertValue(data.get("productTypes"),new TypeReference<List<Long>>() {});
+//        product.setProductType(this.productTypeRepository.findByIdIn(productTypes));
+//        return this.productRepository.save(product);
+//    }
 
-    @Override
-    @Transactional
-    public Product createProduct(Map<String, Object> data) {
-        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Product product = mapper.convertValue(data, Product.class);
-        List<Long> productTypes = mapper.convertValue(data.get("productTypes"),new TypeReference<List<Long>>() {});
-        product.setProductType(this.productTypeRepository.findByIdIn(productTypes));
-        return this.productRepository.save(product);
-    }
 
-    @Override
-    @Transactional
-    public ProductType createProductType(ProductType newProductType) {
-        return this.productTypeRepository.save(newProductType);
-    }
 
     @Override
     @Transactional
@@ -292,8 +288,26 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public SupplierType getSupplierType(Long id) {
+    public Supplier getSupplierById(Long id) {
+        return this.supplierRepository.findSupplierById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SupplierType getSupplierTypeById(Long id) {
         return this.supplierTypeRepository.findSupplierTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductType getProductTypeById(Long id) {
+        return this.productTypeRepository.findProductTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Product getProductById(Long id) {
+        return this.productRepository.findProductById(id).orElse(null);
     }
 
     @Override
@@ -301,22 +315,34 @@ public class DeliveryServiceImpl implements DeliveryService {
     public SupplierType createSupplierType(SupplierType newSupplierType) {
         return this.supplierTypeRepository.save(newSupplierType);
     }
-
     @Override
-    @Transactional(readOnly = true)
-    public Supplier getSupplier(Long id) {
-        return this.supplierRepository.findById(id).orElse(null);
+    @Transactional
+    public ProductType createProductType(ProductType newProductType) {
+        return this.productTypeRepository.save(newProductType);
     }
 
     @Override
     @Transactional
-    public Supplier createSupplier(Map<String, Object> data) {
-        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Optional<SupplierType> type = this.supplierTypeRepository.findById(Long.parseLong(data.get("type").toString()));
-        Supplier newSupplier = mapper.convertValue(data, Supplier.class);
-        type.ifPresent(newSupplier::setSupplierType);
+    public Supplier createSupplier(Supplier newSupplier) {
         return this.supplierRepository.save(newSupplier);
     }
+
+    @Override
+    @Transactional
+    public Product createProduct(Product newProduct) {
+        return this.productRepository.save(newProduct);
+    }
+
+// BLAS
+//    @Override
+//    @Transactional
+//    public Supplier createSupplier(Map<String, Object> data) {
+//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//        Optional<SupplierType> type = this.supplierTypeRepository.findById(Long.parseLong(data.get("type").toString()));
+//        Supplier newSupplier = mapper.convertValue(data, Supplier.class);
+//        type.ifPresent(newSupplier::setSupplierType);
+//        return this.supplierRepository.save(newSupplier);
+//    }
 
     @Override
     @Transactional

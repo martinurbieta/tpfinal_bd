@@ -27,6 +27,7 @@ com/bd/tpfinal/services/DeliveryService.class
 com/bd/tpfinal/repositories/ProductRepository.class
 com/bd/tpfinal/model/Product.class
 com/bd/tpfinal/repositories/OrderRepository.class
+com/bd/tpfinal/services/DeliveryServiceImpl$1.class
 com/bd/tpfinal/model/Client.class
 com/bd/tpfinal/model/Address.class
 com/bd/tpfinal/repositories/SupplierRepository.class
