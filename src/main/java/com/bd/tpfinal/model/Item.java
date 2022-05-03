@@ -1,4 +1,8 @@
 package com.bd.tpfinal.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,12 +19,12 @@ public class Item {
     @Column(length = 500)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_order", nullable = false)
     private Order order;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
+  //  @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 

@@ -17,7 +17,7 @@ public interface DeliveryService {
 
     Client getClientInfo(String username);
 
-//    List<Order> getClientOrders(String username);
+ //   List<Order> getClientOrders(String username);
 
     DeliveryMan newDeliveryMan(DeliveryMan deliveryMan);
 
@@ -29,9 +29,11 @@ public interface DeliveryService {
 
     DeliveryMan getDeliveryManInfo(String username);
 
-    Order newOrderPending(Map<String, Object> data) throws DeliveryException;
+    public Order newOrderPending(Order order);
 
-    Order getOrderinfo(Long number);
+// BLAS    Order newOrderPending(Map<String, Object> data) throws DeliveryException;
+
+    Order getOrderInfo(Long number);
 
     DeliveryMan confirmOrder(Long number) throws DeliveryException;
 

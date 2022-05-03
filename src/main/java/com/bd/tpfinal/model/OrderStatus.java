@@ -2,16 +2,16 @@ package com.bd.tpfinal.model;
 
 import javax.persistence.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Parent;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Embeddable
-public abstract class OrderStatus {
-    @Transient
-    @Parent
-    public Order order;
+public class OrderStatus {
+//public abstract class OrderStatus {
+
 
     @Column(name = "state")
     private String name;
@@ -22,24 +22,51 @@ public abstract class OrderStatus {
     @Column(name = "cancelled_by_client")
     private boolean cancelledByClient;
 
+    @Transient
+    @JsonIgnore
+//    @Parent
+    public Order order;
+
     public OrderStatus(){}
 
-    private void init (String name, Date startDate, boolean cancelledByClient) {
+    public OrderStatus(Order order, String name) {
         this.name = name;
+        this.order = order;
+        this.startDate = Calendar.getInstance().getTime();
+        this.cancelledByClient=this.getCancelledByClient();
+    }
+
+    public OrderStatus(Order order, String name, Date startDate){
+        this.name = name;
+        this.order = order;
+        this.startDate = startDate;
+        this.cancelledByClient=this.getCancelledByClient();
+    }
+
+    public OrderStatus(Order order, String name, Date startDate,boolean cancelledByClient){
+        this.name = name;
+        this.order = order;
         this.startDate = startDate;
         this.cancelledByClient=cancelledByClient;
     }
-    public OrderStatus(String name) {
-        this.init(name, Calendar.getInstance().getTime(), false);
-    }
 
-    public OrderStatus(String name, Date startDate) {
-        this.init(name, startDate, false);
-    }
-
-    public OrderStatus(String name, Date startDate, boolean cancelledByClient) {
-        this.init(name, startDate, cancelledByClient);
-    }
+// BLAS
+//    private void init (String name, Date startDate, boolean cancelledByClient) {
+//        this.name = name;
+//        this.startDate = startDate;
+//        this.cancelledByClient=cancelledByClient;
+//    }
+//    public OrderStatus(String name) {
+//        this.init(name, Calendar.getInstance().getTime(), false);
+//    }
+//
+//    public OrderStatus(String name, Date startDate) {
+//        this.init(name, startDate, false);
+//    }
+//
+//    public OrderStatus(String name, Date startDate, boolean cancelledByClient) {
+//        this.init(name, startDate, cancelledByClient);
+//    }
 
     public String getName() {
         return name;

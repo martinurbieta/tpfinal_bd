@@ -167,31 +167,42 @@ public class DeliveryServiceImpl implements DeliveryService {
     public DeliveryMan getDeliveryManInfo(String username) {
         return this.deliveryManRepository.findByUsername(username).orElse(null);
     }
+// BLAS
+//    @Override
+//    @Transactional
+//    public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
+//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//        Order newOrder = mapper.convertValue(data, Order.class);
+///*
+//        Lo había puesto así para que se pase solo el address y el cliente lo recuperara del address
+//        Optional<Address> address = this.addressRepository.findById(Long.parseLong(data.get("address").toString()));
+//        if (address.isPresent()) {
+//            newOrder.setAddress(address.get());
+//            newOrder.setClient(address.get().getClient());
+//        } else
+//            throw new DeliveryException("No se definió una dirección de entrega.");
+// */
+//        newOrder.setItems(mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {}));
+//        newOrder.setOrderStatus(new Pending());
+////        newOrder.setQualification(new Qualification());
+//        return this.orderRepository.save(newOrder);
+//    }
 
     @Override
     @Transactional
-    public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
-        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Order newOrder = mapper.convertValue(data, Order.class);
-/*
-        Lo había puesto así para que se pase solo el address y el cliente lo recuperara del address
-        Optional<Address> address = this.addressRepository.findById(Long.parseLong(data.get("address").toString()));
-        if (address.isPresent()) {
-            newOrder.setAddress(address.get());
-            newOrder.setClient(address.get().getClient());
-        } else
-            throw new DeliveryException("No se definió una dirección de entrega.");
- */
-        newOrder.setItems(mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {}));
-        newOrder.setOrderStatus(new Pending());
-//        newOrder.setQualification(new Qualification());
-        return this.orderRepository.save(newOrder);
+    public Order newOrderPending(Order order) {
+        //order.getClient().addOrder(order);  //Verificar si hay que implementar.
+        this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderinfo(Long number) {
-        return this.orderRepository.findById(number).orElse(null);
+    public Order getOrderInfo(Long number) {
+
+        Order order = this.orderRepository.findByNumber(number).orElse(null);
+        if (order != null) order.setStatusByName();
+        return order;
     }
 
     @Override
@@ -200,7 +211,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
         if (deliveryMan != null) {
             try {
-                Order order = this.getOrderinfo(number);
+                Order order = this.getOrderInfo(number);
                 order.getOrderStatus().assign(deliveryMan);
                 this.deliveryManRepository.save(deliveryMan);
                 this.orderRepository.save(order);
@@ -224,7 +235,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void deliverOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver();
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
@@ -232,7 +243,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void refuseOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse();
         this.orderRepository.save(order);
     }
@@ -240,7 +251,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void cancelOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel();
         this.orderRepository.save(order);
     }
@@ -248,7 +259,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void finishOrder(Long number) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish();
         this.orderRepository.save(order);
     }
@@ -256,9 +267,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
-        Order order = this.getOrderinfo(number);
+        Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
-        Supplier supplier = order.getItemProductSupplier();
+        Supplier supplier = order.getSupplier();
         Long count = this.orderRepository.countBySupplierId(supplier.getId());
         supplier.updateScore(qualification, count);
         this.orderRepository.save(order);
@@ -289,13 +300,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public Supplier getSupplierById(Long id) {
-        return this.supplierRepository.findSupplierById(id).orElse(null);
+        return this.supplierRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
     public SupplierType getSupplierTypeById(Long id) {
-        return this.supplierTypeRepository.findSupplierTypeById(id).orElse(null);
+        return this.supplierTypeRepository.findById(id).orElse(null);
     }
 
     @Override

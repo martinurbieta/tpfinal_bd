@@ -2,6 +2,8 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -42,7 +44,7 @@ public class Order {
     @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false,nullable = true)
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
@@ -55,7 +57,8 @@ public class Order {
     private int version;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "id_order")
     private List<Item> items;
 
@@ -68,7 +71,8 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-        this.orderStatus = new Pending();
+        this.orderStatus = new Pending(this);
+ //       this.orderStatus = new Pending();  //BLAS
         this.items=new ArrayList<>();
         this.address=null;
     }
@@ -79,9 +83,9 @@ public class Order {
 
     public Date getDateOfOrder() {return dateOfOrder;}
 
-    public Supplier getItemProductSupplier(){
-        return this.items.get(0).getProductSupplier();
-    }
+//    public Supplier getItemProductSupplier(){
+//        return this.items.get(0).getProductSupplier();
+//    }
 
     public void setDateOfOrder(Date dateOfOrder) {this.dateOfOrder = dateOfOrder;}
 
@@ -136,19 +140,9 @@ public class Order {
         this.items = items;
     }
 
-    public OrderStatus getOrderStatus() throws DeliveryException {
-        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
-            try {
-                String name = this.orderStatus.getName();
-                Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
-                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
-                return this.orderStatus;
-            } catch (Throwable t){
-                throw new DeliveryException(t.getMessage());
-            }
-        } else
-            return this.orderStatus;
-    }
+
+
+
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
@@ -188,4 +182,57 @@ public class Order {
     public void setVersion(int version) {
         this.version = version;
     }
+
+//   BLAS
+//    public OrderStatus getOrderStatus() throws DeliveryException {
+//        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
+//            try {
+//                String name = this.orderStatus.getName();
+//                Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
+//                String orderStatusName=this.orderStatus.getName();
+//                Date orderStatusDate= this.orderStatus.getStartDate();
+//                boolean orderStatusCancelledByUser=  this.orderStatus.getCancelledByClient();
+//         //       this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
+//                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(orderStatusName,orderStatusDate,orderStatusCancelledByUser);
+//                return this.orderStatus;
+//            } catch (Throwable t){
+//                throw new DeliveryException(t.getMessage());
+//            }
+//        } else
+//            return this.orderStatus;
+//    }
+
+    // FEDERICO
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+    /*
+     * Debido a la incompatibilidad de Hibernet y JPA con embebeber la clases hijas, una solucion es instanciar
+     * el estado de manera manual.
+     * La clase que se recupera, si bien es un OrderStatus, no es una clase concreta.
+     */
+    public void setStatusByName(){
+        switch (orderStatus.getName()){
+            case "Pending":
+                this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
+                break;
+            case "Assigned":
+                this.setOrderStatus(new Assigned(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
+                break;
+            case "Sent":
+                this.setOrderStatus(new Sent(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
+                break;
+            case "Delivered":
+                this.setOrderStatus(new Delivered(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
+                break;
+            case "Cancelled":
+                this.setOrderStatus(new Cancelled(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
+                break;
+        }
+    }
+
+
+
+
 }

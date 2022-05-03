@@ -37,7 +37,7 @@ public class Supplier {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE}) // cambiado de ALL a MERGE según stackoverflow. https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
     @JoinColumn(name = "id_supplier_type", nullable = false)
-    private SupplierType type;
+    private SupplierType supplierType;
 
     @Version
     @Column(name = "version")
@@ -45,7 +45,7 @@ public class Supplier {
 
     public Supplier(){}
 
-    public Supplier(String name,String cuit, String address, float coordX, float coordY,float qualification,SupplierType type){
+    public Supplier(String name,String cuit, String address, float coordX, float coordY,float qualification,SupplierType supplierType){
 
         this.name  = name;
         this.cuit =cuit;
@@ -53,7 +53,7 @@ public class Supplier {
         this.coordX=coordX;
         this.coordY=coordY;
         this.qualification  = qualification;
-        this.type= type;
+        this.supplierType= supplierType;
     }
     /**
      * Getter.
@@ -176,7 +176,7 @@ public class Supplier {
     }
 
     public SupplierType getSupplierType() {
-        return type;
+        return supplierType;
     }
     /**
      * Setter.
@@ -184,7 +184,7 @@ public class Supplier {
      * @param aSupplierType es el nombre del tipo de Proveedor.
      */
     public void setSupplierType(SupplierType aSupplierType) {
-        this.type = aSupplierType;
+        this.supplierType = aSupplierType;
     }
     /**
      * Updater.

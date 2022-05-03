@@ -85,20 +85,25 @@ public class DeliveryController {
     public Object deleteItem(@PathVariable Long id){
         return this.service.deleteItem(this.service.getItemWithID(id));
     }
+// BLAS
+//    @PostMapping(path = "/order")
+//    public Order newOrder(@RequestBody Map<String, Object> data) throws DeliveryException {
+//        return this.service.newOrderPending(data);
+//    }
 
     @PostMapping(path = "/order")
-    public Order newOrder(@RequestBody Map<String, Object> data) throws DeliveryException {
-        return this.service.newOrderPending(data);
+    public Order newOrder(@RequestBody Order order){
+        return this.service.newOrderPending(order);
     }
 
-    @GetMapping(path = "/order/{items}")
+    @GetMapping(path = "/order/{number}/items")
     public List<Item> getItemsByOrderID(@PathVariable Long number){
         return this.service.getItemsByOrderNumber(number);
     }
 
     @GetMapping(path = "/order/{number}")
     public Order getOrder(@PathVariable Long number){
-        return this.service.getOrderinfo(number);
+        return this.service.getOrderInfo(number);
     }
 
     @PutMapping(path = "/order/{number}/refuse")

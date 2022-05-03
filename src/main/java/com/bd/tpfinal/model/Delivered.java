@@ -5,14 +5,29 @@ import java.util.Date;
 @Embeddable
 public class Delivered extends OrderStatus {
 
-    public Delivered() { super("Delivered"); }
+    public Delivered() {}
 
-    public Delivered(OrderStatus orderStatus) {
-        super(orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+    public Delivered(Order order){
+        super(order, "Delivered");
     }
 
-    public Delivered(Date startDate){
-        super("Delivered", startDate);
+    public Delivered(Order order, Date startDate){
+        super(order, "Delivered", startDate);
     }
+
+    public Delivered(Order order, Date startDate, boolean cancelledByClient){
+        super(order, "Delivered", startDate,cancelledByClient);
+    }
+
+//BLAS
+//    public Delivered() { super("Delivered"); }
+//
+//    public Delivered(OrderStatus orderStatus) {
+//        super(orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+//    }
+//
+//    public Delivered(Date startDate){
+//        super("Delivered", startDate);
+//    }
 
 }
