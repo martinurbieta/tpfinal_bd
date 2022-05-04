@@ -184,17 +184,14 @@ public class Order {
     }
 
     public OrderStatus getOrderStatus() throws DeliveryException {
-        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
+        if (this.orderStatus.getClass().getName().equals("com.bd.tpfinal.model.OrderStatus")) {
             try {
                 String name = this.orderStatus.getName();
                 Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
                 String orderStatusName=this.orderStatus.getName();
-                Date orderStatusDate= this.orderStatus.getStartDate();
-                boolean orderStatusCancelledByUser=  this.orderStatus.getCancelledByClient();
-         //       this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
-                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(orderStatusName,orderStatusDate,orderStatusCancelledByUser);
+                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
                 return this.orderStatus;
-            } catch (Throwable t){
+            } catch (Throwable t) {
                 throw new DeliveryException(t.getMessage());
             }
         } else

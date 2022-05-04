@@ -164,7 +164,12 @@ public class DeliveryServiceImpl implements DeliveryService {
             Order newOrder = mapper.convertValue(data, Order.class);
             newOrder.setAddress(address.get());
             newOrder.setClient(address.get().getClient());
-            newOrder.setItems(mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {}));
+            List<Item> items = mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {});
+            for (Item item : items) {
+                this.productRepository.findById(item.getProduct().getId()).ifPresent(item::setProduct);
+                item.setOrder(newOrder);
+            }
+            newOrder.setItems(items);
             Optional<Supplier> supplier = this.supplierRepository.findById(Long.parseLong(data.get("id_supplier").toString()));
             supplier.ifPresent(newOrder::setSupplier);
             newOrder.setOrderStatus(new Pending());

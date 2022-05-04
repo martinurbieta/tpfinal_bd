@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Embeddable
 public class OrderStatus {
-//public abstract class OrderStatus {
+//public class OrderStatus {
 
 
     @Column(name = "state")

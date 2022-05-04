@@ -81,6 +81,14 @@ public class Item {
         this.description = description;
     }
 
+    public Order getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(Order order) {
+        this.order  = order;
+    }
+
     public Product getProduct() {
         return this.product;
     }
