@@ -41,7 +41,7 @@ public class Order {
     private Address address;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_delivery_man", insertable = false, updatable = false,nullable = true)
+    @JoinColumn(name = "id_delivery_man")
     private DeliveryMan deliveryMan;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
@@ -71,8 +71,8 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-        this.orderStatus = new Pending(this);
- //       this.orderStatus = new Pending();  //BLAS
+//        this.orderStatus = new Pending(this);
+        this.orderStatus = new Pending();  //BLAS
         this.items=new ArrayList<>();
         this.address=null;
     }
@@ -183,27 +183,26 @@ public class Order {
         this.version = version;
     }
 
-//   BLAS
-//    public OrderStatus getOrderStatus() throws DeliveryException {
-//        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
-//            try {
-//                String name = this.orderStatus.getName();
-//                Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
-//                String orderStatusName=this.orderStatus.getName();
-//                Date orderStatusDate= this.orderStatus.getStartDate();
-//                boolean orderStatusCancelledByUser=  this.orderStatus.getCancelledByClient();
-//         //       this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
-//                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(orderStatusName,orderStatusDate,orderStatusCancelledByUser);
-//                return this.orderStatus;
-//            } catch (Throwable t){
-//                throw new DeliveryException(t.getMessage());
-//            }
-//        } else
-//            return this.orderStatus;
-//    }
+    public OrderStatus getOrderStatus() throws DeliveryException {
+        if (!OrderStatus.class.isAssignableFrom(this.orderStatus.getClass())) {
+            try {
+                String name = this.orderStatus.getName();
+                Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
+                String orderStatusName=this.orderStatus.getName();
+                Date orderStatusDate= this.orderStatus.getStartDate();
+                boolean orderStatusCancelledByUser=  this.orderStatus.getCancelledByClient();
+         //       this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
+                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(orderStatusName,orderStatusDate,orderStatusCancelledByUser);
+                return this.orderStatus;
+            } catch (Throwable t){
+                throw new DeliveryException(t.getMessage());
+            }
+        } else
+            return this.orderStatus;
+    }
 
     // FEDERICO
-
+/*
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
@@ -212,6 +211,7 @@ public class Order {
      * el estado de manera manual.
      * La clase que se recupera, si bien es un OrderStatus, no es una clase concreta.
      */
+/*
     public void setStatusByName(){
         switch (orderStatus.getName()){
             case "Pending":
@@ -231,8 +231,5 @@ public class Order {
                 break;
         }
     }
-
-
-
-
+*/
 }

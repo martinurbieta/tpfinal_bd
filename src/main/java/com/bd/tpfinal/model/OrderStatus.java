@@ -24,49 +24,50 @@ public class OrderStatus {
 
     @Transient
     @JsonIgnore
-//    @Parent
+    @Parent
     public Order order;
 
     public OrderStatus(){}
 
-    public OrderStatus(Order order, String name) {
+/*
+MARTIN
+    public OrderStatus(String name) {
         this.name = name;
         this.order = order;
         this.startDate = Calendar.getInstance().getTime();
         this.cancelledByClient=this.getCancelledByClient();
     }
 
-    public OrderStatus(Order order, String name, Date startDate){
+    public OrderStatus(String name, Date startDate){
         this.name = name;
         this.order = order;
         this.startDate = startDate;
         this.cancelledByClient=this.getCancelledByClient();
     }
 
-    public OrderStatus(Order order, String name, Date startDate,boolean cancelledByClient){
+    public OrderStatus(String name, Date startDate,boolean cancelledByClient){
         this.name = name;
         this.order = order;
         this.startDate = startDate;
         this.cancelledByClient=cancelledByClient;
     }
+*/
+    private void init (String name, Date startDate, boolean cancelledByClient) {
+        this.name = name;
+        this.startDate = startDate;
+        this.cancelledByClient=cancelledByClient;
+    }
+    public OrderStatus(String name) {
+        this.init(name, Calendar.getInstance().getTime(), false);
+    }
 
-// BLAS
-//    private void init (String name, Date startDate, boolean cancelledByClient) {
-//        this.name = name;
-//        this.startDate = startDate;
-//        this.cancelledByClient=cancelledByClient;
-//    }
-//    public OrderStatus(String name) {
-//        this.init(name, Calendar.getInstance().getTime(), false);
-//    }
-//
-//    public OrderStatus(String name, Date startDate) {
-//        this.init(name, startDate, false);
-//    }
-//
-//    public OrderStatus(String name, Date startDate, boolean cancelledByClient) {
-//        this.init(name, startDate, cancelledByClient);
-//    }
+    public OrderStatus(String name, Date startDate) {
+        this.init(name, startDate, false);
+    }
+
+    public OrderStatus(String name, Date startDate, boolean cancelledByClient) {
+        this.init(name, startDate, cancelledByClient);
+    }
 
     public String getName() {
         return name;

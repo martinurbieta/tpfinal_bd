@@ -139,18 +139,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         return actual;
     }
-//    BLAS
-//    @Override
-//    @Transactional
-//    public Product createProduct(Map<String, Object> data) {
-//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        Product product = mapper.convertValue(data, Product.class);
-//        List<Long> productTypes = mapper.convertValue(data.get("productTypes"),new TypeReference<List<Long>>() {});
-//        product.setProductType(this.productTypeRepository.findByIdIn(productTypes));
-//        return this.productRepository.save(product);
-//    }
-
-
 
     @Override
     @Transactional
@@ -167,27 +155,28 @@ public class DeliveryServiceImpl implements DeliveryService {
     public DeliveryMan getDeliveryManInfo(String username) {
         return this.deliveryManRepository.findByUsername(username).orElse(null);
     }
-// BLAS
-//    @Override
-//    @Transactional
-//    public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
-//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        Order newOrder = mapper.convertValue(data, Order.class);
-///*
-//        Lo había puesto así para que se pase solo el address y el cliente lo recuperara del address
-//        Optional<Address> address = this.addressRepository.findById(Long.parseLong(data.get("address").toString()));
-//        if (address.isPresent()) {
-//            newOrder.setAddress(address.get());
-//            newOrder.setClient(address.get().getClient());
-//        } else
-//            throw new DeliveryException("No se definió una dirección de entrega.");
-// */
-//        newOrder.setItems(mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {}));
-//        newOrder.setOrderStatus(new Pending());
-////        newOrder.setQualification(new Qualification());
-//        return this.orderRepository.save(newOrder);
-//    }
-
+    @Override
+    @Transactional
+    public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
+        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        Optional<Address> address = this.addressRepository.findById(Long.parseLong(data.get("client_address").toString()));
+        if (address.isPresent()) {
+            Order newOrder = mapper.convertValue(data, Order.class);
+            newOrder.setAddress(address.get());
+            newOrder.setClient(address.get().getClient());
+            newOrder.setItems(mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {}));
+            Optional<Supplier> supplier = this.supplierRepository.findById(Long.parseLong(data.get("id_supplier").toString()));
+            supplier.ifPresent(newOrder::setSupplier);
+            newOrder.setOrderStatus(new Pending());
+            newOrder.setDateOfOrder(new Date());
+/*          SE PONE EN NULL MANUALMENTE PARA EVITAR UNA INJECCION */
+            newOrder.setDeliveryMan(null);
+/* ------ */
+            return this.orderRepository.save(newOrder);
+        } else
+            throw new DeliveryException("No se definió una dirección de entrega.");
+    }
+/*
     @Override
     @Transactional
     public Order newOrderPending(Order order) {
@@ -195,14 +184,13 @@ public class DeliveryServiceImpl implements DeliveryService {
         this.orderRepository.save(order);
         return order;
     }
-
+*/
     @Override
     @Transactional(readOnly = true)
     public Order getOrderInfo(Long number) {
 
-        Order order = this.orderRepository.findByNumber(number).orElse(null);
-        if (order != null) order.setStatusByName();
-        return order;
+        return this.orderRepository.findByNumber(number).orElse(null);
+//        if (order != null) order.setStatusByName();
     }
 
     @Override
@@ -343,17 +331,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     public Product createProduct(Product newProduct) {
         return this.productRepository.save(newProduct);
     }
-
-// BLAS
-//    @Override
-//    @Transactional
-//    public Supplier createSupplier(Map<String, Object> data) {
-//        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-//        Optional<SupplierType> type = this.supplierTypeRepository.findById(Long.parseLong(data.get("type").toString()));
-//        Supplier newSupplier = mapper.convertValue(data, Supplier.class);
-//        type.ifPresent(newSupplier::setSupplierType);
-//        return this.supplierRepository.save(newSupplier);
-//    }
 
     @Override
     @Transactional

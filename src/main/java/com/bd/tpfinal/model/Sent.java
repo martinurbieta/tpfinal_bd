@@ -9,8 +9,15 @@ import java.util.Date;
 @Embeddable
 public class Sent extends OrderStatus {
 
-//    public Sent() { super("Sent"); }  //BLAS
+    public Sent() { super("Sent"); }  //BLAS
 
+    public Sent(Date startDate){
+        super("Sent", startDate);
+    }
+    public Sent(Date startDate, boolean cancelledByClient){
+        super("Sent", startDate,cancelledByClient);
+    }
+    /*
     public Sent() {}
 
     public Sent(Order order){
@@ -24,7 +31,7 @@ public class Sent extends OrderStatus {
     public Sent(Order order, Date startDate, boolean cancelledByClient){
         super(order, "Sent", startDate,cancelledByClient);
     }
-
+*/
 
     @Override
     public boolean canFinish() {
@@ -38,8 +45,8 @@ public class Sent extends OrderStatus {
 
     @Override
     public void finish() throws DeliveryException {
-// Blas        this.order.setOrderStatus(new Delivered());
-        this.order.setOrderStatus(new Delivered(this.order));
+        this.order.setOrderStatus(new Delivered());
+//        this.order.setOrderStatus(new Delivered(this.order));
         this.order.getDeliveryMan().addScore(1);
         this.order.getDeliveryMan().addNumberOfSuccess();
         this.order.getClient().addScore(1);

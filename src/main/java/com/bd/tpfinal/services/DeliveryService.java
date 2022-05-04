@@ -29,9 +29,9 @@ public interface DeliveryService {
 
     DeliveryMan getDeliveryManInfo(String username);
 
-    public Order newOrderPending(Order order);
+//    public Order newOrderPending(Order order);
 
-// BLAS    Order newOrderPending(Map<String, Object> data) throws DeliveryException;
+    Order newOrderPending(Map<String, Object> data) throws DeliveryException;
 
     Order getOrderInfo(Long number);
 
