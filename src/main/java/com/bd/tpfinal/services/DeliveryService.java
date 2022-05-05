@@ -86,4 +86,8 @@ public interface DeliveryService {
 
     List<Product> getProductBySupplier(Long id);
 
+    List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
+
+    List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data);
+
 }

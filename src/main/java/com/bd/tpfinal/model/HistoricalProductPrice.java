@@ -1,10 +1,16 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "historical_product_price")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class HistoricalProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +27,7 @@ public class HistoricalProductPrice {
     private Date finishDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
@@ -103,4 +110,6 @@ public class HistoricalProductPrice {
     public Long getId() {
         return id;
     }
+
+
 }

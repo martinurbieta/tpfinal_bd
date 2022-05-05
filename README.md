@@ -95,23 +95,23 @@ X Obtener todos los proveedores de un cierto tipo.
 
 X Obtener todos los productos y su tipo, de un proveedor específico.
 
-- Obtener las órdenes con más productos de un proveedor específico.
+1 - Obtener las órdenes con más productos de un proveedor específico.
 
-- Obtener la orden de mayor precio total de un día dado.
+2 - Obtener la orden de mayor precio total de un día dado.
 
-- Obtener los diez repartidores con mayor puntaje.
+3 - Obtener los diez repartidores con mayor puntaje.
 
-- Obtener los diez proveedores que más órdenes despacharon.
+4 - Obtener los diez proveedores que más órdenes despacharon.
 
-- Obtener los precios de un producto entre dos fechas dadas.
+5 - Obtener los precios de un producto entre dos fechas dadas.
 
-- Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+6 - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
-- Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
+7 - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
 
   proveedor posee.
 
-- Obtener los proveedores que ofrezcan productos de todos los tipos.
+8 - Obtener los proveedores que ofrezcan productos de todos los tipos.
 
 El uso de test para verificar el correcto funcionamiento del servicio creado es opcional.
 

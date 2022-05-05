@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Date;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -378,5 +382,39 @@ public class DeliveryServiceImpl implements DeliveryService {
     public Item getItemWithID(Long id) {
         Optional<Item> item = this.itemRepository.findById(id);
         return item.orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id) {
+        List<HistoricalProductPrice> prices = this.historicalProductPriceRepository.findByProductId(id);
+        return prices;
+
+    }
+
+    @Override
+    @Transactional
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data) {
+        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        Date startDate = null;
+        Date finishDate = null;
+        Long productId = Long.parseLong(data.get("productId").toString());
+        try {
+            String startDateStr = data.get("startDate").toString();
+            String finishDateStr = data.get("finishDate").toString();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+            startDate = df.parse(startDateStr);
+            finishDate = df.parse(finishDateStr);
+
+            startDate = df.parse(startDateStr);
+            finishDate = df.parse(finishDateStr);
+
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+        }
+
+        return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, productId);
     }
 }

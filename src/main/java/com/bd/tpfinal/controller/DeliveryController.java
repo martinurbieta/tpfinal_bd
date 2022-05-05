@@ -200,5 +200,15 @@ public class DeliveryController {
         return this.service.getProductById(id);
     }
 
+    @GetMapping(path = "/product/{id}/historicalprice") // tested_ok
+    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(@PathVariable Long id){
+        return this.service.getHistoricalProductPriceByProductId(id);
+    }
 
+    @GetMapping(path = "/product/{id}/historicalprice/betweendates")
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@RequestBody Map<String, Object> data){
+        return this.service.getHistoricalProductPriceBetweenDates(data);
+
+        }
 }
+
