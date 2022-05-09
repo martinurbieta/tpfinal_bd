@@ -95,13 +95,13 @@ X Obtener todos los proveedores de un cierto tipo.
 
 X Obtener todos los productos y su tipo, de un proveedor específico.
 
-1 - Obtener las órdenes con más productos de un proveedor específico.
+X - Obtener las órdenes con más productos de un proveedor específico.
 
-2 - Obtener la orden de mayor precio total de un día dado.
+X - Obtener la orden de mayor precio total de un día dado.
 
-3 - Obtener los diez repartidores con mayor puntaje.
+X - Obtener los diez repartidores con mayor puntaje.
 
-4 - Obtener los diez proveedores que más órdenes despacharon.
+X - Obtener los diez proveedores que más órdenes despacharon.
 
 5 - Obtener los precios de un producto entre dos fechas dadas.
 

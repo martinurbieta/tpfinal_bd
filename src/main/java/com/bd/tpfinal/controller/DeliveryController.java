@@ -76,6 +76,11 @@ public class DeliveryController {
         return this.service.getDeliveryManInfo(username);
     }
 
+    @GetMapping(path = "/deliveryMan/bestTen")   //tested_ok
+    public List<DeliveryMan> getBestTenDeliveryMan(){
+        return this.service.getBestTenDeliveryMan();
+    }
+
     @PostMapping(path = "/item")
     public Item createItem(@RequestBody Item newItem){
         return this.service.createItem(newItem);
@@ -95,6 +100,20 @@ public class DeliveryController {
         return this.service.newOrderPending(order);
     }
 */
+    @GetMapping(path = "/order/maxItems/supplier/{supplier}/firsts/{size}")
+    public List<Order> getOrdersWithMaxItems(@PathVariable Long supplier, @PathVariable int size) throws DeliveryException {
+        return this.service.getOrdersWithMaxItems(supplier, size);
+    }
+
+    @GetMapping(path = "/order/maxItems/supplier/{supplier}")
+    public List<Order> getOrderWithMaxItems(@PathVariable Long supplier) throws DeliveryException {
+        return this.service.getOrdersWithMaxItems(supplier, 1);
+    }
+
+    @GetMapping(path = "/order/maxTotalPrice/inDate/{date}")
+    public Order getOrderWithMaxItems(@PathVariable String date) throws DeliveryException {
+        return this.service.getOrderMaxPriceInDate(date);
+    }
     @GetMapping(path = "/order/{number}/items")
     public List<Item> getItemsByOrderID(@PathVariable Long number){
         return this.service.getItemsByOrderNumber(number);
@@ -169,11 +188,6 @@ public class DeliveryController {
     public ProductType createProductType(@RequestBody ProductType newProductType) {
         return this.service.createProductType(newProductType);
     }
-// BLAS
-//    @PostMapping(path = "/supplier")
-//    public Supplier createSupplier(@RequestBody Map<String, Object> data){
-//        return this.service.createSupplier(data);
-//    }
 
     @PostMapping(path = "/supplier")  // tested_ok
     public Supplier createSupplier(@RequestBody Supplier newSupplier) {
@@ -195,6 +209,12 @@ public class DeliveryController {
     public Supplier getSupplierById(@PathVariable Long id){
         return this.service.getSupplierById(id);
     }
+
+    @GetMapping(path = "/supplier/bestTenDispatchers")
+    public List<Supplier> getBestTenDispatchersSupplier() throws DeliveryException {
+        return this.service.getBestTenDispatchersSupplier();
+    }
+
     @GetMapping(path = "/product/{id}")  // tested_ok
     public Product getProductById(@PathVariable Long id){
         return this.service.getProductById(id);

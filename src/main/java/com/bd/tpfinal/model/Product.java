@@ -44,7 +44,7 @@ public class Product {
             inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
     )
     private List<ProductType> productType;
-
+    
     public Product(){}
 
     public Product(String name, float price, float weight, String description, Supplier supplier){

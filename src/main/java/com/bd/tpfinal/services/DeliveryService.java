@@ -1,7 +1,6 @@
 package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -29,11 +28,16 @@ public interface DeliveryService {
 
     DeliveryMan getDeliveryManInfo(String username);
 
+    List<DeliveryMan> getBestTenDeliveryMan();
 //    public Order newOrderPending(Order order);
 
     Order newOrderPending(Map<String, Object> data) throws DeliveryException;
 
     Order getOrderInfo(Long number);
+
+    List<Order> getOrdersWithMaxItems(Long supplier, int size) throws DeliveryException;
+
+    Order getOrderMaxPriceInDate(String date) throws DeliveryException;
 
     DeliveryMan confirmOrder(Long number) throws DeliveryException;
 
@@ -57,10 +61,10 @@ public interface DeliveryService {
 
     Product getProductById(Long id);
 
+    List<Supplier> getBestTenDispatchersSupplier();
+
 
     Supplier getSupplierById(Long id);
-// BLAS
- //   Supplier createSupplier(Map<String, Object> data);
 
     Supplier createSupplier(Supplier newSupplier);
 
@@ -70,8 +74,6 @@ public interface DeliveryService {
     Item createItem(Item newsItem);
 
     void deleteProduct(Long id) throws DeliveryException;
-  //BLAS
-  //  Product createProduct(Map<String, Object> data);
 
     SupplierType createSupplierType(SupplierType newsSupplierType);
 

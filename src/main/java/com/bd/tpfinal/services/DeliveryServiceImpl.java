@@ -6,19 +6,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import java.util.Date;
 
 @Service
@@ -160,6 +158,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         return this.deliveryManRepository.findByUsername(username).orElse(null);
     }
     @Override
+    @Transactional(readOnly = true)
+    public List<DeliveryMan> getBestTenDeliveryMan() {
+        return this.deliveryManRepository.findTop10ByOrderByScoreDesc();
+    }
+    @Override
     @Transactional
     public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
         ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -185,21 +188,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         } else
             throw new DeliveryException("No se definió una dirección de entrega.");
     }
-/*
-    @Override
-    @Transactional
-    public Order newOrderPending(Order order) {
-        //order.getClient().addOrder(order);  //Verificar si hay que implementar.
-        this.orderRepository.save(order);
-        return order;
-    }
-*/
     @Override
     @Transactional(readOnly = true)
     public Order getOrderInfo(Long number) {
 
         return this.orderRepository.findByNumber(number).orElse(null);
-//        if (order != null) order.setStatusByName();
     }
 
     @Override
@@ -221,6 +214,38 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getOrdersWithMaxItems(Long supplier, int size) {
+        Pageable paging = PageRequest.of(0, size);
+        List<Long> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(supplier, paging).getContent();
+        List<Order> orders = (List<Order>) this.orderRepository.findAllById(ids);
+        Collections.sort(orders, Comparator.comparing(item -> ids.indexOf(item.getNumber())));
+        return orders;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Supplier> getBestTenDispatchersSupplier() {
+        Pageable paging = PageRequest.of(0, 10);
+        Page<Long> page = this.supplierRepository.findBestDispatchersSupplierIds(paging);
+        return (List<Supplier>) this.supplierRepository.findAllById(page.getContent());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Order getOrderMaxPriceInDate(String stringDate) throws DeliveryException{
+        try {
+            Date start = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(start);
+            c.add(Calendar.DATE, 1);
+            c.add(Calendar.SECOND, -1);
+            return this.orderRepository.findTopByDateOfOrderBetweenOrderByTotalPriceDesc(start, c.getTime()).orElse(null);
+        } catch (ParseException exception) {
+            throw new DeliveryException("Error en la fecha: " + exception.getMessage());
+        }
+    }
     /*    @Override
         @Transactional
         public List<Order> getAssignedOrders(String username) {

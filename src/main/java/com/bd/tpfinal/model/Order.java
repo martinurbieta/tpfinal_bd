@@ -57,7 +57,7 @@ public class Order {
     private int version;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "id_order")
     private List<Item> items;
@@ -71,8 +71,7 @@ public class Order {
         this.totalPrice =totalPrice;
         this.client = client;
         this.deliveryMan = null;
-//        this.orderStatus = new Pending(this);
-        this.orderStatus = new Pending();  //BLAS
+        this.orderStatus = new Pending();
         this.items=new ArrayList<>();
         this.address=null;
     }
@@ -197,36 +196,4 @@ public class Order {
         } else
             return this.orderStatus;
     }
-
-    // FEDERICO
-/*
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-    /*
-     * Debido a la incompatibilidad de Hibernet y JPA con embebeber la clases hijas, una solucion es instanciar
-     * el estado de manera manual.
-     * La clase que se recupera, si bien es un OrderStatus, no es una clase concreta.
-     */
-/*
-    public void setStatusByName(){
-        switch (orderStatus.getName()){
-            case "Pending":
-                this.setOrderStatus(new Pending(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
-                break;
-            case "Assigned":
-                this.setOrderStatus(new Assigned(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
-                break;
-            case "Sent":
-                this.setOrderStatus(new Sent(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
-                break;
-            case "Delivered":
-                this.setOrderStatus(new Delivered(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
-                break;
-            case "Cancelled":
-                this.setOrderStatus(new Cancelled(this, this.orderStatus.getStartDate(),this.orderStatus.getCancelledByClient()));
-                break;
-        }
-    }
-*/
 }
