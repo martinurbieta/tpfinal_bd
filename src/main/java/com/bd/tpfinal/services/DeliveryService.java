@@ -95,6 +95,13 @@ public interface DeliveryService {
 
     List<ProductType> getProductTypeFindAll();
 
+    List<ProductType> getAllProductTypes();
+
+    List<Supplier> getAllSuppliers();
+
+    List<Product> getAllProducts();
+
+
     List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
 
     List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data);
@@ -103,7 +110,7 @@ public interface DeliveryService {
 
     float getAverageProductTypePrice(Long id) throws DeliveryException;
 
-    // List<Supplier> getSupplierProvidingAllProductTypes();
+     List<Supplier> getSupplierProvidingAllProductType();
 
 
 

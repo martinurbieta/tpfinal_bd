@@ -257,10 +257,10 @@ public class DeliveryController {
         return this.service.getProductTypeFindAll();
     }
 
-//    @GetMapping(path = "/supplier/allProductTypes")
-//    public List<Supplier> getSupplierProvidingAllProductType(){
-//        return this.service.getSupplierProvidingAllProductType();
-//    }
+    @GetMapping(path = "/supplier/allProductTypes")
+    public List<Supplier> getSupplierProvidingAllProductType(){
+        return this.service.getSupplierProvidingAllProductType();
+    }
 
 }
 

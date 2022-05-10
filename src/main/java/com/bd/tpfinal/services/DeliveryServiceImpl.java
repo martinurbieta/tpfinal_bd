@@ -334,6 +334,26 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Product> getAllProducts() {
+        List<Product> products = this.productRepository.findAll();
+        for (Product product : products) {
+            product.getProductType().size();
+        }
+        return products;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Supplier> getAllSuppliers() {
+        List<Supplier> suppliers = this.supplierRepository.findAll();
+        for (Supplier supplier : suppliers) {
+            supplier.getProducts().size();
+        }
+        return suppliers;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductByProductTypeId(Long id) {
         List<Product> products = this.productRepository.findByProductTypeId(id);
         for (Product product : products) {
@@ -341,7 +361,15 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         return products;
     }
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductType> getAllProductTypes() {
+        List<ProductType> productTypes = this.productTypeRepository.findAll();
+        for (ProductType productType : productTypes) {
+            productType.getName();
+        }
+        return productTypes;
+    }
     @Override
     @Transactional(readOnly = true)
     public Supplier getSupplierById(Long id) {
@@ -512,23 +540,28 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Supplier> getSupplierProvidingAllProductTypes() {
-//        List<Supplier> suppliersProvidingAllProductTypes = new ArrayList<>();
-//        List<ProductType> allProductTypes = (List<ProductType>) this.productTypeRepository.findAll();
-//        List<Supplier> suppliers = (List<Supplier>) this.supplierRepository.findAll();
-//        Long numberOfProductTypes = allProductTypes.stream().count();
-//        for (Supplier supplier : suppliers) {
-//            List<Product> products = (List<Product>) this.getProductBySupplier(supplier.getId());
-//            Set<ProductType> productTypesInThisSupplierWithDupplicates = products.
-//                    stream()
-//                    .collect(groupingBy(Product::getProductType,toSet()));
-//            if (productTypesInThisSupplier.stream().count() == numberOfProductTypes)
-//                suppliersProvidingAllProductTypes.add(supplier);
-//        }
-//        return suppliersProvidingAllProductTypes;
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Supplier> getSupplierProvidingAllProductType() {
+        List<Supplier> suppliersProvidingAllProductTypes = new ArrayList<>();
+        List<ProductType> allProductTypes = this.getAllProductTypes();
+        List<Supplier> suppliers = this.getAllSuppliers();
+        Long numberOfProductTypes = allProductTypes.stream().count();
+        for (Supplier supplier : suppliers) {
+            List<Product> products = this.getProductBySupplier(supplier.getId());
+            Set<List<ProductType>> productTypesInThisSupplier = products.
+                    stream()
+                    .map(product -> product.getProductType())
+                    .collect(Collectors.toSet());
+            if (allProductTypes.size()-9==productTypesInThisSupplier.size()){
+                suppliersProvidingAllProductTypes.add(supplier);}
+
+           // System.out.println("PTITS:"+ supplier.getId()+"Nr"+productTypesInThisSupplier.size());
+              }
+        //System.out.println("APT:"+allProductTypes.size());
+
+        return suppliersProvidingAllProductTypes;
+    }
 
 
 

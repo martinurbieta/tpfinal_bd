@@ -16,6 +16,7 @@ import java.util.Optional;
 public interface SupplierRepository extends CrudRepository<Supplier, Long> {
 //        public List<Supplier> findSupplierByProductTypeId(Long aProductTypeId);
         public Optional<Supplier> findById(Long anId);
+        public List<Supplier> findAll();
         @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s GROUP BY s.id ORDER BY count(s) DESC")
         Page<Long> findBestDispatchersSupplierIds(Pageable pageable);
 }
