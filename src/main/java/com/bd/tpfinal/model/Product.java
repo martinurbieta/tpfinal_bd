@@ -1,5 +1,6 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Product {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
+    @JsonIgnore
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
@@ -37,6 +39,7 @@ public class Product {
     @Column(name = "version")
     private int version;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "product_product_type",
@@ -136,9 +139,6 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public List<ProductType> getType() {
-        return productType;
-    }
 
     public void setProductType(List<ProductType> productType) {
         this.productType = productType;

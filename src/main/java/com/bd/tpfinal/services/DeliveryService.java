@@ -2,8 +2,10 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 
 public interface DeliveryService {
@@ -64,6 +66,7 @@ public interface DeliveryService {
     List<Supplier> getBestTenDispatchersSupplier();
 
 
+
     Supplier getSupplierById(Long id);
 
     Supplier createSupplier(Supplier newSupplier);
@@ -88,8 +91,20 @@ public interface DeliveryService {
 
     List<Product> getProductBySupplier(Long id);
 
+    List<Product> getProductByProductTypeId(Long id);
+
+    List<ProductType> getProductTypeFindAll();
+
     List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
 
     List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data);
+
+    ArrayList<Object> getAverageProductTypePrices() throws DeliveryException;
+
+    float getAverageProductTypePrice(Long id) throws DeliveryException;
+
+    // List<Supplier> getSupplierProvidingAllProductTypes();
+
+
 
 }

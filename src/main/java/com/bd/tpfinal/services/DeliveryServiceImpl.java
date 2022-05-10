@@ -18,6 +18,10 @@ import java.util.*;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -51,6 +55,15 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Autowired
     private ProductTypeRepository productTypeRepository;
+
+    @Transactional
+    public ProductTypeRepository getProductTypeRepository() {
+        return this.productTypeRepository;
+    }
+    @Transactional
+    public ProductRepository getProductRepository() {
+        return this.productRepository;
+    }
 
     @Override
     @Transactional
@@ -321,6 +334,16 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Product> getProductByProductTypeId(Long id) {
+        List<Product> products = this.productRepository.findByProductTypeId(id);
+        for (Product product : products) {
+            product.getProductType().size();
+        }
+        return products;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Supplier getSupplierById(Long id) {
         return this.supplierRepository.findById(id).orElse(null);
     }
@@ -335,6 +358,12 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public ProductType getProductTypeById(Long id) {
         return this.productTypeRepository.findProductTypeById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductType> getProductTypeFindAll() {
+        return this.productTypeRepository.findAll();
     }
 
     @Override
@@ -442,4 +471,66 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, productId);
     }
+
+
+
+    @Transactional
+    public ArrayList<Object> getAverageProductTypePrices() throws DeliveryException {
+        List<ProductType> productTypes = this.getProductTypeRepository().findAll();
+        productTypes.size();
+        ArrayList<Object> productTypeAvg = new ArrayList<>();
+        for (ProductType productType : productTypes) {
+            ArrayList<Object> tempProductTypeAvg = new ArrayList<>();
+            Long pID = productType.getId();
+            List<Product> productsInSameProductType = this.getProductByProductTypeId(pID);
+            productsInSameProductType.size();
+            OptionalDouble average = productsInSameProductType.stream()
+                    .mapToDouble(Product::getPrice)
+                    .average();
+            tempProductTypeAvg.add(pID);
+            tempProductTypeAvg.add(average);
+            productTypeAvg.add(tempProductTypeAvg);
+        }
+        return productTypeAvg;
+    }
+
+
+
+
+    @Transactional
+    public float getAverageProductTypePrice(Long id) throws DeliveryException {
+        List<Product> products = this.productRepository.findByProductTypeId(id);
+        float productCount = (float) products.size();
+        float sum = 0;
+        for (Product product : products) {
+            product.getProductType().size();
+            float price = product.getPrice();
+            sum = sum+price;
+        }
+        return sum / productCount;
+
+    }
+
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Supplier> getSupplierProvidingAllProductTypes() {
+//        List<Supplier> suppliersProvidingAllProductTypes = new ArrayList<>();
+//        List<ProductType> allProductTypes = (List<ProductType>) this.productTypeRepository.findAll();
+//        List<Supplier> suppliers = (List<Supplier>) this.supplierRepository.findAll();
+//        Long numberOfProductTypes = allProductTypes.stream().count();
+//        for (Supplier supplier : suppliers) {
+//            List<Product> products = (List<Product>) this.getProductBySupplier(supplier.getId());
+//            Set<ProductType> productTypesInThisSupplierWithDupplicates = products.
+//                    stream()
+//                    .collect(groupingBy(Product::getProductType,toSet()));
+//            if (productTypesInThisSupplier.stream().count() == numberOfProductTypes)
+//                suppliersProvidingAllProductTypes.add(supplier);
+//        }
+//        return suppliersProvidingAllProductTypes;
+//    }
+
+
+
+
 }

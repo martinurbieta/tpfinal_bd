@@ -6,8 +6,10 @@ import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -159,7 +161,11 @@ public class DeliveryController {
         return this.service.getProductBySupplier(id);
 
     }
+    @GetMapping(path = "/product/producttype/{id}")
+    public List<Product> getProductByProductTypeId(@PathVariable Long id){
+        return this.service.getProductByProductTypeId(id);
 
+    }
 
     @DeleteMapping(path = "/product/{id}")
     public void deleteProduct(@PathVariable Long id) throws DeliveryException{
@@ -220,15 +226,41 @@ public class DeliveryController {
         return this.service.getProductById(id);
     }
 
-    @GetMapping(path = "/product/{id}/historicalprice") // tested_ok
+    @GetMapping(path = "/product/{id}/historicalPrice") // tested_ok
     public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(@PathVariable Long id){
         return this.service.getHistoricalProductPriceByProductId(id);
     }
 
-    @GetMapping(path = "/product/{id}/historicalprice/betweendates")
+    @GetMapping(path = "/product/{id}/historicalPrice/betweenDates")
     public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@RequestBody Map<String, Object> data){
         return this.service.getHistoricalProductPriceBetweenDates(data);
 
-        }
+    }
+    @GetMapping(path = "/productType/averagePrices")
+    public ArrayList<Object> getAverageProductTypePrices() throws DeliveryException {
+        return  this.service.getAverageProductTypePrices();
+    }
+
+//    @GetMapping(path = "/productType/averagePrices")
+//    public Map<ProductType, OptionalDouble> getAverageProductTypePrices() throws DeliveryException {
+//        return  this.service.getAverageProductTypePrices();
+//    }
+
+    @GetMapping(path = "/productType/average/{id}")
+    public float getAverageProductTypePrice(@PathVariable Long id) throws DeliveryException {
+        return this.service.getAverageProductTypePrice(id);
+    }
+
+
+    @GetMapping(path = "/productType/all")
+    public List<ProductType> getProductTypeFindAll(){
+        return this.service.getProductTypeFindAll();
+    }
+
+//    @GetMapping(path = "/supplier/allProductTypes")
+//    public List<Supplier> getSupplierProvidingAllProductType(){
+//        return this.service.getSupplierProvidingAllProductType();
+//    }
+
 }
 

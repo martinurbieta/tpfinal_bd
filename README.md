@@ -103,7 +103,7 @@ X - Obtener los diez repartidores con mayor puntaje.
 
 X - Obtener los diez proveedores que más órdenes despacharon.
 
-5 - Obtener los precios de un producto entre dos fechas dadas.
+X - Obtener los precios de un producto entre dos fechas dadas.
 
 6 - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
