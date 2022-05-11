@@ -139,6 +139,9 @@ public class Product {
         this.supplier = supplier;
     }
 
+    public List<ProductType> getType() {
+        return productType;
+    }
 
     public void setProductType(List<ProductType> productType) {
         this.productType = productType;

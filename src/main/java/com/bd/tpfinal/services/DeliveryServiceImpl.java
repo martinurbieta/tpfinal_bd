@@ -211,11 +211,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public DeliveryMan confirmOrder(Long number) throws DeliveryException {
-        DeliveryMan deliveryMan = this.deliveryManRepository.findByFreeTrueAndActiveTrue().stream().findAny().orElse(null);
-        if (deliveryMan != null) {
+        Integer i = (new Random()).nextInt(this.deliveryManRepository.countByFreeTrueAndActiveTrue());
+        Pageable paging = PageRequest.of(i, 1);
+        List<DeliveryMan> deliveryManList = this.deliveryManRepository.findByFreeTrueAndActiveTrue(paging).getContent();
+        if (deliveryManList.size() > 0) {
             try {
+                DeliveryMan deliveryMan = deliveryManList.get(0);
                 Order order = this.getOrderInfo(number);
-                order.getOrderStatus().assign(deliveryMan);
+                order.getOrderStatus().assign(deliveryMan, order);
                 this.deliveryManRepository.save(deliveryMan);
                 this.orderRepository.save(order);
                 return deliveryMan;
@@ -259,19 +262,11 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new DeliveryException("Error en la fecha: " + exception.getMessage());
         }
     }
-    /*    @Override
-        @Transactional
-        public List<Order> getAssignedOrders(String username) {
-            DeliveryMan dm = this.getDeliveryManInfo(username);
-            dm.getActualOrders().size(); // Inicializar lista LAZY
-            return dm.getActualOrders();
-        }
-    */
     @Override
     @Transactional
     public void deliverOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
-        order.getOrderStatus().deliver();
+        order.getOrderStatus().deliver(order);
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
     }
 
@@ -279,7 +274,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public void refuseOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
-        order.getOrderStatus().refuse();
+        order.getOrderStatus().refuse(order);
         this.orderRepository.save(order);
     }
 
@@ -287,7 +282,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public void cancelOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
-        order.getOrderStatus().cancel();
+        order.getOrderStatus().cancel(order);
         this.orderRepository.save(order);
     }
 
@@ -295,7 +290,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public void finishOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
-        order.getOrderStatus().finish();
+        order.getOrderStatus().finish(order);
         this.orderRepository.save(order);
     }
 
@@ -476,31 +471,20 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data) {
-        ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Date startDate = null;
-        Date finishDate = null;
-        Long productId = Long.parseLong(data.get("productId").toString());
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Long id, String startDateStr, String finishDateStr) throws DeliveryException {
         try {
-            String startDateStr = data.get("startDate").toString();
-            String finishDateStr = data.get("finishDate").toString();
-
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-
-            startDate = df.parse(startDateStr);
-            finishDate = df.parse(finishDateStr);
-
-            startDate = df.parse(startDateStr);
-            finishDate = df.parse(finishDateStr);
-
-        } catch (ParseException pe) {
-            pe.printStackTrace();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar c = Calendar.getInstance();
+            Date startDate = df.parse(startDateStr);
+            Date finishDate = df.parse(finishDateStr);
+            c.setTime(finishDate);
+            c.add(Calendar.DATE, 1);
+            c.add(Calendar.SECOND, -1);
+            return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id);
+        } catch (ParseException exception) {
+            throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());
         }
-
-        return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, productId);
     }
-
-
 
     @Transactional
     public ArrayList<Object> getAverageProductTypePrices() throws DeliveryException {

@@ -10,8 +10,6 @@ import java.util.Date;
 
 @Embeddable
 public class OrderStatus {
-//public class OrderStatus {
-
 
     @Column(name = "state")
     private String name;
@@ -22,41 +20,17 @@ public class OrderStatus {
     @Column(name = "cancelled_by_client")
     private boolean cancelledByClient;
 
-    @Transient
-    @JsonIgnore
-    @Parent
-    public Order order;
-
     public OrderStatus(){}
 
-/*
-MARTIN
-    public OrderStatus(String name) {
-        this.name = name;
-        this.order = order;
-        this.startDate = Calendar.getInstance().getTime();
-        this.cancelledByClient=this.getCancelledByClient();
-    }
-
-    public OrderStatus(String name, Date startDate){
-        this.name = name;
-        this.order = order;
-        this.startDate = startDate;
-        this.cancelledByClient=this.getCancelledByClient();
-    }
-
-    public OrderStatus(String name, Date startDate,boolean cancelledByClient){
-        this.name = name;
-        this.order = order;
-        this.startDate = startDate;
-        this.cancelledByClient=cancelledByClient;
-    }
-*/
     private void init (String name, Date startDate, boolean cancelledByClient) {
         this.name = name;
         this.startDate = startDate;
         this.cancelledByClient=cancelledByClient;
     }
+    public OrderStatus(OrderStatus orderStatus) {
+        this.init(orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
+    }
+
     public OrderStatus(String name) {
         this.init(name, Calendar.getInstance().getTime(), false);
     }
@@ -107,23 +81,23 @@ MARTIN
 
     public boolean canCancel() { return false; }
 
-    public void assign(DeliveryMan deliveryMan) throws DeliveryException{
+    public void assign(DeliveryMan deliveryMan, Order order) throws DeliveryException{
         throw new DeliveryException("No se puede realizarse esta accion");
     }
 
-    public void refuse() throws DeliveryException{
+    public void refuse(Order order) throws DeliveryException{
         throw new DeliveryException("No se puede realizarse esta accion");
     }
 
-    public void deliver() throws DeliveryException{
+    public void deliver(Order order) throws DeliveryException{
         throw new DeliveryException("No se puede realizarse esta accion");
     }
 
-    public void cancel() throws DeliveryException{
+    public void cancel(Order order) throws DeliveryException{
         throw new DeliveryException("No se puede realizarse esta accion");
     }
 
-    public void finish() throws DeliveryException{
+    public void finish(Order order) throws DeliveryException{
         throw new DeliveryException("No se puede realizarse esta accion");
     }
 }

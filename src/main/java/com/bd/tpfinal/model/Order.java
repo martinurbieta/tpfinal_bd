@@ -65,7 +65,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Date dateOfOrder, String comments, float totalPrice,Client client) {
+    public Order(Date dateOfOrder, String comments, float totalPrice,Client client) throws DeliveryException {
         this.dateOfOrder =dateOfOrder;
         this.comments =comments;
         this.totalPrice =totalPrice;
@@ -81,10 +81,6 @@ public class Order {
     public void setNumber(Long number) {this.number = number;}
 
     public Date getDateOfOrder() {return dateOfOrder;}
-
-//    public Supplier getItemProductSupplier(){
-//        return this.items.get(0).getProductSupplier();
-//    }
 
     public void setDateOfOrder(Date dateOfOrder) {this.dateOfOrder = dateOfOrder;}
 
@@ -187,8 +183,7 @@ public class Order {
             try {
                 String name = this.orderStatus.getName();
                 Class<?> cl = Class.forName("com.bd.tpfinal.model." + name);
-                String orderStatusName=this.orderStatus.getName();
-                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(this.orderStatus);
+                this.orderStatus = (OrderStatus) cl.getDeclaredConstructor(OrderStatus.class).newInstance(orderStatus);
                 return this.orderStatus;
             } catch (Throwable t) {
                 throw new DeliveryException(t.getMessage());

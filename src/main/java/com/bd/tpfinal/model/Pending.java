@@ -8,27 +8,8 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Pending extends OrderStatus {
-/*
-MARTIN
-    public Pending() {
-    }
-
-    public Pending(Order order) {
-        super(order, "Pending");
-    }
-
-    public Pending(Order order, Date startDate) {
-        super(order, "Pending", startDate);
-    }
-
-    public Pending(Order order, Date startDate, boolean cancelledByClient) {
-        super(order, "Pending", startDate, cancelledByClient);
-    }
-*/
-    public Pending() {    super("Pending"); }
-    public Pending(OrderStatus orderStatus) {
-        super(orderStatus.getName(), orderStatus.getStartDate(), orderStatus.getCancelledByClient());
-    }
+    public Pending() { super("Pending"); }
+    public Pending(OrderStatus orderStatus) {super(orderStatus); }
     public Pending(Date startDate) {super("Pending", startDate); }
 
     @Override
@@ -47,24 +28,21 @@ MARTIN
     }
 
     @Override
-    public void assign(DeliveryMan deliveryMan) throws DeliveryException {
+    public void assign(DeliveryMan deliveryMan, Order order) throws DeliveryException {
         if (this.canAssign()) {
-//          deliveryMan.addOrder(this.order); // Solucion FEDERICO.
             deliveryMan.setFree(false);
-            this.order.setDeliveryMan(deliveryMan);
-//            this.order.setOrderStatus(new Assigned(this.order));
-            this.order.setOrderStatus(new Assigned());
+            order.setDeliveryMan(deliveryMan);
+            order.setOrderStatus(new Assigned());
         } else {
             throw new DeliveryException("The order can't be assigned to the delivery man");
         }
     }
 
     @Override
-    public void cancel() throws DeliveryException {
+    public void cancel(Order order) throws DeliveryException {
         if (this.canCancel()) {
-           this.order.setOrderStatus(new Cancelled());
-//            this.order.setOrderStatus(new Cancelled(this.order));
-            this.order.getClient().addScore(0); // Pending no penaliza al cliente. Un pedido esta confirmado cuando esta confirmado cuando se asigna repartirdor (segundo bullet)."Resta un punto cuando cancela uno ya confirmado y asignado".
+           order.setOrderStatus(new Cancelled());
+//           order.getClient().addScore(0); // Pending no penaliza al cliente. Un pedido esta confirmado cuando esta confirmado cuando se asigna repartirdor (segundo bullet)."Resta un punto cuando cancela uno ya confirmado y asignado".
         } else {
             throw new DeliveryException("The order can't be cancelled");
         }

@@ -9,29 +9,15 @@ import java.util.Date;
 @Embeddable
 public class Sent extends OrderStatus {
 
-    public Sent() { super("Sent"); }  //BLAS
+    public Sent() {super("Sent"); }
 
-    public Sent(Date startDate){
-        super("Sent", startDate);
-    }
-    public Sent(Date startDate, boolean cancelledByClient){
-        super("Sent", startDate,cancelledByClient);
-    }
-    /*
-    public Sent() {}
-
-    public Sent(Order order){
-        super(order, "Sent");
+    public Sent(OrderStatus orderStatus){
+        super(orderStatus);
     }
 
-    public Sent(Order order, Date startDate){
-        super(order, "Sent", startDate);
+    public Sent( Date startDate, boolean cancelledByClient){ 
+        super("Sent", startDate,cancelledByClient);  
     }
-
-    public Sent(Order order, Date startDate, boolean cancelledByClient){
-        super(order, "Sent", startDate,cancelledByClient);
-    }
-*/
 
     @Override
     public boolean canFinish() {
@@ -44,14 +30,12 @@ public class Sent extends OrderStatus {
     }
 
     @Override
-    public void finish() throws DeliveryException {
-        this.order.setOrderStatus(new Delivered());
-//        this.order.setOrderStatus(new Delivered(this.order));
-        this.order.getDeliveryMan().addScore(1);
-        this.order.getDeliveryMan().addNumberOfSuccess();
-        this.order.getClient().addScore(1);
-        this.order.getDeliveryMan().setFree(true);
-//        this.order.getDeliveryMan().deleteOrder(order); solucioń Federico
-        this.order.setDeliveryMan(null); // Rompo la relacion bidireccional(no hay otra forma en el esquema de db actual)
+    public void finish(Order order) throws DeliveryException {
+        order.setOrderStatus(new Delivered());
+        order.getDeliveryMan().addScore(1);
+        order.getDeliveryMan().addNumberOfSuccess();
+        order.getClient().addScore(1);
+        order.getDeliveryMan().setFree(true);
+        order.setDeliveryMan(null); // Rompo la relacion bidireccional(no hay otra forma en el esquema de db actual)
     }
 }

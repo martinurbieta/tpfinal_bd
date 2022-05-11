@@ -5,7 +5,6 @@ import com.bd.tpfinal.utils.DeliveryException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 
 public interface DeliveryService {
@@ -65,8 +64,6 @@ public interface DeliveryService {
 
     List<Supplier> getBestTenDispatchersSupplier();
 
-
-
     Supplier getSupplierById(Long id);
 
     Supplier createSupplier(Supplier newSupplier);
@@ -104,7 +101,7 @@ public interface DeliveryService {
 
     List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
 
-    List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Map<String, Object> data);
+    List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Long number, String startDateStr, String finishDateStr) throws DeliveryException;
 
     ArrayList<Object> getAverageProductTypePrices() throws DeliveryException;
 

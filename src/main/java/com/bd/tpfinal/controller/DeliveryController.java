@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -127,12 +126,12 @@ public class DeliveryController {
     }
 
     @PutMapping(path = "/order/{number}/refuse")
-    public void refuseOrder(Long number) throws DeliveryException {
+    public void refuseOrder(@PathVariable Long number) throws DeliveryException {
         this.service.refuseOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/cancel")
-    public void cancelOrder(Long number) throws DeliveryException{
+    public void cancelOrder(@PathVariable Long number) throws DeliveryException{
         this.service.cancelOrder(number);
     }
 
@@ -140,14 +139,17 @@ public class DeliveryController {
     public DeliveryMan confirmOrder(@PathVariable Long number) throws DeliveryException{
         return this.service.confirmOrder(number);
     }
-
+    @PutMapping(path = "/order/{number}/deliver")
+    public void deliverOrder(@PathVariable Long number) throws DeliveryException{
+        this.service.deliverOrder(number);
+    }
     @PutMapping(path = "/order/{number}/finish")
-    public void finishOrder(Long number) throws DeliveryException {
+    public void finishOrder(@PathVariable Long number) throws DeliveryException {
         this.service.finishOrder(number);
     }
 
     @PostMapping(path = "/order/{number}/qualify")
-    public void qualifyOrder(Long number, @RequestBody Qualification qualification) throws DeliveryException {
+    public void qualifyOrder(@PathVariable Long number, @RequestBody Qualification qualification) throws DeliveryException {
         this.service.qualifyOrder(number, qualification);
     }
 
@@ -164,21 +166,12 @@ public class DeliveryController {
     @GetMapping(path = "/product/producttype/{id}")
     public List<Product> getProductByProductTypeId(@PathVariable Long id){
         return this.service.getProductByProductTypeId(id);
-
     }
 
     @DeleteMapping(path = "/product/{id}")
     public void deleteProduct(@PathVariable Long id) throws DeliveryException{
         this.service.deleteProduct(id);
     }
-//    BLAS
-//    @PostMapping(path = "/product")
-//    public Product createProduct(@RequestBody Map<String, Object> data) {
-//        return this.service.createProduct(data);
-//    }
-
-
-
 
     @GetMapping(path = "/supplierType/{id}")  // tested_ok
     public SupplierType getSupplierTypeById(@PathVariable Long id){
@@ -231,9 +224,9 @@ public class DeliveryController {
         return this.service.getHistoricalProductPriceByProductId(id);
     }
 
-    @GetMapping(path = "/product/{id}/historicalPrice/betweenDates")
-    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@RequestBody Map<String, Object> data){
-        return this.service.getHistoricalProductPriceBetweenDates(data);
+    @GetMapping(path = "/product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}")
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@PathVariable Long id, @PathVariable String startDateStr, @PathVariable String finishDateStr) throws DeliveryException {
+        return this.service.getHistoricalProductPriceBetweenDates(id, startDateStr, finishDateStr);
 
     }
     @GetMapping(path = "/productType/averagePrices")
