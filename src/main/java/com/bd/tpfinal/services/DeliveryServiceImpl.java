@@ -18,10 +18,10 @@ import java.util.*;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.averagingDouble;
+import static java.util.stream.Collectors.counting;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -339,6 +339,16 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Order> getAllOrders() {
+        List<Order> orders  = this.orderRepository.findAll();
+        for (Order order : orders) {
+            order.getItems().size();
+        }
+        return orders;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = this.supplierRepository.findAll();
         for (Supplier supplier : suppliers) {
@@ -537,7 +547,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     stream()
                     .map(product -> product.getProductType())
                     .collect(Collectors.toSet());
-            if (allProductTypes.size()-9==productTypesInThisSupplier.size()){
+            if (allProductTypes.size()==productTypesInThisSupplier.size()){
                 suppliersProvidingAllProductTypes.add(supplier);}
 
            // System.out.println("PTITS:"+ supplier.getId()+"Nr"+productTypesInThisSupplier.size());
@@ -547,7 +557,56 @@ public class DeliveryServiceImpl implements DeliveryService {
         return suppliersProvidingAllProductTypes;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ArrayList<Object> getSupplierByQualificationValue(Long stars) {
+        List<Order> allOrders = this.getAllOrders();
+        List<Supplier> allSuppliers = this.getAllSuppliers();
+        ArrayList<Object> result= new ArrayList<>();
+        System.out.println("stars"+stars);
+        for (Supplier supplier : allSuppliers) {
+            Long supplierCount = null;
+            List<Object> tempStat = new ArrayList<>();
+            List<Qualification>  supplierQualifications = allOrders
+                    .stream()
+                    .filter(order -> order.getSupplier() == supplier)
+                    .map(Order::getQualification)
+                    .filter(Objects::nonNull)
+                    .filter(qualification -> qualification.getScore() >= stars)
+                    .collect(Collectors.toList());
 
+            supplierCount = supplierQualifications.stream().count();
+
+            if(supplierCount > 0 ) {
+            tempStat.add(supplier.getName());
+            System.out.println("tempstat supplier i:"+tempStat);
+            tempStat.add(supplierCount);
+            System.out.println("tempstat count i:"+tempStat);
+            tempStat.add(supplierQualifications.stream().mapToDouble(Qualification::getScore).average());
+            System.out.println("tempstat avg i:"+tempStat);
+            result.add(tempStat);
+            }
+        }
+        return result;
+
+    }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public Map<Supplier,Double>  getSupplierByQualificationValue(Long stars) {
+//        List<Order> allOrders = this.getAllOrders();
+//        List<Order  > ordersWithEnoughStars = allOrders.stream()
+//                .filter(order -> order.getQualification().getScore() >=stars)
+//                .collect(toList());
+//        Map<Supplier,Double> results = ordersWithEnoughStars
+//                .stream()
+//                .map(order -> order.getQualification())
+//                .collect(
+//                        Collectors.groupingBy(
+//                                Order::getSupplier,
+//                                Collectors.averagingDouble(Qualification::getScore)));
+//        return results ;
+//    }
 
 
 }

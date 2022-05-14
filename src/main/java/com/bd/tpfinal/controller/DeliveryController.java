@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -253,6 +254,11 @@ public class DeliveryController {
     @GetMapping(path = "/supplier/allProductTypes")
     public List<Supplier> getSupplierProvidingAllProductType(){
         return this.service.getSupplierProvidingAllProductType();
+    }
+
+    @GetMapping(path = "/supplier/qualification/aLeast/{stars}")
+    public ArrayList<Object>  getSupplierByQualificationValue(@PathVariable Long stars){
+        return this.service.getSupplierByQualificationValue(stars);
     }
 
 }

@@ -5,6 +5,7 @@ import com.bd.tpfinal.utils.DeliveryException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 
 public interface DeliveryService {
@@ -98,6 +99,9 @@ public interface DeliveryService {
 
     List<Product> getAllProducts();
 
+    List<Order> getAllOrders();
+
+
 
     List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
 
@@ -108,6 +112,8 @@ public interface DeliveryService {
     float getAverageProductTypePrice(Long id) throws DeliveryException;
 
      List<Supplier> getSupplierProvidingAllProductType();
+
+    ArrayList<Object> getSupplierByQualificationValue(Long stars);
 
 
 

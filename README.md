@@ -1,4 +1,4 @@
-# Trabajo Práctico Final
+e# Trabajo Práctico Final
 
 **DISEÑO DE BASES DE DATOS - MG IS 2021**
 
@@ -107,7 +107,7 @@ X - Obtener los precios de un producto entre dos fechas dadas.
 
 X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
-7 - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
+X - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
 
   proveedor posee.
 
