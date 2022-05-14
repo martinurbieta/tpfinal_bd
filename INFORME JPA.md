@@ -75,4 +75,17 @@ Si bien se ha procurado mantener la mayor eficiencia del modelo, se ha permitido
 
 En relación al STATE, se ha optado por una instanciación de la Clase, en lugar de la propuesta CASE presentada en delivery_bd[^1].
 
+####DASE DE DATOS
+
+La base de datos de producción se encuentra disponible en
+
+[tpfinal_bd.sql.zip](https://github.com/fedediclaudio/tpfinal_bd/files/8690088/tpfinal_bd.sql.zip)
+
+y los curl post
+
+[curlpost+jsons.zip](https://github.com/fedediclaudio/tpfinal_bd/files/8690097/curlpost%2Bjsons.zip)
+
+
+
+
 [^1]: https://github.com/fedediclaudio/delivery_bd notificado por Ideas el 22/10/21
