@@ -107,7 +107,7 @@ public interface DeliveryService {
 
     List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Long number, String startDateStr, String finishDateStr) throws DeliveryException;
 
-    ArrayList<Object> getAverageProductTypePrices() throws DeliveryException;
+    List<ArrayList> getAverageProductTypePrices() throws DeliveryException;
 
     float getAverageProductTypePrice(Long id) throws DeliveryException;
 

@@ -230,17 +230,12 @@ public class DeliveryController {
         return this.service.getHistoricalProductPriceBetweenDates(id, startDateStr, finishDateStr);
 
     }
-    @GetMapping(path = "/productType/averagePrices")
-    public ArrayList<Object> getAverageProductTypePrices() throws DeliveryException {
+    @GetMapping(path = "/product/averagePrices/for/allTypes")
+    public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
         return  this.service.getAverageProductTypePrices();
     }
 
-//    @GetMapping(path = "/productType/averagePrices")
-//    public Map<ProductType, OptionalDouble> getAverageProductTypePrices() throws DeliveryException {
-//        return  this.service.getAverageProductTypePrices();
-//    }
-
-    @GetMapping(path = "/productType/average/{id}")
+    @GetMapping(path = "/product/averagePrices/for/{id}")
     public float getAverageProductTypePrice(@PathVariable Long id) throws DeliveryException {
         return this.service.getAverageProductTypePrice(id);
     }

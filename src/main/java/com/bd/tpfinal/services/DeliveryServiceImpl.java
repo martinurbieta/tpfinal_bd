@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -425,7 +426,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public Product createProduct(Product newProduct) {
-        return this.productRepository.save(newProduct);
+        this.productRepository.save(newProduct);
+        HistoricalProductPrice historicalProductPrice = new HistoricalProductPrice(newProduct, newProduct.getPrice(), new Date());
+        this.historicalProductPriceRepository.save(historicalProductPrice);
+        return newProduct;
     }
 
     @Override
@@ -497,27 +501,17 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Transactional
-    public ArrayList<Object> getAverageProductTypePrices() throws DeliveryException {
-        List<ProductType> productTypes = this.getProductTypeRepository().findAll();
-        productTypes.size();
-        ArrayList<Object> productTypeAvg = new ArrayList<>();
-        for (ProductType productType : productTypes) {
-            ArrayList<Object> tempProductTypeAvg = new ArrayList<>();
-            Long pID = productType.getId();
-            List<Product> productsInSameProductType = this.getProductByProductTypeId(pID);
-            productsInSameProductType.size();
-            OptionalDouble average = productsInSameProductType.stream()
-                    .mapToDouble(Product::getPrice)
-                    .average();
-            tempProductTypeAvg.add(pID);
-            tempProductTypeAvg.add(average);
-            productTypeAvg.add(tempProductTypeAvg);
+    public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
+        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
+        ArrayList<ArrayList> resultado = new ArrayList <ArrayList>();
+        for (ArrayList tipoConPromedio : tiposConPromedio) {
+            ArrayList<Object> elemento = new ArrayList<>();
+            elemento.add (this.productTypeRepository.findById((Long) tipoConPromedio.get(0)).orElse(null));
+            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
+            resultado.add(elemento);
         }
-        return productTypeAvg;
+        return resultado;
     }
-
-
-
 
     @Transactional
     public float getAverageProductTypePrice(Long id) throws DeliveryException {
@@ -530,9 +524,7 @@ public class DeliveryServiceImpl implements DeliveryService {
             sum = sum+price;
         }
         return sum / productCount;
-
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -549,11 +541,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     .collect(Collectors.toSet());
             if (allProductTypes.size()==productTypesInThisSupplier.size()){
                 suppliersProvidingAllProductTypes.add(supplier);}
-
-           // System.out.println("PTITS:"+ supplier.getId()+"Nr"+productTypesInThisSupplier.size());
               }
-        //System.out.println("APT:"+allProductTypes.size());
-
         return suppliersProvidingAllProductTypes;
     }
 
@@ -590,23 +578,4 @@ public class DeliveryServiceImpl implements DeliveryService {
         return result;
 
     }
-
-//    @Override
-//    @Transactional(readOnly = true)
-//    public Map<Supplier,Double>  getSupplierByQualificationValue(Long stars) {
-//        List<Order> allOrders = this.getAllOrders();
-//        List<Order  > ordersWithEnoughStars = allOrders.stream()
-//                .filter(order -> order.getQualification().getScore() >=stars)
-//                .collect(toList());
-//        Map<Supplier,Double> results = ordersWithEnoughStars
-//                .stream()
-//                .map(order -> order.getQualification())
-//                .collect(
-//                        Collectors.groupingBy(
-//                                Order::getSupplier,
-//                                Collectors.averagingDouble(Qualification::getScore)));
-//        return results ;
-//    }
-
-
 }
