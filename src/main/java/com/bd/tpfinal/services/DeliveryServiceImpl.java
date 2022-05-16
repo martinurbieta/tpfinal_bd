@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -20,9 +21,6 @@ import java.util.*;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.averagingDouble;
-import static java.util.stream.Collectors.counting;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -173,8 +171,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional(readOnly = true)
-    public List<DeliveryMan> getBestTenDeliveryMan() {
-        return this.deliveryManRepository.findTop10ByOrderByScoreDesc();
+    public List<DeliveryMan> getBestDeliveryMan(Integer size) {
+        Pageable paging = PageRequest.of(0, size);
+        return this.deliveryManRepository.findByOrderByScoreDesc(paging).getContent();
     }
     @Override
     @Transactional
@@ -205,7 +204,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public Order getOrderInfo(Long number) {
-
         return this.orderRepository.findByNumber(number).orElse(null);
     }
 
@@ -243,8 +241,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> getBestTenDispatchersSupplier() {
-        Pageable paging = PageRequest.of(0, 10);
+    public List<Supplier> getBestFirstsDispatchersSupplier(Integer quantity) {
+        Pageable paging = PageRequest.of(0, quantity);
         Page<Long> page = this.supplierRepository.findBestDispatchersSupplierIds(paging);
         return (List<Supplier>) this.supplierRepository.findAllById(page.getContent());
     }
@@ -277,6 +275,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse(order);
         this.orderRepository.save(order);
+        this.confirmOrder(number);
     }
 
     @Override
@@ -348,6 +347,12 @@ public class DeliveryServiceImpl implements DeliveryService {
         return orders;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Supplier> getSupplierByType(Long id) {
+        List<Supplier> suppliers = this.supplierRepository.findBySupplierTypeId(id);
+        return suppliers;
+    }
     @Override
     @Transactional(readOnly = true)
     public List<Supplier> getAllSuppliers() {
@@ -434,8 +439,18 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public Item createItem(Item newItem) {
-        return this.itemRepository.save(newItem);
+    public Item createItem(Item newItem) throws DeliveryException {
+        Order order = this.orderRepository.findByNumber(newItem.getOrder().getNumber()).orElse(null);
+        if (order == null) {
+            throw new DeliveryException("No existe la orden donde agregar este item");
+        } else {
+            OrderStatus status = order.getOrderStatus();
+            if (status.canAddItem()) {
+                return this.itemRepository.save(newItem);
+            } else {
+                throw new DeliveryException("No se puede agregar items en el estado "+status.getName());
+            }
+        }
     }
 
 
@@ -491,6 +506,9 @@ public class DeliveryServiceImpl implements DeliveryService {
             Calendar c = Calendar.getInstance();
             Date startDate = df.parse(startDateStr);
             Date finishDate = df.parse(finishDateStr);
+            if ( startDate.after(finishDate)) {
+                throw new DeliveryException("Error en las fechas enviadas: la fecha de finalización debe ser mayor que la de inicio");
+            }
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
@@ -547,35 +565,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public ArrayList<Object> getSupplierByQualificationValue(Long stars) {
-        List<Order> allOrders = this.getAllOrders();
-        List<Supplier> allSuppliers = this.getAllSuppliers();
-        ArrayList<Object> result= new ArrayList<>();
-        System.out.println("stars"+stars);
-        for (Supplier supplier : allSuppliers) {
-            Long supplierCount = null;
-            List<Object> tempStat = new ArrayList<>();
-            List<Qualification>  supplierQualifications = allOrders
-                    .stream()
-                    .filter(order -> order.getSupplier() == supplier)
-                    .map(Order::getQualification)
-                    .filter(Objects::nonNull)
-                    .filter(qualification -> qualification.getScore() >= stars)
-                    .collect(Collectors.toList());
-
-            supplierCount = supplierQualifications.stream().count();
-
-            if(supplierCount > 0 ) {
-            tempStat.add(supplier.getName());
-            System.out.println("tempstat supplier i:"+tempStat);
-            tempStat.add(supplierCount);
-            System.out.println("tempstat count i:"+tempStat);
-            tempStat.add(supplierQualifications.stream().mapToDouble(Qualification::getScore).average());
-            System.out.println("tempstat avg i:"+tempStat);
-            result.add(tempStat);
-            }
-        }
-        return result;
-
+    public List<Supplier> getSupplierByQualificationValue(Integer stars) {
+        List<Long> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
+        return (List<Supplier>) this.supplierRepository.findAllById(ids);
     }
 }

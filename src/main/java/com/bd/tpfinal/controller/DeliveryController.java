@@ -80,11 +80,10 @@ public class DeliveryController {
 
     @GetMapping(path = "/deliveryMan/bestTen")   //tested_ok
     public List<DeliveryMan> getBestTenDeliveryMan(){
-        return this.service.getBestTenDeliveryMan();
+        return this.service.getBestDeliveryMan(10);
     }
-
     @PostMapping(path = "/item")
-    public Item createItem(@RequestBody Item newItem){
+    public Item createItem(@RequestBody Item newItem) throws DeliveryException {
         return this.service.createItem(newItem);
     }
 
@@ -96,12 +95,7 @@ public class DeliveryController {
     public Order newOrder(@RequestBody Map<String, Object> data) throws DeliveryException {
         return this.service.newOrderPending(data);
     }
-/*
-    @PostMapping(path = "/order")
-    public Order newOrder(@RequestBody Order order){
-        return this.service.newOrderPending(order);
-    }
-*/
+
     @GetMapping(path = "/order/maxItems/supplier/{supplier}/firsts/{size}")
     public List<Order> getOrdersWithMaxItems(@PathVariable Long supplier, @PathVariable int size) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, size);
@@ -205,6 +199,11 @@ public class DeliveryController {
         return this.service.getProductTypeById(id);
     }
 
+    @GetMapping(path = "/supplier/byTpe/{id}")
+    public List<Supplier> getSupplierByType(@PathVariable Long id){
+        return this.service.getSupplierByType(id);
+
+    }
     @GetMapping(path = "/supplier/{id}")  // tested_ok
     public Supplier getSupplierById(@PathVariable Long id){
         return this.service.getSupplierById(id);
@@ -212,7 +211,7 @@ public class DeliveryController {
 
     @GetMapping(path = "/supplier/bestTenDispatchers")
     public List<Supplier> getBestTenDispatchersSupplier() throws DeliveryException {
-        return this.service.getBestTenDispatchersSupplier();
+        return this.service.getBestFirstsDispatchersSupplier(10);
     }
 
     @GetMapping(path = "/product/{id}")  // tested_ok
@@ -251,8 +250,8 @@ public class DeliveryController {
         return this.service.getSupplierProvidingAllProductType();
     }
 
-    @GetMapping(path = "/supplier/qualification/aLeast/{stars}")
-    public ArrayList<Object>  getSupplierByQualificationValue(@PathVariable Long stars){
+    @GetMapping(path = "/supplier/qualification/hasAtLeast/{stars}")
+    public List<Supplier>  getSupplierByQualificationValue(@PathVariable Integer stars){
         return this.service.getSupplierByQualificationValue(stars);
     }
 

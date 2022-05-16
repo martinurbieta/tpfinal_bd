@@ -18,6 +18,6 @@ public interface DeliveryManRepository extends CrudRepository<DeliveryMan, Long>
     public Integer countByFreeTrueAndActiveTrue();
 
     public Page<DeliveryMan> findByFreeTrueAndActiveTrue(Pageable pageable);
-    List<DeliveryMan> findTop10ByOrderByScoreDesc();
+    Page<DeliveryMan> findByOrderByScoreDesc(Pageable pageable);
 
 }
