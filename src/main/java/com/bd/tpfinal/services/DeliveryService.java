@@ -1,6 +1,7 @@
 package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,7 @@ public interface DeliveryService {
 
     DeliveryMan getDeliveryManInfo(String username);
 
-    List<DeliveryMan> getBestTenDeliveryMan();
-//    public Order newOrderPending(Order order);
+    List<DeliveryMan> getBestDeliveryMan(Integer Size);
 
     Order newOrderPending(Map<String, Object> data) throws DeliveryException;
 
@@ -63,7 +63,7 @@ public interface DeliveryService {
 
     Product getProductById(Long id);
 
-    List<Supplier> getBestTenDispatchersSupplier();
+    List<Supplier> getBestFirstsDispatchersSupplier(Integer quantity);
 
     Supplier getSupplierById(Long id);
 
@@ -72,7 +72,7 @@ public interface DeliveryService {
 
     Object deleteItem(Item item);
 
-    Item createItem(Item newsItem);
+    Item createItem(Item newsItem) throws DeliveryException;
 
     void deleteProduct(Long id) throws DeliveryException;
 
@@ -95,6 +95,9 @@ public interface DeliveryService {
 
     List<ProductType> getAllProductTypes();
 
+    @Transactional(readOnly = true)
+    List<Supplier> getSupplierByType(Long id);
+
     List<Supplier> getAllSuppliers();
 
     List<Product> getAllProducts();
@@ -113,7 +116,7 @@ public interface DeliveryService {
 
      List<Supplier> getSupplierProvidingAllProductType();
 
-    ArrayList<Object> getSupplierByQualificationValue(Long stars);
+    List<Supplier> getSupplierByQualificationValue(Integer stars);
 
 
 
