@@ -116,7 +116,7 @@ public interface DeliveryService {
 
      List<Supplier> getSupplierProvidingAllProductType();
 
-    List<Supplier> getSupplierByQualificationValue(Integer stars);
+    List<Supplier> getSupplierByQualificationValue(Float stars);
 
 
 

@@ -251,7 +251,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/supplier/qualification/hasAtLeast/{stars}")
-    public List<Supplier>  getSupplierByQualificationValue(@PathVariable Integer stars){
+    public List<Supplier>  getSupplierByQualificationValue(@PathVariable Float stars){
         return this.service.getSupplierByQualificationValue(stars);
     }
 

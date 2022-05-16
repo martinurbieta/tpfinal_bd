@@ -565,7 +565,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> getSupplierByQualificationValue(Integer stars) {
+    public List<Supplier> getSupplierByQualificationValue(Float stars) {
         List<Long> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
         return (List<Supplier>) this.supplierRepository.findAllById(ids);
     }
