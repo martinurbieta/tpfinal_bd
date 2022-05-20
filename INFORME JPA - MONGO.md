@@ -95,6 +95,7 @@ y los curl post
 ### PARTE 2 - MONGOJPA
 
 En esta segunda parte, se ha implementado la solución Mongo.
+Se utilizó Robot 3T para operar las collecciones y Postman para evaluar los endpoints.
 
 ####Modificaciones realizadas
 
@@ -109,8 +110,14 @@ Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de la
 
 ####Docker
 
+Instalación docker en Ubuntu
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
 ####Docker Mongo
-tirar linea de mandos
+
+docker run --name mongo-container -v /home/home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/Collections -p 27017:27017 -d mongo:latest
+docker images
+docker ps
+sudo systemctl start mongod
 
 ####Generacion de colecciones via Curl
 tirar lineas

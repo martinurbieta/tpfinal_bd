@@ -3,7 +3,7 @@ package com.bd.tpfinal.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
+
 @Document
 //@Embeddable
 

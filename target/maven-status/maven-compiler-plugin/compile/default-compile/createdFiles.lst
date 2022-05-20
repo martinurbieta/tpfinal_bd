@@ -1,3 +1,4 @@
+com/bd/tpfinal/EnableMongoRepositories.class
 com/bd/tpfinal/repositories/ItemRepository.class
 com/bd/tpfinal/model/ProductType.class
 com/bd/tpfinal/model/Qualification.class

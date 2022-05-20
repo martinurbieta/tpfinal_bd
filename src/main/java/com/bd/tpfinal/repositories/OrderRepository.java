@@ -6,8 +6,9 @@ import com.bd.tpfinal.model.Product;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,6 @@ public interface OrderRepository extends MongoRepository<Order, ObjectId> {
     public Long countBySupplierId(ObjectId aIdSupplier);
     public List<Order> findAll();
     @Query(value = "SELECT o.number FROM Order o JOIN o.items i JOIN i.product p WHERE p.supplier.id = :supplier GROUP BY o.number ORDER BY count(o) DESC")
-    Page<Long> findFirstsWithMaxItemsBySupplier(@Param("supplier") Long supplier, Pageable pageable);
+    Page<ObjectId> findFirstsWithMaxItemsBySupplier(@Param("supplier") ObjectId supplier, Pageable pageable);
     Optional<Order> findTopByDateOfOrderBetweenOrderByTotalPriceDesc(Date start, Date end);
 }

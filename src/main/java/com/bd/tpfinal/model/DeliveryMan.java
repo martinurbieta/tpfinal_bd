@@ -3,7 +3,6 @@ package com.bd.tpfinal.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 

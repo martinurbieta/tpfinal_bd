@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -23,43 +24,83 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+/**
+ * Esta clase contiene la implementación de los servicios relacionados con el sistema.
+ *
+ * @author Grupo 8
+ *
+ */
+
 @Service
+@Transactional
 public class DeliveryServiceImpl implements DeliveryService {
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los repartidores.
+     */
+    @Inject
     private DeliveryManRepository deliveryManRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los clientes.
+     */
+    @Inject
     private ClientRepository clientRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los domicilios.
+     */
+    @Inject
     private AddressRepository addressRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los items.
+     */
+    @Inject
     private ItemRepository itemRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a las ordenes.
+     */
+    @Inject
     private OrderRepository orderRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los precios históricos.
+     */
+    @Inject
     private HistoricalProductPriceRepository historicalProductPriceRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los productos.
+     */
+    @Inject
     private ProductRepository productRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los proveedores.
+     */
+    @Inject
     private SupplierRepository supplierRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los tipos de proveedores.
+     */
+    @Inject
     private SupplierTypeRepository supplierTypeRepository;
 
-    @Autowired
+    /**
+     * Es el repositorio ligado a los tipos de productos.
+     */
+    @Inject
     private ProductTypeRepository productTypeRepository;
+
 
     @Transactional
     public ProductTypeRepository getProductTypeRepository() {
         return this.productTypeRepository;
     }
+
     @Transactional
     public ProductRepository getProductRepository() {
         return this.productRepository;
@@ -180,7 +221,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
         ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Optional<Address> address = this.addressRepository.findById(Long.parseLong(data.get("client_address").toString()));
+        Optional<Address> address = this.addressRepository.findById((ObjectId) data.get("client_address"));
         if (address.isPresent()) {
             Order newOrder = mapper.convertValue(data, Order.class);
             newOrder.setAddress(address.get());
@@ -191,7 +232,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 item.setOrder(newOrder);
             }
             newOrder.setItems(items);
-            Optional<Supplier> supplier = this.supplierRepository.findById(Long.parseLong(data.get("id_supplier").toString()));
+            Optional<Supplier> supplier = this.supplierRepository.findById((ObjectId) data.get("id_supplier"));
             supplier.ifPresent(newOrder::setSupplier);
             newOrder.setOrderStatus(new Pending());
             newOrder.setDateOfOrder(new Date());
@@ -244,7 +285,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public List<Supplier> getBestFirstsDispatchersSupplier(Integer quantity) {
         Pageable paging = PageRequest.of(0, quantity);
-        Page<Long> page = this.supplierRepository.findBestDispatchersSupplierIds(paging);
+        Page<ObjectId> page = this.supplierRepository.findBestDispatchersSupplierIds(paging);
         return (List<Supplier>) this.supplierRepository.findAllById(page.getContent());
     }
 
@@ -518,7 +559,7 @@ public class DeliveryServiceImpl implements DeliveryService {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());
         }
     }
-
+    @Override
     @Transactional
     public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
         List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
@@ -531,7 +572,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         return resultado;
     }
-
+    @Override
     @Transactional
     public float getAverageProductTypePrice(ObjectId id) throws DeliveryException {
         List<Product> products = this.productRepository.findByProductTypeId(id);

@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
+
 
 @Document
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})

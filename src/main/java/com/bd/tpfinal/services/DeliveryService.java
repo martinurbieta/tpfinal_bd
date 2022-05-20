@@ -1,6 +1,7 @@
 package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.bson.types.ObjectId;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -8,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 
-
+/**
+ * Esta interface define el comportamiento esperado por los servicios relacionados con el sistema.
+ *
+ * @author Grupo 8
+ *
+ */
 public interface DeliveryService {
 
     Client newClient(Client client);
@@ -25,7 +31,7 @@ public interface DeliveryService {
 
     DeliveryMan editDeliveryMan(String username, DeliveryMan deliveryMan) throws DeliveryException;
 
-    Product editProduct(Long number, Product product)  throws DeliveryException;
+    Product editProduct(ObjectId number, Product product)  throws DeliveryException;
 
     void desactiveDeliveryMan(String username);
 
@@ -35,37 +41,37 @@ public interface DeliveryService {
 
     Order newOrderPending(Map<String, Object> data) throws DeliveryException;
 
-    Order getOrderInfo(Long number);
+    Order getOrderInfo(ObjectId number);
 
-    List<Order> getOrdersWithMaxItems(Long supplier, int size) throws DeliveryException;
+    List<Order> getOrdersWithMaxItems(ObjectId supplier, int size) throws DeliveryException;
 
     Order getOrderMaxPriceInDate(String date) throws DeliveryException;
 
-    DeliveryMan confirmOrder(Long number) throws DeliveryException;
+    DeliveryMan confirmOrder(ObjectId number) throws DeliveryException;
 
-    void deliverOrder(Long number) throws DeliveryException;
+    void deliverOrder(ObjectId number) throws DeliveryException;
 
-    void refuseOrder(Long number) throws DeliveryException;
+    void refuseOrder(ObjectId number) throws DeliveryException;
 
-    void cancelOrder(Long number) throws DeliveryException;
+    void cancelOrder(ObjectId number) throws DeliveryException;
 
-    void finishOrder(Long number) throws DeliveryException;
+    void finishOrder(ObjectId number) throws DeliveryException;
 
-    void qualifyOrder(Long number, Qualification qualification) throws DeliveryException;
+    void qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException;
 
-    Address getAddress(Long id);
+    Address getAddress(ObjectId id);
 
     Address createAddress(Address newAddress);
 
-    SupplierType getSupplierTypeById(Long id);
+    SupplierType getSupplierTypeById(ObjectId id);
 
-    ProductType getProductTypeById(Long id);
+    ProductType getProductTypeById(ObjectId id);
 
-    Product getProductById(Long id);
+    Product getProductById(ObjectId id);
 
     List<Supplier> getBestFirstsDispatchersSupplier(Integer quantity);
 
-    Supplier getSupplierById(Long id);
+    Supplier getSupplierById(ObjectId id);
 
     Supplier createSupplier(Supplier newSupplier);
 
@@ -74,7 +80,7 @@ public interface DeliveryService {
 
     Item createItem(Item newsItem) throws DeliveryException;
 
-    void deleteProduct(Long id) throws DeliveryException;
+    void deleteProduct(ObjectId id) throws DeliveryException;
 
     SupplierType createSupplierType(SupplierType newsSupplierType);
 
@@ -83,20 +89,20 @@ public interface DeliveryService {
     Product createProduct(Product newProduct);
 
 
-    List<Item> getItemsByOrderNumber(Long number);
+    List<Item> getItemsByOrderNumber(ObjectId number);
 
-    Item getItemWithID(Long id);
+    Item getItemWithID(ObjectId id);
 
-    List<Product> getProductBySupplier(Long id);
+    List<Product> getProductBySupplier(ObjectId id);
 
-    List<Product> getProductByProductTypeId(Long id);
+    List<Product> getProductByProductTypeId(ObjectId id);
 
     List<ProductType> getProductTypeFindAll();
 
     List<ProductType> getAllProductTypes();
 
     @Transactional(readOnly = true)
-    List<Supplier> getSupplierByType(Long id);
+    List<Supplier> getSupplierByType(ObjectId id);
 
     List<Supplier> getAllSuppliers();
 
@@ -106,13 +112,13 @@ public interface DeliveryService {
 
 
 
-    List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id);
+    List<HistoricalProductPrice> getHistoricalProductPriceByProductId(ObjectId id);
 
-    List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Long number, String startDateStr, String finishDateStr) throws DeliveryException;
+    List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(ObjectId number, String startDateStr, String finishDateStr) throws DeliveryException;
 
     List<ArrayList> getAverageProductTypePrices() throws DeliveryException;
 
-    float getAverageProductTypePrice(Long id) throws DeliveryException;
+    float getAverageProductTypePrice(ObjectId id) throws DeliveryException;
 
      List<Supplier> getSupplierProvidingAllProductType();
 

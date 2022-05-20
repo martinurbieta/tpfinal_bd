@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,7 +76,7 @@ public class Order {
 
     public ObjectId getNumber() {return number;}
 
-    public void setNumber(Long number) {this.number = number;}
+    public void setNumber(ObjectId number) {this.number = number;}
 
     public Date getDateOfOrder() {return dateOfOrder;}
 

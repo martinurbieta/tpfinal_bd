@@ -1,9 +1,7 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Parent;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 

@@ -1,6 +1,6 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.Embeddable;
+
 
 import com.bd.tpfinal.utils.DeliveryException;
 import org.springframework.data.mongodb.core.mapping.Document;
