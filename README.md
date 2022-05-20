@@ -31,7 +31,7 @@ La utilización de contenedores Docker es opcional.
 
 El modelo a persistir se trata de un sistema de delivery similar a soluciones existentes en el mercado (como PedidosYa, Rappi, etc.). Dicho modelo posee el siguiente diagrama de clases:
 
-![Diagrama de clases](https://github.com/fedediclaudio/tpfinal_bd/blob/main/Diragrama%20de%20clases.png)
+![Diagrama de clases](https://github.com/fedediclaudio/tpfinal_bd/blob/main/Diagrama%20de%20clases.png)
 
 La aplicación dispone de un conjunto de usuarios (*User*) que pueden ser de dos tipos: repartidores (*DeliveryMan*), los cuales se encargan de llevar los pedidos generados por, el segundo tipo de usuarios, los clientes (*Client*). Cada usuario posee, además de ciertos datos propios del usuario, un atributo que determina si está activo (*active*) en el sistema, así como también un puntaje (*score*). Este puntaje se calcula de diferente manera dependiendo del tipo de usuario: un cliente suma un punto por cada pedido finalizado y resta un punto cuando cancela uno ya confirmado y asignado; un repartidor suma un punto cuando completa una entrega mientras que resta dos puntos cuando rechaza un pedido que le fue asignado.
 
