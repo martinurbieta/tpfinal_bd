@@ -1,10 +1,12 @@
 package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Embeddable;
 import java.util.Date;
-@Embeddable
+@Document
+//@Embeddable
 public class Delivered extends OrderStatus {
     public Delivered() { super("Delivered"); }
 

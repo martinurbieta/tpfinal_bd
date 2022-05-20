@@ -1,10 +1,13 @@
 package com.bd.tpfinal.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 import javax.persistence.Embeddable;
 
-@Embeddable
+@Document
+//@Embeddable
 public class Cancelled extends OrderStatus {
     public Cancelled() { super("Cancelled"); }
 

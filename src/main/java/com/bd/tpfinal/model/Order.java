@@ -2,8 +2,17 @@ package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,54 +21,45 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "order_")
+@Document
 public class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    //@Column(name = "id_order", unique = true, updatable = false)
-    private Long number;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId number;
 
-    @Column(nullable = false, updatable = false)
+    @Field
     private Date dateOfOrder;
 
-    @Column(length = 500)
+    @Field
     private String comments;
 
-    @Column(nullable = false)
+    @Field
     private float totalPrice;
 
-    @Embedded
+    @Field
     private OrderStatus orderStatus;
 
-    @Embedded
+    @Field
     private Qualification qualification;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_address", nullable = false)
+    @Field
     private Address address;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE}) //check EAGER
-    @JoinColumn(name = "id_delivery_man")
+    @Field
     private DeliveryMan deliveryMan;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_client", nullable = false)
+    @Field
     private Client client;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_supplier")
+    @DBRef
     private Supplier supplier;
 
     @Version
-    @Column(name = "version")
     private int version;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "id_order")
+    @BsonIgnore
+    @DBRef
     private List<Item> items;
 
     public Order() {
@@ -76,7 +76,7 @@ public class Order {
         this.address=null;
     }
 
-    public Long getNumber() {return number;}
+    public ObjectId getNumber() {return number;}
 
     public void setNumber(Long number) {this.number = number;}
 

@@ -1,40 +1,46 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import javax.persistence.*;
 
-@Entity
-@Table(name = "address")
+@Document
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_address", unique = true, updatable = false)
-    private Long id;
 
-    @Column(length = 500)
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
+
+    @Field
     private String name;
 
-    @Column(length = 500)
+    @Field
     private String address;
 
-    @Column(length = 500)
+    @Field
     private String apartment;
 
-    @Column(name = "coord_x",nullable = false)
+    @Field
     private float coordX;
 
-    @Column(name = "coord_y",nullable = false)
+    @Field
     private float coordY;
 
-    @Column(length = 500)
+    @Field
     private String description;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_client", nullable = false)
+    @DBRef(lazy = true)
     private Client client;
 
     @Version
-    @Column(name = "version")
     private int version;
 
     public Address(){}
@@ -158,7 +164,7 @@ public class Address {
         this.version = version;
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 }

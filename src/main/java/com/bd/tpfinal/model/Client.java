@@ -1,22 +1,24 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "client")
+@Document
 public class  Client extends User{
 
-    @Column(updatable = false, nullable = false)
+    @Field
     private Date dateOfRegister;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client")
+    @BsonIgnore
+    @Field
     private List<Address> addresses;
 
     public Client(){}

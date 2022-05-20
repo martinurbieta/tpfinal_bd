@@ -5,6 +5,7 @@ import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -141,7 +142,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public Product editProduct(Long number, Product product) throws DeliveryException {
+    public Product editProduct(ObjectId number, Product product) throws DeliveryException {
         Product actual = this.productRepository.findById(number).orElse(null);
         if (actual != null) {
             if (actual.getPrice() != product.getPrice()) {
@@ -203,13 +204,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderInfo(Long number) {
+    public Order getOrderInfo(ObjectId number) {
         return this.orderRepository.findByNumber(number).orElse(null);
     }
 
     @Override
     @Transactional
-    public DeliveryMan confirmOrder(Long number) throws DeliveryException {
+    public DeliveryMan confirmOrder(ObjectId number) throws DeliveryException {
         Integer i = (new Random()).nextInt(this.deliveryManRepository.countByFreeTrueAndActiveTrue());
         Pageable paging = PageRequest.of(i, 1);
         List<DeliveryMan> deliveryManList = this.deliveryManRepository.findByFreeTrueAndActiveTrue(paging).getContent();
@@ -231,9 +232,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> getOrdersWithMaxItems(Long supplier, int size) {
+    public List<Order> getOrdersWithMaxItems(ObjectId supplier, int size) {
         Pageable paging = PageRequest.of(0, size);
-        List<Long> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(supplier, paging).getContent();
+        List<ObjectId> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(supplier, paging).getContent();
         List<Order> orders = (List<Order>) this.orderRepository.findAllById(ids);
         Collections.sort(orders, Comparator.comparing(item -> ids.indexOf(item.getNumber())));
         return orders;
@@ -263,7 +264,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional
-    public void deliverOrder(Long number) throws DeliveryException {
+    public void deliverOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver(order);
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
@@ -271,7 +272,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void refuseOrder(Long number) throws DeliveryException {
+    public void refuseOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse(order);
         this.orderRepository.save(order);
@@ -280,7 +281,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void cancelOrder(Long number) throws DeliveryException {
+    public void cancelOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel(order);
         this.orderRepository.save(order);
@@ -288,7 +289,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void finishOrder(Long number) throws DeliveryException {
+    public void finishOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish(order);
         this.orderRepository.save(order);
@@ -296,7 +297,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
+    public void qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getSupplier();
@@ -307,7 +308,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Address getAddress(Long id) {
+    public Address getAddress(ObjectId id) {
         return this.addressRepository.findById(id).orElse(null);
     }
 
@@ -319,7 +320,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductBySupplier(Long id) {
+    public List<Product> getProductBySupplier(ObjectId id) {
         List<Product> products = this.productRepository.findBySupplierId(id);
         for (Product product : products) {
             product.getProductType().size();
@@ -349,7 +350,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> getSupplierByType(Long id) {
+    public List<Supplier> getSupplierByType(ObjectId id) {
         List<Supplier> suppliers = this.supplierRepository.findBySupplierTypeId(id);
         return suppliers;
     }
@@ -365,7 +366,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> getProductByProductTypeId(Long id) {
+    public List<Product> getProductByProductTypeId(ObjectId id) {
         List<Product> products = this.productRepository.findByProductTypeId(id);
         for (Product product : products) {
             product.getProductType().size();
@@ -383,19 +384,19 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional(readOnly = true)
-    public Supplier getSupplierById(Long id) {
+    public Supplier getSupplierById(ObjectId id) {
         return this.supplierRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public SupplierType getSupplierTypeById(Long id) {
+    public SupplierType getSupplierTypeById(ObjectId id) {
         return this.supplierTypeRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ProductType getProductTypeById(Long id) {
+    public ProductType getProductTypeById(ObjectId id) {
         return this.productTypeRepository.findProductTypeById(id).orElse(null);
     }
 
@@ -407,7 +408,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {
+    public Product getProductById(ObjectId id) {
         return this.productRepository.findProductById(id).orElse(null);
     }
 
@@ -467,7 +468,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void deleteProduct(Long id) throws DeliveryException {
+    public void deleteProduct(ObjectId id) throws DeliveryException {
         try {
             this.productRepository.deleteById(id);
             this.historicalProductPriceRepository.deleteByProductId(id);
@@ -478,21 +479,21 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public List<Item> getItemsByOrderNumber(Long number) {
+    public List<Item> getItemsByOrderNumber(ObjectId number) {
         Optional<Order> order = this.orderRepository.findByNumber(number);
         return order.map(Order::getItems).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Item getItemWithID(Long id) {
+    public Item getItemWithID(ObjectId id) {
         Optional<Item> item = this.itemRepository.findById(id);
         return item.orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(Long id) {
+    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(ObjectId id) {
         List<HistoricalProductPrice> prices = this.historicalProductPriceRepository.findByProductId(id);
         return prices;
 
@@ -500,7 +501,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(Long id, String startDateStr, String finishDateStr) throws DeliveryException {
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(ObjectId id, String startDateStr, String finishDateStr) throws DeliveryException {
         try {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
@@ -524,7 +525,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         ArrayList<ArrayList> resultado = new ArrayList <ArrayList>();
         for (ArrayList tipoConPromedio : tiposConPromedio) {
             ArrayList<Object> elemento = new ArrayList<>();
-            elemento.add (this.productTypeRepository.findById((Long) tipoConPromedio.get(0)).orElse(null));
+            elemento.add (this.productTypeRepository.findById((ObjectId) tipoConPromedio.get(0)).orElse(null));
             elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
             resultado.add(elemento);
         }
@@ -532,7 +533,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Transactional
-    public float getAverageProductTypePrice(Long id) throws DeliveryException {
+    public float getAverageProductTypePrice(ObjectId id) throws DeliveryException {
         List<Product> products = this.productRepository.findByProductTypeId(id);
         float productCount = (float) products.size();
         float sum = 0;
@@ -566,7 +567,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public List<Supplier> getSupplierByQualificationValue(Float stars) {
-        List<Long> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
+        List<ObjectId> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
         return (List<Supplier>) this.supplierRepository.findAllById(ids);
     }
 }

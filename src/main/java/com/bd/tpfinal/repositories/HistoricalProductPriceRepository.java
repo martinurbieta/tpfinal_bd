@@ -8,14 +8,16 @@ import java.util.Optional;
 import com.bd.tpfinal.model.HistoricalProductPrice;
 
 import com.bd.tpfinal.model.Supplier;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HistoricalProductPriceRepository extends CrudRepository<HistoricalProductPrice, Long> {
-    public Optional<HistoricalProductPrice> findFirstByProductIdOrderByStartDateDesc(Long aIdProduct);
-    public List<HistoricalProductPrice> findByProductId(Long anId);
-    public void deleteByProductId (Long aIdProduct);
+public interface HistoricalProductPriceRepository extends MongoRepository<HistoricalProductPrice, ObjectId> {
+    public Optional<HistoricalProductPrice> findFirstByProductIdOrderByStartDateDesc(ObjectId aIdProduct);
+    public List<HistoricalProductPrice> findByProductId(ObjectId anId);
+    public void deleteByProductId (ObjectId aIdProduct);
 
-    public List<HistoricalProductPrice> findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(Date startDate,Date finishDate, Long aIdProduct);
+    public List<HistoricalProductPrice> findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(Date startDate,Date finishDate, ObjectId aIdProduct);
 }

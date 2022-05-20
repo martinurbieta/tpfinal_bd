@@ -1,35 +1,38 @@
 package com.bd.tpfinal.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.types.ObjectId;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "item")
+@Document
 public class Item {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_item", unique = true, updatable = false)
-    private Long id;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
 
-    @Column(nullable = false)
+    @Field
     private int quantity;
 
-    @Column(length = 500)
+    @Field
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_order", nullable = false)
+    @DBRef
     private Order order;
 
   //  @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "id_product", nullable = false)
+    @DBRef
     private Product product;
 
     @Version
-    @Column(name = "version")
     private int version;
 
     public Item() {}
@@ -105,7 +108,7 @@ public class Item {
         this.version = version;
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 }

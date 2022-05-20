@@ -2,50 +2,50 @@ package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "product")
+@Document
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_product", unique = true, updatable = false)
-    private Long id;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
 
-    @Column(nullable = false, length = 50, updatable=true)
+    @Field
     private String name;
 
-    @Column(nullable = false, updatable=true)
+    @Field
     private float price;
 
-    @Column(updatable=true)
+    @Field
     private float weight;
 
-    @Column(length = 500, updatable=true)
+    @Field
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-    @JsonIgnore
-    @JoinColumn(name = "id_supplier", nullable = false)
+    @DBRef
+    @BsonIgnore
     private Supplier supplier;
 
     @Version
-    @Column(name = "version")
     private int version;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-    @JoinTable(
-            name = "product_product_type",
-            joinColumns = { @JoinColumn(name = "id_product") },
-            inverseJoinColumns = { @JoinColumn(name = "id_product_type") }
-    )
+    @BsonIgnore
+    @DBRef
     private List<ProductType> productType;
     
     public Product(){}
@@ -63,7 +63,7 @@ public class Product {
      *
      * @return el id del producto.
      */
-    public Long getId() {
+    public ObjectId getId() {
         return this.id;
     }
     /**

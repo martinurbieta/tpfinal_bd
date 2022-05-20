@@ -90,3 +90,38 @@ y los curl post
 
 
 [^1]: https://github.com/fedediclaudio/delivery_bd notificado por Ideas el 22/10/21
+
+
+### PARTE 2 - MONGOJPA
+
+En esta segunda parte, se ha implementado la solución Mongo.
+
+####Modificaciones realizadas
+
+Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de las configuraciones en _POM_:
+- Adecucaión de annotations:
+  - **@Document** en reemplazo de **@Entity** / **@Embeddable**
+  - **@Field** en reemplazo de **@Columns** , **@Embedded** y los casos Eager
+  - **@DBRef** en lugar de las variantes **@OneToMany**, **@ManyToOne** ,**@ManyToMany** para los casos Lazy
+  - **@@MongoId** , **@JsonSerialize** y **ObjectID** en lugar de la notación JPA **@Id**
+- Adecuación de modelo, repositorios y servicios:
+  - El cambio de ID de Long a **ObjectID**, implica los ajustes respectivos a los getters, repositorios y servicios.
+
+####Docker
+
+####Docker Mongo
+tirar linea de mandos
+
+####Generacion de colecciones via Curl
+tirar lineas
+
+####Docker compose
+
+tirar lineas
+
+
+Pendiente
+-- parseado de ID en servicios
+-- Implementación state
+-- Aggregates
+-- superclases

@@ -4,20 +4,23 @@ import javax.persistence.*;
 import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Parent;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Calendar;
 import java.util.Date;
 
-@Embeddable
+//@Embeddable
+@Document
 public class OrderStatus {
 
-    @Column(name = "state")
+    @Field
     private String name;
 
-    @Column(name = "state_start_date")
+    @Field
     private Date startDate;
 
-    @Column(name = "cancelled_by_client")
+    @Field
     private boolean cancelledByClient;
 
     public OrderStatus(){}

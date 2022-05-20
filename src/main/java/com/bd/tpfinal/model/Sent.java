@@ -3,10 +3,12 @@ package com.bd.tpfinal.model;
 import javax.persistence.Embeddable;
 
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Embeddable
+//@Embeddable
+@Document
 public class Sent extends OrderStatus {
 
     public Sent() {super("Sent"); }

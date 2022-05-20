@@ -1,20 +1,22 @@
 package com.bd.tpfinal.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
-@Entity
-@Table(name = "delivery_man")
+@Document
 public class DeliveryMan extends User{
 
-    @Column(nullable = false)
+    @Field
     private int numberOfSuccess;
 
-    @Column
+    @Field
     private boolean free;
 
-    @Column(nullable = false, updatable = false)
+    @Field
     private Date dateOfAdmission;
 
     public DeliveryMan(){}

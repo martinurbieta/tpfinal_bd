@@ -2,37 +2,43 @@ package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
-@Entity
-@Table(name = "historical_product_price")
+@Document
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer","handler"})
 public class HistoricalProductPrice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_historical_product_price", unique = true, updatable = false)
-    private Long id;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
 
-    @Column(nullable = false, updatable = false)
+    @Field
     private float price;
 
-    @Column(nullable = false, updatable = false)
+    @Field
     private Date startDate;
 
-    @Column(nullable = false, updatable = false)
+    @Field
     private Date finishDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "id_product", nullable = false)
+    @DBRef
+    @BsonIgnore
     private Product product;
 
     @Version
-    @Column(name = "version")
+
     private int version;
 
     public HistoricalProductPrice(){}
@@ -107,7 +113,7 @@ public class HistoricalProductPrice {
         this.version = version;
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 

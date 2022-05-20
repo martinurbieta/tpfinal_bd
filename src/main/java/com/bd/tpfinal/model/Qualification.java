@@ -1,15 +1,18 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Embeddable
+import javax.persistence.*;
+@Document
+//@Embeddable
 
 public class Qualification {
 
-    @Column
+    @Field
     private float score;
 
-    @Column(length = 500)
+    @Field
     private String commentary;
 
     public Qualification(){}

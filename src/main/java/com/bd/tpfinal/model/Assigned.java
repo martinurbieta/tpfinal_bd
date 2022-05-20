@@ -6,8 +6,10 @@ import java.util.Date;
 import javax.persistence.Embeddable;
 
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Embeddable
+//@Embeddable
+@Document
 public class Assigned extends OrderStatus {
 
     public Assigned(){ super("Assigned"); }

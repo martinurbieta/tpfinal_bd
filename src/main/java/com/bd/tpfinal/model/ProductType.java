@@ -1,23 +1,29 @@
 package com.bd.tpfinal.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import javax.persistence.*;
 
-@Entity
-@Table(name = "product_type")
+@Document
 public class ProductType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_product_type", unique = true, updatable = false)
-    private Long id;
 
-    @Column(nullable = false, length = 50, updatable=true)
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
+
+    @Field
     private String name;
 
-    @Column(length = 500, updatable=true)
+    @Field
     private String description;
 
     @Version
-    @Column(name = "version")
     private int version;
 
     public ProductType(){}
@@ -69,7 +75,7 @@ public class ProductType {
         this.version = version;
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 }

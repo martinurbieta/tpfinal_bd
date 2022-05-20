@@ -1,46 +1,51 @@
 package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 import javax.persistence.*;
 
-@Entity
-@Table(name = "supplier")
+@Document
 public class Supplier {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_supplier", unique = true, updatable = false)
-    private Long id;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
 
-    @Column(nullable = false, updatable = true, length = 50)
+    @Field
     private String name;
 
-    @Column(nullable = false, updatable = true, length = 13)
+    @Field
     private String cuit;
 
-    @Column(length = 50)
+    @Field
     private String address;
 
-    @Column(name = "coord_x")
+    @Field
     private float coordX;
 
-    @Column(name = "coord_y")
+    @Field
     private float coordY;
 
-    @Column
+    @Field
     private float qualification;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER, orphanRemoval = false)
+    @BsonIgnore
+    @DBRef
     private List<Product> products;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE}) // cambiado de ALL a MERGE según stackoverflow. https://stackoverflow.com/questions/13370221/persistentobjectexception-detached-entity-passed-to-persist-thrown-by-jpa-and-h
-    @JoinColumn(name = "id_supplier_type", nullable = false)
+    @DBRef
     private SupplierType supplierType;
 
     @Version
-    @Column(name = "version")
     private int version;
 
     public Supplier(){}
@@ -61,7 +66,7 @@ public class Supplier {
      * @return el id del proveedor.
      */
 
-    public Long getId() {
+    public ObjectId getId() {
         return this.id;
     }
     /**

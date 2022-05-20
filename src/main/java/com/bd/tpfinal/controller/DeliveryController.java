@@ -3,6 +3,7 @@ package com.bd.tpfinal.controller;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.DeliveryService;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class DeliveryController {
         return "OK!";
     }
     @GetMapping(path = "/address/{id}") //tested_ok
-    public Address getAddress(@PathVariable Long id){
+    public Address getAddress(@PathVariable ObjectId id){
         return this.service.getAddress(id);
     }
 
@@ -88,7 +89,7 @@ public class DeliveryController {
     }
 
     @DeleteMapping(path = "/item/{id}")
-    public Object deleteItem(@PathVariable Long id){
+    public Object deleteItem(@PathVariable ObjectId id){
         return this.service.deleteItem(this.service.getItemWithID(id));
     }
     @PostMapping(path = "/order")
@@ -97,12 +98,12 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/order/maxItems/supplier/{supplier}/firsts/{size}")
-    public List<Order> getOrdersWithMaxItems(@PathVariable Long supplier, @PathVariable int size) throws DeliveryException {
+    public List<Order> getOrdersWithMaxItems(@PathVariable ObjectId supplier, @PathVariable int size) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, size);
     }
 
     @GetMapping(path = "/order/maxItems/supplier/{supplier}")
-    public List<Order> getOrderWithMaxItems(@PathVariable Long supplier) throws DeliveryException {
+    public List<Order> getOrderWithMaxItems(@PathVariable ObjectId supplier) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, 1);
     }
 
@@ -111,65 +112,65 @@ public class DeliveryController {
         return this.service.getOrderMaxPriceInDate(date);
     }
     @GetMapping(path = "/order/{number}/items")
-    public List<Item> getItemsByOrderID(@PathVariable Long number){
+    public List<Item> getItemsByOrderID(@PathVariable ObjectId number){
         return this.service.getItemsByOrderNumber(number);
     }
 
     @GetMapping(path = "/order/{number}")
-    public Order getOrder(@PathVariable Long number){
+    public Order getOrder(@PathVariable ObjectId number){
         return this.service.getOrderInfo(number);
     }
 
     @PutMapping(path = "/order/{number}/refuse")
-    public void refuseOrder(@PathVariable Long number) throws DeliveryException {
+    public void refuseOrder(@PathVariable ObjectId number) throws DeliveryException {
         this.service.refuseOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/cancel")
-    public void cancelOrder(@PathVariable Long number) throws DeliveryException{
+    public void cancelOrder(@PathVariable ObjectId number) throws DeliveryException{
         this.service.cancelOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/confirm")
-    public DeliveryMan confirmOrder(@PathVariable Long number) throws DeliveryException{
+    public DeliveryMan confirmOrder(@PathVariable ObjectId number) throws DeliveryException{
         return this.service.confirmOrder(number);
     }
     @PutMapping(path = "/order/{number}/deliver")
-    public void deliverOrder(@PathVariable Long number) throws DeliveryException{
+    public void deliverOrder(@PathVariable ObjectId number) throws DeliveryException{
         this.service.deliverOrder(number);
     }
     @PutMapping(path = "/order/{number}/finish")
-    public void finishOrder(@PathVariable Long number) throws DeliveryException {
+    public void finishOrder(@PathVariable ObjectId number) throws DeliveryException {
         this.service.finishOrder(number);
     }
 
     @PostMapping(path = "/order/{number}/qualify")
-    public void qualifyOrder(@PathVariable Long number, @RequestBody Qualification qualification) throws DeliveryException {
+    public void qualifyOrder(@PathVariable ObjectId number, @RequestBody Qualification qualification) throws DeliveryException {
         this.service.qualifyOrder(number, qualification);
     }
 
     @PutMapping(path = "/product/{id}")  // ok
-    public Product editProduct(@PathVariable Long id, @RequestBody Product product) throws DeliveryException{
+    public Product editProduct(@PathVariable ObjectId id, @RequestBody Product product) throws DeliveryException{
         return this.service.editProduct(id, product);
     }
 
     @GetMapping(path = "/product/bySupplier/{id}")
-    public List<Product> getProductBySupplier(@PathVariable Long id){
+    public List<Product> getProductBySupplier(@PathVariable ObjectId id){
         return this.service.getProductBySupplier(id);
 
     }
     @GetMapping(path = "/product/producttype/{id}")
-    public List<Product> getProductByProductTypeId(@PathVariable Long id){
+    public List<Product> getProductByProductTypeId(@PathVariable ObjectId id){
         return this.service.getProductByProductTypeId(id);
     }
 
     @DeleteMapping(path = "/product/{id}")
-    public void deleteProduct(@PathVariable Long id) throws DeliveryException{
+    public void deleteProduct(@PathVariable ObjectId id) throws DeliveryException{
         this.service.deleteProduct(id);
     }
 
     @GetMapping(path = "/supplierType/{id}")  // tested_ok
-    public SupplierType getSupplierTypeById(@PathVariable Long id){
+    public SupplierType getSupplierTypeById(@PathVariable ObjectId id){
         return this.service.getSupplierTypeById(id);
     }
 
@@ -195,17 +196,17 @@ public class DeliveryController {
 
 
     @GetMapping(path = "/productType/{id}") // tested_ok
-    public ProductType getProductTypeById(@PathVariable Long id){
+    public ProductType getProductTypeById(@PathVariable ObjectId id){
         return this.service.getProductTypeById(id);
     }
 
     @GetMapping(path = "/supplier/byTpe/{id}")
-    public List<Supplier> getSupplierByType(@PathVariable Long id){
+    public List<Supplier> getSupplierByType(@PathVariable ObjectId id){
         return this.service.getSupplierByType(id);
 
     }
     @GetMapping(path = "/supplier/{id}")  // tested_ok
-    public Supplier getSupplierById(@PathVariable Long id){
+    public Supplier getSupplierById(@PathVariable ObjectId id){
         return this.service.getSupplierById(id);
     }
 
@@ -215,17 +216,17 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/product/{id}")  // tested_ok
-    public Product getProductById(@PathVariable Long id){
+    public Product getProductById(@PathVariable ObjectId id){
         return this.service.getProductById(id);
     }
 
     @GetMapping(path = "/product/{id}/historicalPrice") // tested_ok
-    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(@PathVariable Long id){
+    public List<HistoricalProductPrice> getHistoricalProductPriceByProductId(@PathVariable ObjectId id){
         return this.service.getHistoricalProductPriceByProductId(id);
     }
 
     @GetMapping(path = "/product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}")
-    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@PathVariable Long id, @PathVariable String startDateStr, @PathVariable String finishDateStr) throws DeliveryException {
+    public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@PathVariable ObjectId id, @PathVariable String startDateStr, @PathVariable String finishDateStr) throws DeliveryException {
         return this.service.getHistoricalProductPriceBetweenDates(id, startDateStr, finishDateStr);
 
     }
@@ -235,7 +236,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/product/averagePrices/for/{id}")
-    public float getAverageProductTypePrice(@PathVariable Long id) throws DeliveryException {
+    public float getAverageProductTypePrice(@PathVariable ObjectId id) throws DeliveryException {
         return this.service.getAverageProductTypePrice(id);
     }
 

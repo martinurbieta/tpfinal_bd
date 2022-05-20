@@ -1,40 +1,45 @@
 package com.bd.tpfinal.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 import java.util.Date;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Document
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_user")
-    private Long id;
+    @MongoId
+    @JsonSerialize(using = ToStringSerializer.class)
+    private ObjectId id;
 
     @Version
-    @Column(name = "version")
     private int version;
 
-    @Column(length = 50, nullable = false)
+    @Field
     private String name;
 
-    @Column(length = 50, updatable = false, unique = true, nullable = false)
+    @Field
     private String username;
 
-    @Column(length = 50, nullable = false)
+    @Field
     private String password;
 
-    @Column(length = 50, unique = true, nullable = false)
+    @Field
     private String email;
 
-    @Column
+    @Field
     private Date dateOfBirth;
 
-    @Column
+    @Field
     private boolean active;
 
-    @Column
+    @Field
     private int score;
 
     protected User(){}
@@ -48,7 +53,7 @@ public abstract class User {
         this.score = 0;
         this.active = true;
     }
-    public Long getID() {return id;}
+    public ObjectId getID() {return id;}
     public String getName() {return name;}
 
 

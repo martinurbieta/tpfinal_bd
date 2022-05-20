@@ -1,12 +1,14 @@
 package com.bd.tpfinal.model;
 
 import com.bd.tpfinal.utils.DeliveryException;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 import javax.persistence.Embeddable;
 
-@Embeddable
+@Document
+//@Embeddable
 public class Pending extends OrderStatus {
     public Pending() { super("Pending"); }
     public Pending(OrderStatus orderStatus) {super(orderStatus); }
