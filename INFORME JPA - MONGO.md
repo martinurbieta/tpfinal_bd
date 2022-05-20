@@ -120,11 +120,13 @@ docker ps
 sudo systemctl start mongod
 
 ####Generacion de colecciones via Curl
-tirar lineas
+
+curl -d "@tpfinaldata.json" -H "Content-Type: application/json" -X POST http://localhost:27017/data
 
 ####Docker compose
 
-tirar lineas
+
+No va,.
 
 
 Pendiente
