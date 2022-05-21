@@ -113,7 +113,7 @@ Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de la
 Instalación docker en Ubuntu
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
 ####Docker Mongo
-
+sudo chmod 666 /var/run/docker.sock
 docker run --name mongo-container -v /home/home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/Collections -p 27017:27017 -d mongo:latest
 docker images
 docker ps
