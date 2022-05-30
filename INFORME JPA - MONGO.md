@@ -113,11 +113,24 @@ Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de la
 Instalación docker en Ubuntu
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
 ####Docker Mongo
+**permite correr docker sin estar loggeado**
 sudo chmod 666 /var/run/docker.sock
-docker run --name mongo-container -v /home/home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/Collections -p 27017:27017 -d mongo:latest
+**Montado y ejecutado de imagen Mongo, persistiendo en carpeta local las colecciones**
+docker run --name mongo-container -v /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/data:/data/db -p 27017:27017 -d mongo:latest
+**Listado de imagenes**
 docker images
+**Estados**
 docker ps
+**Detener imagen**
+docker stop mongo-container
+**Remover imagen**
+docker rm IdImagen
+**Inspección**
+docker inspect mongo
 sudo systemctl start mongod
+**Browse imagen**
+docker exec -it mongo-container bash
+
 
 ####Generacion de colecciones via Curl
 

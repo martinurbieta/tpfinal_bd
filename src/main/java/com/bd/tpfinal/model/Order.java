@@ -35,19 +35,19 @@ public class Order {
     @Field
     private float totalPrice;
 
-    @Field
+    @DBRef
     private OrderStatus orderStatus;
 
-    @Field
+    @DBRef
     private Qualification qualification;
 
-    @Field
+    @DBRef
     private Address address;
 
-    @Field
+    @DBRef
     private DeliveryMan deliveryMan;
 
-    @Field
+    @DBRef
     private Client client;
 
     @DBRef

@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 
@@ -17,10 +18,10 @@ public class SupplierType {
     @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
-    @DBRef
+    @Field
     private String name;
 
-    @DBRef
+    @Field
     private String description;
 
     @Version
