@@ -221,24 +221,27 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public Order newOrderPending(Map<String, Object> data) throws DeliveryException {
         ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        Optional<Address> address = this.addressRepository.findById((ObjectId) data.get("client_address"));
+        Optional<Address> address = this.addressRepository.findById(new ObjectId(data.get("client_address").toString()));
         if (address.isPresent()) {
             Order newOrder = mapper.convertValue(data, Order.class);
             newOrder.setAddress(address.get());
             newOrder.setClient(address.get().getClient());
-            List<Item> items = mapper.convertValue(data.get("items"),new TypeReference<List<Item>>() {});
-            for (Item item : items) {
-                this.productRepository.findById(item.getProduct().getId()).ifPresent(item::setProduct);
-                item.setOrder(newOrder);
-            }
-            newOrder.setItems(items);
-            Optional<Supplier> supplier = this.supplierRepository.findById((ObjectId) data.get("id_supplier"));
+            Optional<Supplier> supplier = this.supplierRepository.findById(new ObjectId (data.get("id_supplier").toString()));
             supplier.ifPresent(newOrder::setSupplier);
             newOrder.setOrderStatus(new Pending());
             newOrder.setDateOfOrder(new Date());
 /*          SE PONE EN NULL MANUALMENTE PARA EVITAR UNA INJECCION */
             newOrder.setDeliveryMan(null);
 /* ------ */
+            List<Item> items = newOrder.getItems();
+            newOrder.setItems(null);
+            this.orderRepository.save(newOrder);
+            for (Item item : items) {
+                this.productRepository.findById(item.getProduct().getId()).ifPresent(item::setProduct);
+                newOrder.setItems(items);
+                item.setOrder(newOrder);
+                this.itemRepository.save(item);
+            }
             return this.orderRepository.save(newOrder);
         } else
             throw new DeliveryException("No se definió una dirección de entrega.");
