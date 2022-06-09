@@ -124,7 +124,7 @@ docker ps
 **Detener imagen**
 docker stop mongo-container
 **Remover imagen**
-docker rm IdImagen
+docker rm -f IdImagen
 **Inspección**
 docker inspect mongo
 sudo systemctl start mongod
@@ -132,9 +132,24 @@ sudo systemctl start mongod
 docker exec -it mongo-container bash
 
 
-####Generacion de colecciones via Curl
 
-curl -d "@tpfinaldata.json" -H "Content-Type: application/json" -X POST http://localhost:27017/data
+####Generacion de colecciones via Curl + docker php+apache
+En la carpeta donde se encuentran los archivos *curlpost_host.docker.internal.php* y *tpfinaldata.json*
+se corre el siguiente comando de docker, donde se levanta un servidor PHP y se corre el curlpost que se encuentra en la carpeta local.
+El docker se vincula al localhost de la machine con el flag *--add-host=host.docker.internal:host-gateway* y en el archivo PHP el endpoint corespondiente es *http://host.docker.internal:8081/api/*
+
+$docker run --name="apache_server" --rm --add-host=host.docker.internal:host-gateway -v $(pwd):/app/ php:7.4-apache php /app/curlpost_host.docker.internal.php /app/tpfinaldata.json
+
+El siguiente comando permite identificar el IP de la maquina para poder comunicar el docker con el local host
+$ip addr show docker0 | grep -Po 'inet \K[\d.]+'
+Para el caso particular, correspondió el *IP 172.17.0.1* y en el archivo PHP correspondía cambiar el endpoint a *'http://172.17.0.1:8081/api/'*
+
+Ingresando al docker via
+$*docker exec -it apache_server bash*
+se puede verificar el host
+*cat /etc/hosts*
+
+ref: https://www.howtogeek.com/devops/how-to-connect-to-localhost-within-a-docker-container/#:~:text=You%20just%20need%20to%20reference,0.1%20.&text=Your%20host's%20Docker%20IP%20will,services%20running%20on%20your%20host.
 
 ####Docker compose
 
