@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -238,10 +239,10 @@ public class DeliveryServiceImpl implements DeliveryService {
             this.orderRepository.save(newOrder);
             for (Item item : items) {
                 this.productRepository.findById(item.getProduct().getId()).ifPresent(item::setProduct);
-                newOrder.setItems(items);
                 item.setOrder(newOrder);
                 this.itemRepository.save(item);
             }
+            newOrder.setItems(items);
             return this.orderRepository.save(newOrder);
         } else
             throw new DeliveryException("No se definió una dirección de entrega.");
@@ -277,7 +278,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public List<Order> getOrdersWithMaxItems(ObjectId supplier, int size) {
-        Pageable paging = PageRequest.of(0, size);
+        Pageable paging = PageRequest.of(0, size, Sort.by("count(o)").descending());
         List<ObjectId> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(supplier, paging).getContent();
         List<Order> orders = (List<Order>) this.orderRepository.findAllById(ids);
         Collections.sort(orders, Comparator.comparing(item -> ids.indexOf(item.getNumber())));

@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="tpfinal_bd_Mongo" />
         <module name="tpfinal" />
+        <module name="tpfinal_bd" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tpfinal" options="-parameters" />
+      <module name="tpfinal_bd" options="-parameters" />
       <module name="tpfinal_bd_Mongo" options="-parameters" />
     </option>
   </component>

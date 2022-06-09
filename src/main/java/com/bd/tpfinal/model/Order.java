@@ -35,10 +35,10 @@ public class Order {
     @Field
     private float totalPrice;
 
-    @DBRef
+    @Field
     private OrderStatus orderStatus;
 
-    @DBRef
+    @Field
     private Qualification qualification;
 
     @DBRef
