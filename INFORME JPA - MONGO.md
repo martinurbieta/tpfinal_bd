@@ -114,51 +114,84 @@ Instalación docker en Ubuntu
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
 ####Docker Mongo
 **permite correr docker sin estar loggeado**
-sudo chmod 666 /var/run/docker.sock
+`sudo chmod 666 /var/run/docker.sock`
 **Montado y ejecutado de imagen Mongo, persistiendo en carpeta local las colecciones**
-docker run --name mongo-container -v /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/data:/data/db -p 27017:27017 -d mongo:latest
+`docker run --name mongo-container -v /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/data:/data/db -p 27017:27017 -d mongo:latest`
 **Listado de imagenes**
-docker images
+`docker images`
 **Estados**
-docker ps
+`docker ps`
 **Detener imagen**
-docker stop mongo-container
+`docker stop mongo-container`
 **Remover imagen**
-docker rm -f IdImagen
+`docker rm -f IdImagen`
 **Inspección**
-docker inspect mongo
-sudo systemctl start mongod
+`docker inspect mongo`
+`sudo systemctl start mongod`
 **Browse imagen**
-docker exec -it mongo-container bash
+`docker exec -it mongo-container bash`
 
 
 
 ####Generacion de colecciones via Curl + docker php+apache
 En la carpeta donde se encuentran los archivos *curlpost_host.docker.internal.php* y *tpfinaldata.json*
 se corre el siguiente comando de docker, donde se levanta un servidor PHP y se corre el curlpost que se encuentra en la carpeta local.
-El docker se vincula al localhost de la machine con el flag *--add-host=host.docker.internal:host-gateway* y en el archivo PHP el endpoint corespondiente es *http://host.docker.internal:8081/api/*
+El docker se vincula al localhost de la machine con el flag *--add-host=host.docker.internal:host-gateway*[^2] y en el archivo PHP el endpoint corespondiente es *http://host.docker.internal:8081/api/*
 
-$docker run --name="apache_server" --rm --add-host=host.docker.internal:host-gateway -v $(pwd):/app/ php:7.4-apache php /app/curlpost_host.docker.internal.php /app/tpfinaldata.json
-
+`docker run --name="apache_server" --rm --add-host=host.docker.internal:host-gateway -v $(pwd):/app/ php:7.4-apache php /app/curlpost_host.docker.internal.php /app/tpfinaldata.json
+`
 El siguiente comando permite identificar el IP de la maquina para poder comunicar el docker con el local host
-$ip addr show docker0 | grep -Po 'inet \K[\d.]+'
-Para el caso particular, correspondió el *IP 172.17.0.1* y en el archivo PHP correspondía cambiar el endpoint a *'http://172.17.0.1:8081/api/'*
+`ip addr show docker0 | grep -Po 'inet \K[\d.]+'
+`Para el caso particular, correspondió el *IP 172.17.0.1* y en el archivo PHP correspondía cambiar el endpoint a *'http://172.17.0.1:8081/api/'*
 
 Ingresando al docker via
-$*docker exec -it apache_server bash*
+`docker exec -it apache_server bash`
 se puede verificar el host
-*cat /etc/hosts*
+`cat /etc/hosts`
 
-ref: https://www.howtogeek.com/devops/how-to-connect-to-localhost-within-a-docker-container/#:~:text=You%20just%20need%20to%20reference,0.1%20.&text=Your%20host's%20Docker%20IP%20will,services%20running%20on%20your%20host.
+[^2]:  https://www.howtogeek.com/devops/how-to-connect-to-localhost-within-a-docker-container/#:~:text=You%20just%20need%20to%20reference,0.1%20.&text=Your%20host's%20Docker%20IP%20will,services%20running%20on%20your%20host.
 
-####Docker compose
+####Verificación de las implementaciones de endpoints en la aplicación
+
+• Agregar un ítem a una orden ya creada
+
+X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+
+X Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
+
+actualizar la calificación del proveedor.
+
+X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+
+X Eliminar un producto de los ofrecidos por un proveedor.
+
+X Obtener todos los proveedores de un cierto tipo.
+
+X Obtener todos los productos y su tipo, de un proveedor específico.
+
+X - Obtener las órdenes con más productos de un proveedor específico.
+
+X - Obtener la orden de mayor precio total de un día dado.
+
+X - Obtener los diez repartidores con mayor puntaje.
+`http://localhost:8081/api/deliveryMan/bestTen` Works.
 
 
-No va,.
+X - Obtener los diez proveedores que más órdenes despacharon.
+`http://localhost:8081/api/supplier/bestTenDispatchers` Not working.
+
+X - Obtener los precios de un producto entre dos fechas dadas.
+`http://localhost:8081/api//product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}` Not crashing.
 
 
-Pendiente
--- parseado de ID en servicios
--- Implementación state
--- Aggregates
--- superclases
+X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+`http://localhost:8081/api/product/averagePrices/for/allTypes` Not working
+
+
+X - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
+`http://localhost:8081/api/supplier/qualification/hasAtLeast/{stars}` Not working
+
+X - Obtener los proveedores que ofrezcan productos de todos los tipos.
+`http://localhost:8081/api/supplier/allProductTypes`
+Not working.
+

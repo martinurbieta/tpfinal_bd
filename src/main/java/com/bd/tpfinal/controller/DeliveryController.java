@@ -247,7 +247,7 @@ public class DeliveryController {
     }
 
 
-    @GetMapping(path = "/productType/all")
+    @GetMapping(path = "/productType/all") // ok Mongo.
     public List<ProductType> getProductTypeFindAll(){
         return this.service.getProductTypeFindAll();
     }

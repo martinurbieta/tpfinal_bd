@@ -9,7 +9,6 @@
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/model/Delivered.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/model/Assigned.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/model/Item.java
-/home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/repositories/EjemploRepository.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/repositories/OrderRepository.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/services/DeliveryServiceImpl.java
 /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/src/main/java/com/bd/tpfinal/model/Supplier.java

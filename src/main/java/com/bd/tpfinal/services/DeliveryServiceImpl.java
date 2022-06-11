@@ -566,16 +566,20 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
-        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
-        ArrayList<ArrayList> resultado = new ArrayList <ArrayList>();
-        for (ArrayList tipoConPromedio : tiposConPromedio) {
-            ArrayList<Object> elemento = new ArrayList<>();
-            elemento.add (this.productTypeRepository.findById((ObjectId) tipoConPromedio.get(0)).orElse(null));
-            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
-            resultado.add(elemento);
-        }
-        return resultado;
+//        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
+//        System.out.println("tiposConPromedio:" + tiposConPromedio);
+//        ArrayList<ArrayList> resultado = new ArrayList<ArrayList>();
+//        for (ArrayList tipoConPromedio : tiposConPromedio) {
+//            ArrayList<Object> elemento = new ArrayList<>();
+//            elemento.add(this.productTypeRepository.findById((ObjectId) tipoConPromedio.get(0)).orElse(null));
+//            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
+//            resultado.add(elemento);
+//        }
+//        return resultado;
+
+        return this.productRepository.findAllAveragePriceGroupByProductType();
     }
+
     @Override
     @Transactional
     public float getAverageProductTypePrice(ObjectId id) throws DeliveryException {
