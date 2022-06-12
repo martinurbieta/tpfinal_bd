@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DeliveryException.class)
-    public ResponseEntity<String> handleEntityNotFoundException(HttpServletRequest request, Exception ex) {
+    public ResponseEntity<String> handleDeliveryException(HttpServletRequest request, Exception ex) {
         return new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
