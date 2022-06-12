@@ -57,6 +57,7 @@ public class Order {
     private int version;
 
     @BsonIgnore
+    @JsonIgnore
     @DBRef
     private List<Item> items;
 

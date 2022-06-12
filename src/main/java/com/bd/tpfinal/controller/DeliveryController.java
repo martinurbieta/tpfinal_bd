@@ -104,12 +104,12 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/order/maxItems/supplier/{supplier}/firsts/{size}")
-    public List<Order> getOrdersWithMaxItems(@PathVariable ObjectId supplier, @PathVariable int size) throws DeliveryException {
+    public List<Order> getOrdersWithMaxItems(@PathVariable String supplier, @PathVariable int size) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, size);
     }
 
     @GetMapping(path = "/order/maxItems/supplier/{supplier}")
-    public List<Order> getOrderWithMaxItems(@PathVariable ObjectId supplier) throws DeliveryException {
+    public List<Order> getOrdersWithMaxItems(@PathVariable String supplier) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, 1);
     }
 

@@ -5,6 +5,7 @@ import com.bd.tpfinal.utils.DeliveryException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DBRef;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -277,9 +278,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> getOrdersWithMaxItems(ObjectId supplier, int size) {
-        Pageable paging = PageRequest.of(0, size, Sort.by("count(o)").descending());
-        List<ObjectId> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(supplier, paging).getContent();
+    public List<Order> getOrdersWithMaxItems(String supplier, int size) {
+        DBRef dbref = new DBRef("supplier", new ObjectId(supplier));
+        List<ObjectId> ids = this.orderRepository.findFirstsWithMaxItemsBySupplier(dbref, size);
         List<Order> orders = (List<Order>) this.orderRepository.findAllById(ids);
         Collections.sort(orders, Comparator.comparing(item -> ids.indexOf(item.getNumber())));
         return orders;
@@ -566,18 +567,15 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
-//        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
-//        System.out.println("tiposConPromedio:" + tiposConPromedio);
-//        ArrayList<ArrayList> resultado = new ArrayList<ArrayList>();
-//        for (ArrayList tipoConPromedio : tiposConPromedio) {
-//            ArrayList<Object> elemento = new ArrayList<>();
-//            elemento.add(this.productTypeRepository.findById((ObjectId) tipoConPromedio.get(0)).orElse(null));
-//            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
-//            resultado.add(elemento);
-//        }
-//        return resultado;
-
-        return this.productRepository.findAllAveragePriceGroupByProductType();
+        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
+        ArrayList<ArrayList> resultado = new ArrayList <ArrayList>();
+        for (ArrayList tipoConPromedio : tiposConPromedio) {
+            ArrayList<Object> elemento = new ArrayList<>();
+            elemento.add (this.productTypeRepository.findById((ObjectId) ((DBRef) tipoConPromedio.get(0)).getId()).orElse(null));
+            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
+            resultado.add(elemento);
+        }
+        return resultado;
     }
 
     @Override

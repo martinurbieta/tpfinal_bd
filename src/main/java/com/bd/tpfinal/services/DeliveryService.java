@@ -2,6 +2,7 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public interface DeliveryService {
 
     Order getOrderInfo(ObjectId number);
 
-    List<Order> getOrdersWithMaxItems(ObjectId supplier, int size) throws DeliveryException;
+    List<Order> getOrdersWithMaxItems(String supplier, int size) throws DeliveryException;
 
     Order getOrderMaxPriceInDate(String date) throws DeliveryException;
 

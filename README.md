@@ -79,39 +79,41 @@ El proyecto entregado deberá tener en cuenta los siguientes puntos:
 
 - Implementación del control de concurrencia mediante el versionado de objetos en las clases necesarias.
 
-Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: • Agregar un ítem a una orden ya creada.
+Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: 
 
-X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+B• Agregar un ítem a una orden ya creada.
 
-X Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
+BX Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+
+BX Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
 
   actualizar la calificación del proveedor.
 
-X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+BX Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
-X Eliminar un producto de los ofrecidos por un proveedor.
+MX Eliminar un producto de los ofrecidos por un proveedor.
 
-X Obtener todos los proveedores de un cierto tipo.
+MX Obtener todos los proveedores de un cierto tipo.
 
-X Obtener todos los productos y su tipo, de un proveedor específico.
+MX Obtener todos los productos y su tipo, de un proveedor específico.
 
-X - Obtener las órdenes con más productos de un proveedor específico.
+BV - Obtener las órdenes con más productos de un proveedor específico.
 
-X - Obtener la orden de mayor precio total de un día dado.
+BX - Obtener la orden de mayor precio total de un día dado.
 
-X - Obtener los diez repartidores con mayor puntaje.
+BX - Obtener los diez repartidores con mayor puntaje.
 
-X - Obtener los diez proveedores que más órdenes despacharon.
+BX - Obtener los diez proveedores que más órdenes despacharon.
 
-X - Obtener los precios de un producto entre dos fechas dadas.
+MX - Obtener los precios de un producto entre dos fechas dadas.
 
-X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+MV - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
-X - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
+MX - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
 
   proveedor posee.
 
-X - Obtener los proveedores que ofrezcan productos de todos los tipos.
+MX - Obtener los proveedores que ofrezcan productos de todos los tipos.
 
 El uso de test para verificar el correcto funcionamiento del servicio creado es opcional.
 
