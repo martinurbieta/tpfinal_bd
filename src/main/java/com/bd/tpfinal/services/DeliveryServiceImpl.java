@@ -138,13 +138,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         return this.clientRepository.findByUsername(username).orElse(null);
     }
 
-    /*    @Override
-        @Transactional(readOnly = true)
-        public List<Order> getClientOrders(String username) {
-            Client client = this.getClientInfo(username);
-            return (client != null) ? client.getOrders() : null;
-        }
-    */
     @Override
     @Transactional
     public DeliveryMan newDeliveryMan(DeliveryMan deliveryMan) {
@@ -257,12 +250,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public DeliveryMan confirmOrder(ObjectId number) throws DeliveryException {
-        Integer i = (new Random()).nextInt(this.deliveryManRepository.countByFreeTrueAndActiveTrue());
-        Pageable paging = PageRequest.of(i, 1);
-        List<DeliveryMan> deliveryManList = this.deliveryManRepository.findByFreeTrueAndActiveTrue(paging).getContent();
-        if (deliveryManList.size() > 0) {
+        Optional<DeliveryMan> optionalDeliveryMan = this.deliveryManRepository.findRandomlyByFreeTrueAndActiveTrue();
+        if (optionalDeliveryMan.isPresent()) {
             try {
-                DeliveryMan deliveryMan = deliveryManList.get(0);
+                DeliveryMan deliveryMan = optionalDeliveryMan.get();
                 Order order = this.getOrderInfo(number);
                 order.getOrderStatus().assign(deliveryMan, order);
                 this.deliveryManRepository.save(deliveryMan);
@@ -289,9 +280,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public List<Supplier> getBestFirstsDispatchersSupplier(Integer quantity) {
-        Pageable paging = PageRequest.of(0, quantity);
-        Page<ObjectId> page = this.supplierRepository.findBestDispatchersSupplierIds(paging);
-        return (List<Supplier>) this.supplierRepository.findAllById(page.getContent());
+        return this.supplierRepository.findBestDispatchersSupplierIds();
     }
 
     @Override
@@ -310,48 +299,67 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional
-    public void deliverOrder(ObjectId number) throws DeliveryException {
+    public Order deliverOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver(order);
-        this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
+        this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void refuseOrder(ObjectId number) throws DeliveryException {
+    public Order refuseOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse(order);
         this.orderRepository.save(order);
         this.confirmOrder(number);
+        return order;
     }
 
     @Override
     @Transactional
-    public void cancelOrder(ObjectId number) throws DeliveryException {
+    public Order cancelOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel(order);
         this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void finishOrder(ObjectId number) throws DeliveryException {
+    public Order finishOrder(ObjectId number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish(order);
         this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException {
+    public Order qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getSupplier();
         Long count = this.orderRepository.countBySupplierId(supplier.getId());
         supplier.updateScore(qualification, count);
         this.orderRepository.save(order);
+        this.supplierRepository.save(supplier);
+        return order;
     }
-
+    @Override
+    @Transactional
+    public Order addItem(ObjectId number, Item item) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
+        if (order.getOrderStatus().canAddItem()) {
+            item.setOrder(order);
+            this.itemRepository.save(item);
+            order.addItem(item);
+            this.orderRepository.save(order);
+        } else {
+            throw new DeliveryException("No se puede agregar items a la orden en el estado actual");
+        }
+        return order;
+    }
     @Override
     @Transactional(readOnly = true)
     public Address getAddress(ObjectId id) {
@@ -549,6 +557,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(ObjectId id, String startDateStr, String finishDateStr) throws DeliveryException {
         try {
+
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             Date startDate = df.parse(startDateStr);
@@ -559,6 +568,10 @@ public class DeliveryServiceImpl implements DeliveryService {
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
+            System.out.println("startDate"+startDate);
+            System.out.println("endDate"+finishDate);
+            System.out.println("id"+id);
+//            System.out.println("printout."+this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id));
             return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id);
         } catch (ParseException exception) {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());

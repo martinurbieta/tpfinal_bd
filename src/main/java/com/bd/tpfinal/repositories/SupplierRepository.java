@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import org.springframework.data.mongodb.repository.Query;
@@ -19,8 +20,20 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
         public List<Supplier> findBySupplierTypeId(ObjectId aSupplierTypeId);
         public Optional<Supplier> findById(ObjectId anId);
         public List<Supplier> findAll();
-        @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s GROUP BY s.id ORDER BY count(s) DESC")
-        Page<ObjectId> findBestDispatchersSupplierIds(Pageable pageable);
-        @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
+        @Aggregation(pipeline = {
+                "{'$lookup' : {'from' : 'order','localField' : '_id','foreignField' : 'supplier.$id','as' : 'orders'}}",
+                "{'$addFields' : {'cantidad' : {'$size' : '$orders'}}}",
+                "{'$sort' : {'cantidad' : -1}}",
+                "{ '$limit' : 10 }"
+        })
+        List<Supplier> findBestDispatchersSupplierIds();
+
+     //   @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
+        @Aggregation(pipeline = {
+                "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'supplierOrders'}}",
+                "{'$match':{'qualification':{'$gte':6}}}",
+                "{'$project? :{'_id' : 1,'qualification':1,'calificaciones':{'$size':'$supplierOrders'}}}"
+        })
+
         List<ObjectId> findByScoreLessThanEqual(@Param("score") Float score);
 }
