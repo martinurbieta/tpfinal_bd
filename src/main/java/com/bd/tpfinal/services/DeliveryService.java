@@ -50,15 +50,17 @@ public interface DeliveryService {
 
     DeliveryMan confirmOrder(ObjectId number) throws DeliveryException;
 
-    void deliverOrder(ObjectId number) throws DeliveryException;
+    Order deliverOrder(ObjectId number) throws DeliveryException;
 
-    void refuseOrder(ObjectId number) throws DeliveryException;
+    Order refuseOrder(ObjectId number) throws DeliveryException;
 
-    void cancelOrder(ObjectId number) throws DeliveryException;
+    Order cancelOrder(ObjectId number) throws DeliveryException;
 
-    void finishOrder(ObjectId number) throws DeliveryException;
+    Order finishOrder(ObjectId number) throws DeliveryException;
 
-    void qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException;
+    Order qualifyOrder(ObjectId number, Qualification qualification) throws DeliveryException;
+
+    Order addItem(ObjectId number, Item item) throws DeliveryException;
 
     Address getAddress(ObjectId id);
 

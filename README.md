@@ -81,15 +81,15 @@ El proyecto entregado deberá tener en cuenta los siguientes puntos:
 
 Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: 
 
-B• Agregar un ítem a una orden ya creada.
+BV Agregar un ítem a una orden ya creada.
 
-BX Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+BV Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
 
-BX Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
+BV Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
 
   actualizar la calificación del proveedor.
 
-BX Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+B= Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
 MX Eliminar un producto de los ofrecidos por un proveedor.
 
@@ -99,11 +99,11 @@ MX Obtener todos los productos y su tipo, de un proveedor específico.
 
 BV - Obtener las órdenes con más productos de un proveedor específico.
 
-BX - Obtener la orden de mayor precio total de un día dado.
+B= - Obtener la orden de mayor precio total de un día dado.
 
-BX - Obtener los diez repartidores con mayor puntaje.
+B= - Obtener los diez repartidores con mayor puntaje.
 
-BX - Obtener los diez proveedores que más órdenes despacharon.
+BV - Obtener los diez proveedores que más órdenes despacharon.
 
 MX - Obtener los precios de un producto entre dos fechas dadas.
 

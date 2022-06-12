@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import org.springframework.data.mongodb.repository.Query;
@@ -19,8 +20,13 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
         public List<Supplier> findBySupplierTypeId(ObjectId aSupplierTypeId);
         public Optional<Supplier> findById(ObjectId anId);
         public List<Supplier> findAll();
-        @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s GROUP BY s.id ORDER BY count(s) DESC")
-        Page<ObjectId> findBestDispatchersSupplierIds(Pageable pageable);
+        @Aggregation(pipeline = {
+                "{'$lookup' : {'from' : 'order','localField' : '_id','foreignField' : 'supplier.$id','as' : 'orders'}}",
+                "{'$addFields' : {'cantidad' : {'$size' : '$orders'}}}",
+                "{'$sort' : {'cantidad' : -1}}",
+                "{ '$limit' : 10 }"
+        })
+        List<Supplier> findBestDispatchersSupplierIds();
         @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
         List<ObjectId> findByScoreLessThanEqual(@Param("score") Float score);
 }
