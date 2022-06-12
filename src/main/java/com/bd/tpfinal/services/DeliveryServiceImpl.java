@@ -303,6 +303,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         Long count = this.orderRepository.countBySupplierId(supplier.getId());
         supplier.updateScore(qualification, count);
         this.orderRepository.save(order);
+        this.supplierRepository.save(supplier);
     }
 
     @Override
