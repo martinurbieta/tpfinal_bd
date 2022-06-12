@@ -79,7 +79,9 @@ El proyecto entregado deberá tener en cuenta los siguientes puntos:
 
 - Implementación del control de concurrencia mediante el versionado de objetos en las clases necesarias.
 
-Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: • Agregar un ítem a una orden ya creada.
+Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: 
+
+X Agregar un ítem a una orden ya creada.
 
 X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
 

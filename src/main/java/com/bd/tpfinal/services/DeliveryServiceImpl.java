@@ -263,40 +263,44 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
     @Override
     @Transactional
-    public void deliverOrder(Long number) throws DeliveryException {
+    public Order deliverOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().deliver(order);
         this.orderRepository.save(order); // Tambien guardamos el DeliveryMan y el Client, debido a las oper en cadena
+        return order;
     }
 
     @Override
     @Transactional
-    public void refuseOrder(Long number) throws DeliveryException {
+    public Order refuseOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().refuse(order);
         this.orderRepository.save(order);
         this.confirmOrder(number);
+        return order;
     }
 
     @Override
     @Transactional
-    public void cancelOrder(Long number) throws DeliveryException {
+    public Order cancelOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().cancel(order);
         this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void finishOrder(Long number) throws DeliveryException {
+    public Order finishOrder(Long number) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.getOrderStatus().finish(order);
         this.orderRepository.save(order);
+        return order;
     }
 
     @Override
     @Transactional
-    public void qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
+    public Order qualifyOrder(Long number, Qualification qualification) throws DeliveryException {
         Order order = this.getOrderInfo(number);
         order.setQualification(qualification);
         Supplier supplier = order.getSupplier();
@@ -304,8 +308,21 @@ public class DeliveryServiceImpl implements DeliveryService {
         supplier.updateScore(qualification, count);
         this.orderRepository.save(order);
         this.supplierRepository.save(supplier);
+        return order;
     }
-
+    @Override
+    @Transactional
+    public Order addItem(Long number, Item item) throws DeliveryException {
+        Order order = this.getOrderInfo(number);
+        if (order.getOrderStatus().canAddItem()) {
+            item.setOrder(order);
+            order.addItem(item);
+            this.orderRepository.save(order);
+        } else {
+            throw new DeliveryException("No se puede agregar items a la orden en el estado actual");
+        }
+        return order;
+    }
     @Override
     @Transactional(readOnly = true)
     public Address getAddress(Long id) {

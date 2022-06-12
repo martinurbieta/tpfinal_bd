@@ -43,15 +43,17 @@ public interface DeliveryService {
 
     DeliveryMan confirmOrder(Long number) throws DeliveryException;
 
-    void deliverOrder(Long number) throws DeliveryException;
+    Order deliverOrder(Long number) throws DeliveryException;
 
-    void refuseOrder(Long number) throws DeliveryException;
+    Order refuseOrder(Long number) throws DeliveryException;
 
-    void cancelOrder(Long number) throws DeliveryException;
+    Order cancelOrder(Long number) throws DeliveryException;
 
-    void finishOrder(Long number) throws DeliveryException;
+    Order finishOrder(Long number) throws DeliveryException;
 
-    void qualifyOrder(Long number, Qualification qualification) throws DeliveryException;
+    Order qualifyOrder(Long number, Qualification qualification) throws DeliveryException;
+
+    Order addItem(Long number, Item item) throws DeliveryException;
 
     Address getAddress(Long id);
 

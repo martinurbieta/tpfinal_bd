@@ -121,13 +121,13 @@ public class DeliveryController {
     }
 
     @PutMapping(path = "/order/{number}/refuse")
-    public void refuseOrder(@PathVariable Long number) throws DeliveryException {
-        this.service.refuseOrder(number);
+    public Order refuseOrder(@PathVariable Long number) throws DeliveryException {
+        return this.service.refuseOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/cancel")
-    public void cancelOrder(@PathVariable Long number) throws DeliveryException{
-        this.service.cancelOrder(number);
+    public Order cancelOrder(@PathVariable Long number) throws DeliveryException{
+        return this.service.cancelOrder(number);
     }
 
     @PutMapping(path = "/order/{number}/confirm")
@@ -135,17 +135,22 @@ public class DeliveryController {
         return this.service.confirmOrder(number);
     }
     @PutMapping(path = "/order/{number}/deliver")
-    public void deliverOrder(@PathVariable Long number) throws DeliveryException{
-        this.service.deliverOrder(number);
+    public Order deliverOrder(@PathVariable Long number) throws DeliveryException{
+        return this.service.deliverOrder(number);
     }
     @PutMapping(path = "/order/{number}/finish")
-    public void finishOrder(@PathVariable Long number) throws DeliveryException {
-        this.service.finishOrder(number);
+    public Order finishOrder(@PathVariable Long number) throws DeliveryException {
+        return this.service.finishOrder(number);
     }
 
     @PostMapping(path = "/order/{number}/qualify")
-    public void qualifyOrder(@PathVariable Long number, @RequestBody Qualification qualification) throws DeliveryException {
-        this.service.qualifyOrder(number, qualification);
+    public Order qualifyOrder(@PathVariable Long number, @RequestBody Qualification qualification) throws DeliveryException {
+        return this.service.qualifyOrder(number, qualification);
+    }
+
+    @PutMapping(path = "/order/{number}/addItem")
+    public Order addItem(@PathVariable Long number, @RequestBody Item item) throws DeliveryException {
+        return this.service.addItem(number, item);
     }
 
     @PutMapping(path = "/product/{id}")  // ok
