@@ -558,6 +558,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional
     public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(ObjectId id, String startDateStr, String finishDateStr) throws DeliveryException {
         try {
+
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar c = Calendar.getInstance();
             Date startDate = df.parse(startDateStr);
@@ -568,6 +569,10 @@ public class DeliveryServiceImpl implements DeliveryService {
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
+            System.out.println("startDate"+startDate);
+            System.out.println("endDate"+finishDate);
+            System.out.println("id"+id);
+//            System.out.println("printout."+this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id));
             return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id);
         } catch (ParseException exception) {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());

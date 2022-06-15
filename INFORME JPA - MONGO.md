@@ -151,8 +151,15 @@ se puede verificar el host
 
 [^2]:  https://www.howtogeek.com/devops/how-to-connect-to-localhost-within-a-docker-container/#:~:text=You%20just%20need%20to%20reference,0.1%20.&text=Your%20host's%20Docker%20IP%20will,services%20running%20on%20your%20host.
 
-####Verificación de las implementaciones de endpoints en la aplicación
+###Verificación de las implementaciones de endpoints en la aplicación
 
+Un cambio importante, ha sido el manejo del ObjectID, que para compatibilizarlo con el browser, debía ser transformado a string o bien ser levantado en el modelo como DBRef new ObjectID.
+
+Las intervensiones han sido principalmente en los queries de repositorios especificos de SQL, que han sido adaptados a NOSQL, interviniendose en XX de XX requisitos.
+
+Nos encontramos con situaciones en que el mismo query ejecutado en MongoDB emitia una salida que satisfacía el requisito. Sin embargo, se optó por intervenir de forma tal de minimizar los cambios en el código, de forma tal que pueda volverse de Mongo a JPA con la menor cantidad de modificaciones o refactoring. Este critero puede no ser el más performante, pero permitiría asegurar una hipotetica continuidad en el pipeline de la aplicación, sin realizar parsings adicionales.
+
+##### Requisitos
 • Agregar un ítem a una orden ya creada
 
 X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
@@ -163,11 +170,20 @@ actualizar la calificación del proveedor.
 
 X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
+------------------------------------
 X Eliminar un producto de los ofrecidos por un proveedor.
+`http://localhost:8081/api/product/{id}`
 
+test case: `http://localhost:8081/api/product/62a3847a0b361a202e89576e`
+Sin cambios. Borra de colección el producto, pero mantiene las referencias es items, lo cual es consistente a mi entender para mantener registro del item (producto) vendido..
+--------------------------------------
 X Obtener todos los proveedores de un cierto tipo.
-
+`http://localhost:8081/api/supplier/byTpe/{id}`
+Sin cambios.
+--------------------------------------
 X Obtener todos los productos y su tipo, de un proveedor específico.
+endpoint: `http://localhost:8081/api/product/bySupplier/{id}`
+test case:  `http://localhost:8081/api/product/bySupplier/62a384790b361a202e89572c`
 
 X - Obtener las órdenes con más productos de un proveedor específico.
 
@@ -187,9 +203,28 @@ X - Obtener los precios de un producto entre dos fechas dadas.
 X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 `http://localhost:8081/api/product/averagePrices/for/allTypes` Not working
 
-
+-------------------
 X - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
 `http://localhost:8081/api/supplier/qualification/hasAtLeast/{stars}` Not working
+No se requirió ajustes en el endpoint
+`http://localhost:8081/api/order/{number}}/qualify`
+
+Test Qualify
+1) Estado: Orden Confirmada:
+`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/confirm`
+2) Estado: Orden Entregada:
+`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/deliver`
+3) Calificar orden completada:
+`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/qualify
+`
+
+Body
+
+`{
+"score": 10,
+"commentary": "alles goede"
+}`
+
 
 X - Obtener los proveedores que ofrezcan productos de todos los tipos.
 `http://localhost:8081/api/supplier/allProductTypes`

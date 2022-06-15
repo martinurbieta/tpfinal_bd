@@ -91,11 +91,11 @@ BV Añadir una calificación a una orden ya completada. Tenga en cuenta que de
 
 B= Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
-MX Eliminar un producto de los ofrecidos por un proveedor.
+M= Eliminar un producto de los ofrecidos por un proveedor.
 
-MX Obtener todos los proveedores de un cierto tipo.
+M= Obtener todos los proveedores de un cierto tipo.
 
-MX Obtener todos los productos y su tipo, de un proveedor específico.
+M= Obtener todos los productos y su tipo, de un proveedor específico.
 
 BV - Obtener las órdenes con más productos de un proveedor específico.
 

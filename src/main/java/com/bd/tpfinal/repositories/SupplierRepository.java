@@ -27,6 +27,13 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
                 "{ '$limit' : 10 }"
         })
         List<Supplier> findBestDispatchersSupplierIds();
-        @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
+
+     //   @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
+        @Aggregation(pipeline = {
+                "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'supplierOrders'}}",
+                "{'$match':{'qualification':{'$gte':6}}}",
+                "{'$project? :{'_id' : 1,'qualification':1,'calificaciones':{'$size':'$supplierOrders'}}}"
+        })
+
         List<ObjectId> findByScoreLessThanEqual(@Param("score") Float score);
 }
