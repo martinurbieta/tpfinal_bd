@@ -524,18 +524,19 @@ public class DeliveryServiceImpl implements DeliveryService {
             Calendar c = Calendar.getInstance();
             Date startDate = df.parse(startDateStr);
             Date finishDate = df.parse(finishDateStr);
-            if ( startDate.after(finishDate)) {
+            if (startDate.after(finishDate)) {
                 throw new DeliveryException("Error en las fechas enviadas: la fecha de finalización debe ser mayor que la de inicio");
             }
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
-            return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id);
+            List<HistoricalProductPrice> precios = this.historicalProductPriceRepository.findAllByStartDateBetweenAndProductId(startDate, finishDate, id);
+            precios.addAll(this.historicalProductPriceRepository.findAllByFinishDateBetweenAndProductId(startDate, finishDate, id));
+            return precios;
         } catch (ParseException exception) {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());
         }
     }
-
     @Transactional
     public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
         List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
