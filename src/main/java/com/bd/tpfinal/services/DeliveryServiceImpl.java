@@ -228,15 +228,16 @@ public class DeliveryServiceImpl implements DeliveryService {
 /*          SE PONE EN NULL MANUALMENTE PARA EVITAR UNA INJECCION */
             newOrder.setDeliveryMan(null);
 /* ------ */
-            List<Item> items = newOrder.getItems();
-            newOrder.setItems(null);
+            ArrayList<ArrayList<Object>> itemsArray = (ArrayList<ArrayList<Object>>) data.get("items");
+            newOrder.setItems(new ArrayList<Item>());
             this.orderRepository.save(newOrder);
-            for (Item item : items) {
+            for (Object itemObject : itemsArray) {
+                Item item = mapper.convertValue(itemObject, Item.class);
                 this.productRepository.findById(item.getProduct().getId()).ifPresent(item::setProduct);
                 item.setOrder(newOrder);
                 this.itemRepository.save(item);
+                newOrder.addItem(item);
             }
-            newOrder.setItems(items);
             return this.orderRepository.save(newOrder);
         } else
             throw new DeliveryException("No se definió una dirección de entrega.");
