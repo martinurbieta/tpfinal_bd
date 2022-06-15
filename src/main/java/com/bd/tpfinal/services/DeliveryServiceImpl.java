@@ -573,7 +573,9 @@ public class DeliveryServiceImpl implements DeliveryService {
             System.out.println("endDate"+finishDate);
             System.out.println("id"+id);
 //            System.out.println("printout."+this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id));
-            return this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id);
+            List<HistoricalProductPrice> precios = this.historicalProductPriceRepository.findAllByStartDateBetweenAndProductId(startDate, finishDate, id);
+            precios.addAll(this.historicalProductPriceRepository.findAllByFinishDateBetweenAndProductId(startDate, finishDate, id));
+            return precios;
         } catch (ParseException exception) {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());
         }

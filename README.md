@@ -105,7 +105,7 @@ B= - Obtener los diez repartidores con mayor puntaje.
 
 BV - Obtener los diez proveedores que más órdenes despacharon.
 
-MX - Obtener los precios de un producto entre dos fechas dadas.
+BV - Obtener los precios de un producto entre dos fechas dadas.
 
 MV - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 

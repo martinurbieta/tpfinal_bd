@@ -19,9 +19,6 @@ public interface HistoricalProductPriceRepository extends MongoRepository<Histor
     public Optional<HistoricalProductPrice> findFirstByProductIdOrderByStartDateDesc(ObjectId aIdProduct);
     public List<HistoricalProductPrice> findByProductId(ObjectId anId);
     public void deleteByProductId (ObjectId aIdProduct);
-
-
-
-
-    public List<HistoricalProductPrice> findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(Date startDate,Date finishDate, ObjectId aIdProduct);
+    public List<HistoricalProductPrice> findAllByStartDateBetweenAndProductId(Date startDate, Date finishDate, ObjectId id);
+    public List<HistoricalProductPrice> findAllByFinishDateBetweenAndProductId(Date startDate, Date finishDate, ObjectId id);
 }
