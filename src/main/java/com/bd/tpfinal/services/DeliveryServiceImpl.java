@@ -569,10 +569,6 @@ public class DeliveryServiceImpl implements DeliveryService {
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
-            System.out.println("startDate"+startDate);
-            System.out.println("endDate"+finishDate);
-            System.out.println("id"+id);
-//            System.out.println("printout."+this.historicalProductPriceRepository.findAllByStartDateGreaterThanEqualAndFinishDateLessThanEqualAndProductId(startDate, finishDate, id));
             List<HistoricalProductPrice> precios = this.historicalProductPriceRepository.findAllByStartDateBetweenAndProductId(startDate, finishDate, id);
             precios.addAll(this.historicalProductPriceRepository.findAllByFinishDateBetweenAndProductId(startDate, finishDate, id));
             return precios;
