@@ -2,19 +2,15 @@ package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.repositories.*;
 import com.bd.tpfinal.utils.DeliveryException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBRef;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.inject.Inject;
 import java.text.DateFormat;
@@ -413,9 +409,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = this.supplierRepository.findAll();
-        for (Supplier supplier : suppliers) {
-            supplier.getProducts().size();
-        }
+//        for (Supplier supplier : suppliers) {
+//            supplier.getProducts().size();
+//        }
         return suppliers;
     }
 
@@ -617,7 +613,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     stream()
                     .map(product -> product.getProductType())
                     .collect(Collectors.toSet());
-            if (allProductTypes.size()==productTypesInThisSupplier.size()){
+            if (allProductTypes.size()-0==productTypesInThisSupplier.size()){   //Para test debe cambiarse el valor de 0 a 15.
                 suppliersProvidingAllProductTypes.add(supplier);}
               }
         return suppliersProvidingAllProductTypes;
@@ -625,8 +621,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> getSupplierByQualificationValue(Float stars) {
-        List<ObjectId> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
-        return (List<Supplier>) this.supplierRepository.findAllById(ids);
+    public List<ArrayList>   getSupplierByQualificationValue(Float stars) {
+//        List<ObjectId> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
+//        return (List<Supplier>) this.supplierRepository.findAllById(ids);
+        return this.supplierRepository.findByScoreLessThanEqual(stars);
     }
 }

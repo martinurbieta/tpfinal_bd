@@ -1,14 +1,11 @@
 package com.bd.tpfinal.services;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalDouble;
+import java.util.*;
 
 /**
  * Esta interface define el comportamiento esperado por los servicios relacionados con el sistema.
@@ -125,7 +122,7 @@ public interface DeliveryService {
 
      List<Supplier> getSupplierProvidingAllProductType();
 
-    List<Supplier> getSupplierByQualificationValue(Float stars);
+    List<ArrayList>  getSupplierByQualificationValue(Float stars);
 
 
 

@@ -1,19 +1,16 @@
 package com.bd.tpfinal.repositories;
 
 import com.bd.tpfinal.model.Supplier;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> {
@@ -31,9 +28,8 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
      //   @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
         @Aggregation(pipeline = {
                 "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'supplierOrders'}}",
-                "{'$match':{'qualification':{'$gte':6}}}",
-                "{'$project? :{'_id' : 1,'qualification':1,'calificaciones':{'$size':'$supplierOrders'}}}"
+                "{'$match':{'qualification':{'$gte':?0 }}}",
+                "{'$group' :{_id:'$id' ,'resultado':{'$push':{'proveedor':{'$toString':'$_id'},'qualification':{'$round':['$qualification',2]},'calificadores':{'$size':'$supplierOrders'}}}}}"
         })
-
-        List<ObjectId> findByScoreLessThanEqual(@Param("score") Float score);
+        List<ArrayList>  findByScoreLessThanEqual(@Param("score") Float score);
 }

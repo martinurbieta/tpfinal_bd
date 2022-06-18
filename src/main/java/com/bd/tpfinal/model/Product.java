@@ -44,8 +44,8 @@ public class Product {
     @Version
     private int version;
 
-    @BsonIgnore
     @DBRef
+    @BsonIgnore
     private List<ProductType> productType;
     
     public Product(){}

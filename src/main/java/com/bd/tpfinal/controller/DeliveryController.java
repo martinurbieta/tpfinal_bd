@@ -3,20 +3,17 @@ package com.bd.tpfinal.controller;
 import com.bd.tpfinal.model.*;
 import com.bd.tpfinal.services.DeliveryService;
 import com.bd.tpfinal.utils.DeliveryException;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalDouble;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -262,7 +259,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/supplier/qualification/hasAtLeast/{stars}")
-    public List<Supplier>  getSupplierByQualificationValue(@PathVariable Float stars){
+    public List<ArrayList>  getSupplierByQualificationValue(@PathVariable Float stars){
         return this.service.getSupplierByQualificationValue(stars);
     }
 

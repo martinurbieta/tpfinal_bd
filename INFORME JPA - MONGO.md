@@ -157,55 +157,72 @@ Un cambio importante, ha sido el manejo del ObjectID, que para compatibilizarlo 
 
 Las intervensiones han sido principalmente en los queries de repositorios especificos de SQL, que han sido adaptados a NOSQL, interviniendose en XX de XX requisitos.
 
-Nos encontramos con situaciones en que el mismo query ejecutado en MongoDB emitia una salida que satisfacía el requisito. Sin embargo, se optó por intervenir de forma tal de minimizar los cambios en el código, de forma tal que pueda volverse de Mongo a JPA con la menor cantidad de modificaciones o refactoring. Este critero puede no ser el más performante, pero permitiría asegurar una hipotetica continuidad en el pipeline de la aplicación, sin realizar parsings adicionales.
+Nos encontramos con situaciones en que el mismo query ejecutado en MongoDB emitia una salida que satisfacía el requisito. Sin embargo, se optó por intervenir de forma tal de minimizar los cambios en el código, de forma tal que pueda volverse de Mongo a JPA con la menor cantidad de modificaciones o refactoring. Este critero puede no ser el más performante, pero permitiría asegurar una hipotetica continuidad en el pipeline de la aplicación, sin realizar parsings adicionales. Sin embargo, existe una salvedad indicada y justificada.
 
 ##### Requisitos
 • Agregar un ítem a una orden ya creada
 
 X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
 
+---------------------------------
 X Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
 
 actualizar la calificación del proveedor.
 
+-----------------------------
 X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
 ------------------------------------
 X Eliminar un producto de los ofrecidos por un proveedor.
-`http://localhost:8081/api/product/{id}`
-
-test case: `http://localhost:8081/api/product/62a3847a0b361a202e89576e`
+Endpoint: `http://localhost:8081/api/product/{id}`
+Test case: `http://localhost:8081/api/product/62a3847a0b361a202e89576e`
 Sin cambios. Borra de colección el producto, pero mantiene las referencias es items, lo cual es consistente a mi entender para mantener registro del item (producto) vendido..
 --------------------------------------
 X Obtener todos los proveedores de un cierto tipo.
-`http://localhost:8081/api/supplier/byTpe/{id}`
+Endpoint: `http://localhost:8081/api/supplier/byTpe/{id}`
+Test case: `http://localhost:8081/api/supplier/byTpe/62a384790b361a202e8956ba`
 Sin cambios.
 --------------------------------------
 X Obtener todos los productos y su tipo, de un proveedor específico.
 endpoint: `http://localhost:8081/api/product/bySupplier/{id}`
 test case:  `http://localhost:8081/api/product/bySupplier/62a384790b361a202e89572c`
+-------------------
 
 X - Obtener las órdenes con más productos de un proveedor específico.
 
+-------------------
+
 X - Obtener la orden de mayor precio total de un día dado.
+Endpoint: `http://localhost:8081/api/order/maxTotalPrice/inDate/{date}`
+test case: `http://localhost:8081/api/order/maxTotalPrice/inDate/2022-06-10`
+
+Nota: sin intervenir solución JPA para Mongo.
+
+----------------------
+
 
 X - Obtener los diez repartidores con mayor puntaje.
-`http://localhost:8081/api/deliveryMan/bestTen` Works.
-
+Endpoint and test: `http://localhost:8081/api/deliveryMan/bestTen`
+Nota: sin intervenir solución JPA para Mongo.
+-----------------------
 
 X - Obtener los diez proveedores que más órdenes despacharon.
-`http://localhost:8081/api/supplier/bestTenDispatchers` Not working.
+endopoint and test: `http://localhost:8081/api/supplier/bestTenDispatchers` 
+Nota: adecuó el query SupplierRepository de SQL a Mongo.
+----------------
 
 X - Obtener los precios de un producto entre dos fechas dadas.
-`http://localhost:8081/api//product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}` Not crashing.
-
-
+endpoint: `http://localhost:8081/api//product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}` Not crashing.
+testcase: `http://localhost:8081/api/product/62a3847a0b361a202e895784/historicalPrice/betweenDates/2021-06-08/2023-06-11`
+Nota: Sin cambios en relación a la versión JPA.
+-----------------
 X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
-`http://localhost:8081/api/product/averagePrices/for/allTypes` Not working
+Enpoint and test : `http://localhost:8081/api/product/averagePrices/for/allTypes` 
+Se debió adecuar el query del repositorio en ProductRepository. Se mantuvo el código en la implementaciń del servicio.
 
 -------------------
-X - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
-`http://localhost:8081/api/supplier/qualification/hasAtLeast/{stars}` Not working
+- Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
+
 No se requirió ajustes en el endpoint
 `http://localhost:8081/api/order/{number}}/qualify`
 
@@ -218,15 +235,33 @@ Test Qualify
 `http://localhost:8081/api/order/62a3847a0b361a202e8957cc/qualify
 `
 
-Body
+Body califiacación.
 
 `{
 "score": 10,
 "commentary": "alles goede"
 }`
 
+endpoint: `http://localhost:8081/api/supplier/qualification/hasAtLeast/{stars}`
+testcase: `http://localhost:8081/api/supplier/qualification/hasAtLeast/8`
+Nota: se modificó el servicio, atento a que la solución JPA resultaba, si bien operativa, no satisfactoria a nuestro entender, aún contemplando que no se evalua performance en este trabajo.
+------------------------
 
 X - Obtener los proveedores que ofrezcan productos de todos los tipos.
 `http://localhost:8081/api/supplier/allProductTypes`
-Not working.
 
+En la implementaión del servicio, debío comentarse parte del código del método getAllSuppliers() donde se inicializaba lazy en JPA con .size
+`
+    @Override
+    @Transactional(readOnly = true)
+    public List<Supplier> getAllSuppliers() {
+        List<Supplier> suppliers = this.supplierRepository.findAll();
+//        for (Supplier supplier : suppliers) {
+//            supplier.getProducts().size();
+//        }
+return suppliers;
+}`
+
+Con dicho cambio, el endpoint utilizado funcionó correctamente.
+endpoint y test: `http://localhost:8081/api/supplier/allProductTypes`
+Nota: el resultado con la colección actual [], atento a que ningun proveedor cumple con dicho requisito, sin embargo.
