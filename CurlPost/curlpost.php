@@ -2,21 +2,23 @@
 class CurlPost 
 {
 	protected $url;
-	static function init ($url) {
-		return new self($url);
+	static function init ($url, $method) {
+		return new self($url, $method);
 	}
-	function __construct ($url) {
+	function __construct ($url, $method) {
 		$this->url = $url;
+		$this->method = $method;
 	}
-	function send ($payload) {
+	function send ($request) {
 		$ch = curl_init( $this->url );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode($payload) );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode($request) );
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt($ch, CURLOPT_URL, $this->url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
 		$result = curl_exec($ch);
 		curl_close($ch);
-		return new CurlResponse($result, $this->url, $payload);
+		return new CurlResponse($this->url, $request, $result);
 	}
 }
 class JsonLoader 
@@ -36,25 +38,37 @@ class JsonLoader
 	function decode() {
 		return json_decode ($this->data);
 	}
+	function file() {
+		return $this->file;
+	}
 
 }
 class CurlResponse 
 {
-	protected $content;
-	protected $decoded;
+	protected $body;
 	protected $url;
 	protected $request;
-	function __construct ($content, $url, $request) {
-		$this->decoded = json_decode($content);
-		if (isset($this->decoded->status) && is_numeric($this->decoded->status) && $this->decoded->status >= 400) {
-			throw new Exception('Error al enviar '. json_encode($request, JSON_PRETTY_PRINT). ' a la direccion '.$url);
-		}
-		$this->content = $content;
+	public function __construct ($url, $request, $response) {
 		$this->url = $url;
 		$this->request = $request;
+		$this->body = $this->checkStatus($response);
 	}
-	function decode() {
-		return $this->decoded;
+	public function checkStatus ($content) {
+		$response = json_decode($content);
+		if (isset($response->status) && is_numeric($response->status) && $response->status >= 400) {
+			AppCurlPostOutput::getInstance()->saveFile('processed.json');
+			throw new Exception('Error al enviar '. json_encode($this->request, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES). ' a la direccion '.$this->url);
+		}
+		return $response;
+	}
+ 	public function url() {
+ 		return $this->url;
+	}
+ 	public function request() {
+ 		return $this->request;
+	}
+ 	public function decode() {
+		return $this->body;
 	}
 
 }
@@ -71,73 +85,146 @@ class AppCurlPostOutput {
 	}
 	function add ($class, CurlResponse $response) {
 		if (!isset($this->content[$class])) $this->content[$class] = [];
-		$this->content[$class][] = $response->decode();
+		$this->content[$class][] = ['url'=>$response->url(), 'request'=>$response->request(), 'response'=>$response->decode()];
+	}
+	function clear () {
+		$this->content = [];
+	}
+	function printR () {
+		print_r($this->content);
+	}
+	function printJson() {
+		echo json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+	}
+	function saveFile($output='output.json') {
+		file_put_contents($output, json_encode($this->content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+	}
+}
+class EntityTracer {
+	protected $keys;
+	function __construct ($keys) {
+		$this->keys = $keys;
+	}
+	public function addKey ($name, $key) {
+		$this->keys[$name][] = $key;
+	}
+	public function findEntitiesIdNames ($items) {
+		return array_intersect(array_keys((array) $items), array_keys($this->keys));
+	}
+	public function trace($entitiesNames, $entities) {
+		foreach ($entitiesNames as $name) {
+			if (is_iterable($entities->$name)) 
+				$this->recursive($name, $entities);
+			else 
+				$this->complete($name, $entities);
+		}
+		return $entities;
+	}
+	private function recursive($name, &$entities) {
+		if ($name == 'items') {
+			foreach ($entities->$name as &$items) {
+				$childrens = $this->findEntitiesIdNames($items);
+				$this->trace($childrens, $items);
+			}
+		} else {
+			foreach ($entities->$name as &$entity) 
+				$entity->id = $this->keys[$name][$entity->id-1];
+		}		
+		return $entities->$name;
+	}
+	private function complete($name, &$entities) {
+		//Entra cuando es una asociacion de una propiedad que se relaciona con una entidad
+		if (is_string($this->keys[$name])) 
+			$entities->$name = $this->keys[$this->keys[$name]][$entities->$name-1];
+		//Entra cuando es una entidad con un id que se debe recuperar
+		elseif (isset($entities->$name->id)) 
+			$entities->$name->id = $this->keys[$name][$entities->$name->id-1];
+		return $entities->$name;
+	}
+	public function printR () {
+		print_r($this->keys);
+	}
+	public function printJson() {
+		echo json_encode($this->keys, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+	}
+	public function saveFile($output='keys.json') {
+		file_put_contents($output, json_encode($this->keys, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 	}
 }
 class AppCurlPostClient {
 	protected $json;
 	protected $baseurl;
 	protected $output;
-	protected $keys;
-	static function start ($json, $baseurl=null) {
-		if ($baseurl)
-			return new self($json, $baseurl);
-		else
-			return new self($json);
+	protected $tracker;
+	static function start ($config) {
+		return new self($config);
 	}
-	function __construct ($json, $baseurl='http://localhost:8081/api/') {
-		$this->json = $json;
-		$this->baseurl = $baseurl;
+	function __construct ($config) {
+		$this->baseurl = isset($config['baseurl'])?$config['baseurl']: 'http://localhost:8081/api';
+		$this->json = $config['json']->decode();
 		$this->output = AppCurlPostOutput::getInstance();
-		$this->keys = ['items'=>true, 'id_supplier'=>'supplier', 'client_address'=>'address'];
+		$method = explode('.', $config['json']->file());
+		$this->method = strtoupper($method[0]);
+		$this->isValidMethod($this->method);
+		$this->tracker = new EntityTracer($this->getKeys($config['fileKeys']));
 	}
-	private function completeIds($entities, $payload) {
-		foreach ($entities as $entity) {
-			if (is_iterable($payload->$entity)) {
-				if ($entity == 'items') {
-					foreach ($payload->$entity as &$item) {
-						$innerEntities = array_intersect(array_keys((array)$item),array_keys($this->keys));
-						$this->completeIds($innerEntities, $item);
-					}
-				} else {
-					foreach ($payload->$entity as &$e) 
-						$e->id = $this->keys[$entity][$e->id-1];
-				}
-			} else {
-				if (is_string($this->keys[$entity])) 
-					$payload->$entity = $this->keys[$this->keys[$entity]][$payload->$entity-1];
-				elseif (isset($payload->$entity->id)) 
-					$payload->$entity->id = $this->keys[$entity][$payload->$entity->id-1];
-			}
-		}
+	function getKeys($fileKeys) {
+		if (!$fileKeys)
+			return ['items'=>true, 'id_supplier'=>'supplier', 'client_address'=>'address'];
+		else
+			return json_decode(file_get_contents($fileKeys), true);
+	}
+	function isValidMethod($method) {
+		if (!$method || !in_array($method,['PUT', 'POST', 'GET', 'DELETE'])) 
+			throw new Exception("El archivo debe tener en su nombre el metodo del http, ej: post.nombrearchivo.json");
+		return true;		
 	}
 	function renderUrl ($action) {
-		return $this->baseurl.$action;
+		$pieces = explode('/', $action);
+		foreach ($pieces as $piece) {
+			if (strpos($piece,':') !== false) {
+				list($name, $id) = explode(':', $piece);
+				$traced = $this->tracker->trace([$name], json_decode('{"'.$name.'" : { "id" :'.$id.'} }'));
+				$piece = $traced->$name->id;
+			}
+			$url[] = $piece;
+		}
+		return $this->baseurl.'/'.implode('/', $url);
+	}
+	function keys () {
+		return $this->tracker;
 	}
 	function execute () {
 		foreach ($this->json as $name => $array) {
-			foreach ($array as $payload) {
-				if ($this->keys) {
-					$entities = array_intersect(array_keys((array)$payload),array_keys($this->keys));
-					if ($entities) 
-						$this->completeIds($entities, $payload);
-				}
-				$response = CurlPost::init($this->renderUrl($name))->send($payload);
+			foreach ($array as $request) {
+				$names = $this->tracker->findEntitiesIdNames($request);
+				if ($names) 
+					$this->tracker->trace($names, $request);
+				$url = $this->renderUrl($name);
+				$curlresponse = CurlPost::init($url, $this->method)->send($request);
+				$entity = $curlresponse->decode();
+				//Las ordenes tenian number y no id
+				$id = isset($entity->id)?$entity->id:(isset($entity->number)?$entity->number:null);
+				if ($id) 
+					$this->tracker->addKey($name, $id);
 
-				if (isset($response->decode()->id))
-					$this->keys[$name][] = $response->decode()->id; 
-
-				$this->output->add($name, $response);
+				$this->output->add($name, $curlresponse);
 			}
 		}
-		return $this;
+		return $this->output;
 	}
-	function printR () {
-		print_r($this->output);
-	}
-	function printJson() {
-		echo json_encode($this->output, JSON_PRETTY_PRINT);
-	}
-
 }
-AppCurlPostClient::start(JsonLoader::load($argv[1])->decode())->execute()->printR();
+$args = getopt("i:k:u:o:s::");
+
+$config = ['json'=>JsonLoader::load($args['i'])]; //Recupera la información del json
+if (isset($args['u']))
+	$config['baseurl'] = $args['u']; //Url base
+$config['fileKeys'] = isset($args['k'])?$args['k']:null; //Nombre de archivo de las claves guardadas
+
+$app = AppCurlPostClient::start($config);
+
+$app->execute()->saveFile(isset($args['o'])?$args['o']:null);
+
+if (isset($args['s'])) {
+	$app->keys()->saveFile(isset($args['o'])?'keys.'.$args['o']:null);
+}

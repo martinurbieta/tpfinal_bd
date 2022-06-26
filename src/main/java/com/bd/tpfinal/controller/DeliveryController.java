@@ -85,6 +85,7 @@ public class DeliveryController {
         return this.service.getDeliveryManInfo(username);
     }
 
+    //Resuelve el punto 10
     @GetMapping(path = "/deliveryMan/bestTen")   //tested_ok
     public List<DeliveryMan> getBestTenDeliveryMan(){
         return this.service.getBestDeliveryMan(10);
@@ -108,11 +109,13 @@ public class DeliveryController {
         return this.service.getOrdersWithMaxItems(supplier, size);
     }
 
+    //Resuelve el punto 8
     @GetMapping(path = "/order/maxItems/supplier/{supplier}")
     public List<Order> getOrdersWithMaxItems(@PathVariable String supplier) throws DeliveryException {
         return this.service.getOrdersWithMaxItems(supplier, 1);
     }
 
+    //Resuelve el punto 9
     @GetMapping(path = "/order/maxTotalPrice/inDate/{date}")
     public Order getOrderWithMaxItems(@PathVariable String date) throws DeliveryException {
         return this.service.getOrderMaxPriceInDate(date);
@@ -132,6 +135,7 @@ public class DeliveryController {
         return this.service.refuseOrder(number);
     }
 
+    //Resuelve el punto 1
     @PutMapping(path = "/order/{number}/addItem")
     public Order addItem(@PathVariable ObjectId number, @RequestBody Item item) throws DeliveryException {
         return this.service.addItem(number, item);
@@ -141,6 +145,7 @@ public class DeliveryController {
         return this.service.cancelOrder(number);
     }
 
+    //Resuelve el punto 2
     @PutMapping(path = "/order/{number}/confirm")
     public DeliveryMan confirmOrder(@PathVariable ObjectId number) throws DeliveryException{
         return this.service.confirmOrder(number);
@@ -154,26 +159,30 @@ public class DeliveryController {
         return this.service.finishOrder(number);
     }
 
-    @PostMapping(path = "/order/{number}/qualify")
+    //Resuelve el punto 3
+    @PutMapping(path = "/order/{number}/qualify")
     public Order qualifyOrder(@PathVariable ObjectId number, @RequestBody Qualification qualification) throws DeliveryException {
         return this.service.qualifyOrder(number, qualification);
     }
 
+    //Resuelve el punto 4
     @PutMapping(path = "/product/{id}")  // ok
     public Product editProduct(@PathVariable ObjectId id, @RequestBody Product product) throws DeliveryException{
         return this.service.editProduct(id, product);
     }
 
+    //Resuelve el punto 7
     @GetMapping(path = "/product/bySupplier/{id}")
     public List<Product> getProductBySupplier(@PathVariable ObjectId id){
         return this.service.getProductBySupplier(id);
 
     }
-    @GetMapping(path = "/product/producttype/{id}")
+    @GetMapping(path = "/product/productType/{id}")
     public List<Product> getProductByProductTypeId(@PathVariable ObjectId id){
         return this.service.getProductByProductTypeId(id);
     }
 
+    //Resuelve el punto 5
     @DeleteMapping(path = "/product/{id}")
     public void deleteProduct(@PathVariable ObjectId id) throws DeliveryException{
         this.service.deleteProduct(id);
@@ -210,7 +219,8 @@ public class DeliveryController {
         return this.service.getProductTypeById(id);
     }
 
-    @GetMapping(path = "/supplier/byTpe/{id}")
+    //Resuelve el punto 6
+    @GetMapping(path = "/supplier/byType/{id}")
     public List<Supplier> getSupplierByType(@PathVariable ObjectId id){
         return this.service.getSupplierByType(id);
 
@@ -220,6 +230,7 @@ public class DeliveryController {
         return this.service.getSupplierById(id);
     }
 
+    //Resuelve el punto 11
     @GetMapping(path = "/supplier/bestTenDispatchers")
     public List<Supplier> getBestTenDispatchersSupplier() throws DeliveryException {
         return this.service.getBestFirstsDispatchersSupplier(10);
@@ -235,11 +246,13 @@ public class DeliveryController {
         return this.service.getHistoricalProductPriceByProductId(id);
     }
 
+    //Resuelve el punto 12
     @GetMapping(path = "/product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}")
     public List<HistoricalProductPrice> getHistoricalProductPriceBetweenDates(@PathVariable ObjectId id, @PathVariable String startDateStr, @PathVariable String finishDateStr) throws DeliveryException {
         return this.service.getHistoricalProductPriceBetweenDates(id, startDateStr, finishDateStr);
 
     }
+    //Resuelve el punto 13
     @GetMapping(path = "/product/averagePrices/for/allTypes")
     public List<ArrayList> getAverageProductTypePrices() throws DeliveryException {
         return  this.service.getAverageProductTypePrices();
@@ -256,11 +269,13 @@ public class DeliveryController {
         return this.service.getProductTypeFindAll();
     }
 
+    //Resuelve el punto 15
     @GetMapping(path = "/supplier/allProductTypes")
     public List<Supplier> getSupplierProvidingAllProductType(){
         return this.service.getSupplierProvidingAllProductType();
     }
 
+    //Resuelve el punto 14
     @GetMapping(path = "/supplier/qualification/hasAtLeast/{stars}")
     public List<Supplier>  getSupplierByQualificationValue(@PathVariable Float stars){
         return this.service.getSupplierByQualificationValue(stars);

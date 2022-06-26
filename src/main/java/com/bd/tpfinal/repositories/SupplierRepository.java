@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,10 +31,13 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
 
      //   @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
         @Aggregation(pipeline = {
-                "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'supplierOrders'}}",
-                "{'$match':{'qualification':{'$gte':6}}}",
-                "{'$project? :{'_id' : 1,'qualification':1,'calificaciones':{'$size':'$supplierOrders'}}}"
+                "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'order'}}",
+                "{'unwind' : { path: '$order' } }",
+                "{'addFields' : { score: '$order.qualification.score' } }",
+                "{'$match':{'score':{'$lte': ?0}}}",
+                "{'$project' :{'_id' : 1,'qualification':1,'calificaciones':{'$size':'$supplierOrders'}}}",
+                "{ _id:'$_id', count: { $count: {} } }"
         })
 
-        List<ObjectId> findByScoreLessThanEqual(@Param("score") Float score);
+        List<ArrayList> findByScoreLessThanEqual(Float score);
 }

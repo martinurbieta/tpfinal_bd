@@ -81,39 +81,39 @@ El proyecto entregado deberá tener en cuenta los siguientes puntos:
 
 Se deberán implementar en la aplicación endpoints para realizar las siguientes acciones: 
 
-BV Agregar un ítem a una orden ya creada.
+1 BV Agregar un ítem a una orden ya creada.
 
-BV Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+2 BV Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
 
-BV Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
+3 BV Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
 
   actualizar la calificación del proveedor.
 
-B= Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+4 B= Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
 
-M= Eliminar un producto de los ofrecidos por un proveedor.
+5 M= Eliminar un producto de los ofrecidos por un proveedor.
 
-M= Obtener todos los proveedores de un cierto tipo.
+6 M= Obtener todos los proveedores de un cierto tipo.
 
-M= Obtener todos los productos y su tipo, de un proveedor específico.
+7 M= Obtener todos los productos y su tipo, de un proveedor específico.
 
-BV - Obtener las órdenes con más productos de un proveedor específico.
+8 BV - Obtener las órdenes con más productos de un proveedor específico.
 
-B= - Obtener la orden de mayor precio total de un día dado.
+9 B= - Obtener la orden de mayor precio total de un día dado.
 
-B= - Obtener los diez repartidores con mayor puntaje.
+10 B= - Obtener los diez repartidores con mayor puntaje.
 
-BV - Obtener los diez proveedores que más órdenes despacharon.
+11 BV - Obtener los diez proveedores que más órdenes despacharon.
 
-BV - Obtener los precios de un producto entre dos fechas dadas.
+12 BV - Obtener los precios de un producto entre dos fechas dadas.
 
-MV - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+13 MV - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
-MX - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
+14 MX - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
 
   proveedor posee.
 
-MX - Obtener los proveedores que ofrezcan productos de todos los tipos.
+15 MX - Obtener los proveedores que ofrezcan productos de todos los tipos.
 
 El uso de test para verificar el correcto funcionamiento del servicio creado es opcional.
 
