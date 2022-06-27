@@ -109,11 +109,11 @@ Se deberán implementar en la aplicación endpoints para realizar las siguient
 
 13 MV - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
 
-14 MX - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
+14 MV - Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el
 
   proveedor posee.
 
-15 MX - Obtener los proveedores que ofrezcan productos de todos los tipos.
+15 MV - Obtener los proveedores que ofrezcan productos de todos los tipos.
 
 El uso de test para verificar el correcto funcionamiento del servicio creado es opcional.
 

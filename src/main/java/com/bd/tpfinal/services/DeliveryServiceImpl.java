@@ -625,18 +625,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> getSupplierByQualificationValue(Float stars) {
-        List<ArrayList> ids = this.supplierRepository.findByScoreLessThanEqual(stars);
-        (List<Supplier>) this.supplierRepository.findAllById(ids);
-        //SIGO
-        List<ArrayList> tiposConPromedio = this.productRepository.findAllAveragePriceGroupByProductType();
-        ArrayList<ArrayList> resultado = new ArrayList <ArrayList>();
-        for (ArrayList tipoConPromedio : tiposConPromedio) {
-            ArrayList<Object> elemento = new ArrayList<>();
-            elemento.add (this.productTypeRepository.findById((ObjectId) ((DBRef) tipoConPromedio.get(0)).getId()).orElse(null));
-            elemento.add(new DecimalFormat("#.##").format(tipoConPromedio.get(1)));
-            resultado.add(elemento);
-        }
-        return resultado;
+    public List<ArrayList>   getSupplierByQualificationValue(Float stars) {
+        return this.supplierRepository.findByScoreLessThanEqual(stars);
     }
 }

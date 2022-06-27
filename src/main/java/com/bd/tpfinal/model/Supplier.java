@@ -38,8 +38,9 @@ public class Supplier {
     @Field
     private float qualification;
 
-    @BsonIgnore
+
     @DBRef
+    @BsonIgnore
     private List<Product> products;
 
     @DBRef
