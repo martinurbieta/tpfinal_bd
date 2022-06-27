@@ -1,0 +1,56 @@
+{
+    "order/order:5/addItem" : [
+	    {
+	        "quantity": 2,
+	        "description": "producto agregado 1",
+	        "product": {
+	            "id": 14
+	        }
+	    }
+    ],
+    "order/order:10/addItem" : [
+	    {
+	        "quantity": 2,
+	        "description": "producto agregado 2",
+	        "product": {
+	            "id": 12
+	        }
+	    }
+    ],
+    "order/order:15/addItem" : [
+	    {
+	        "quantity": 2,
+	        "description": "producto agregado 3",
+	        "product": {
+	            "id": 15
+	        }
+	    }
+    ],
+    "order/order:1/confirm" : [ 
+    	{} 
+    ],
+    "order/order:2/confirm" : [ 
+    	{} 
+    ],
+    "order/order:2/deliver" : [ 
+    	{} 
+    ],
+    "order/order:2/qualify" : [
+	    {
+	        "score": 5,
+	        "commentary": "se califico la orden"
+	    }
+    ],
+    "order/order:2/finish" : [ 
+    	{} 
+    ],
+    "product/product:1" : [
+    	{ 
+		    "name" : "Nombre nuevo", 
+		    "price" : 1750.04, 
+		    "weight" : 201.70, 
+		    "description" : "se modifico el nombre del producto", 
+		    "supplier" : { "id" : 14 }
+		}
+	]
+}

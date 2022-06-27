@@ -96,8 +96,9 @@ y los curl post
 
 En esta segunda parte, se ha implementado la solución Mongo.
 Se utilizó Robot 3T para operar las collecciones y Postman para evaluar los endpoints.
+La plataforma IDE utilizada fue IntelliJ IDEA Community Edition.
 
-####Modificaciones realizadas
+####Adaptaciones realizadas
 
 Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de las configuraciones en _POM_:
 - Adecucaión de annotations:
@@ -108,28 +109,42 @@ Sobre la base del modelo JPA, se realizaron los siguientes cambios, aparte de la
 - Adecuación de modelo, repositorios y servicios:
   - El cambio de ID de Long a **ObjectID**, implica los ajustes respectivos a los getters, repositorios y servicios.
 
-####Docker
+####Setup Docker
 
-Instalación docker en Ubuntu
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
-####Docker Mongo
-**permite correr docker sin estar loggeado**
+- Se procedió a la instalación de docker en Ubuntu según lo indicado en el siguiente enlace
+
+`https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es`
+
+- El siguiente comando permite correr docker sin estar loggeado
+
 `sudo chmod 666 /var/run/docker.sock`
-**Montado y ejecutado de imagen Mongo, persistiendo en carpeta local las colecciones**
-`docker run --name mongo-container -v /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/data:/data/db -p 27017:27017 -d mongo:latest`
-**Listado de imagenes**
-`docker images`
-**Estados**
-`docker ps`
-**Detener imagen**
-`docker stop mongo-container`
-**Remover imagen**
-`docker rm -f IdImagen`
-**Inspección**
-`docker inspect mongo`
-`sudo systemctl start mongod`
-**Browse imagen**
-`docker exec -it mongo-container bash`
+
+- Montado y ejecución de imagen Mongo, persistiendo en carpeta local las colecciones. El comando debe ejecutarse estando en la carpeta *./tpfinal_bd_Mongo/data* que es la que se persistirá. 
+`docker run --name mongo-container -v $(pwd):/data/db -p 27017:27017 -d mongo:latest`
+
+- Para poder realizar commits de las colecciones, se debió desproteger la carpeta:
+`sudo chmod 777 -R /home/martinurbieta/develp/BaseDatos2021/tpfinal_bd_Mongo/data`
+
+- Otros comandos útiles para docker:
+ 
+    **Listado de imagenes**
+    `docker images`
+ 
+    **Estados**
+    `docker ps`
+
+    **Detener imagen**
+    `docker stop mongo-container`
+
+    **Remover imagen**
+    `docker rm -f IdImagen`
+    
+    **Inspección**
+    `docker inspect mongo`
+    `sudo systemctl start mongod`
+    
+    **Browse imagen**
+    `docker exec -it mongo-container bash`
 
 
 
@@ -140,6 +155,7 @@ El docker se vincula al localhost de la machine con el flag *--add-host=host.doc
 
 `docker run --name="apache_server" --rm --add-host=host.docker.internal:host-gateway -v $(pwd):/app/ php:7.4-apache php /app/curlpost_host.docker.internal.php /app/tpfinaldata.json
 `
+
 El siguiente comando permite identificar el IP de la maquina para poder comunicar el docker con el local host
 `ip addr show docker0 | grep -Po 'inet \K[\d.]+'
 `Para el caso particular, correspondió el *IP 172.17.0.1* y en el archivo PHP correspondía cambiar el endpoint a *'http://172.17.0.1:8081/api/'*
@@ -155,85 +171,33 @@ se puede verificar el host
 
 Un cambio importante, ha sido el manejo del ObjectID, que para compatibilizarlo con el browser, debía ser transformado a string o bien ser levantado en el modelo como DBRef new ObjectID.
 
-Las intervensiones han sido principalmente en los queries de repositorios especificos de SQL, que han sido adaptados a NOSQL, interviniendose en XX de XX requisitos.
+Las intervenciones han sido principalmente en los queries de repositorios específicos de SQL, que han sido adaptados a NOSQL, interviniéndose en 5 de 15 requisitos, sin considerar cambios propios de ObjectID o comentar código. Los queries de MongoDB eran probados previamente en Robo 3T y luego implementados en el sistema, requiriendose ajustes de sintaxis con el uso de comillas.
 
-Nos encontramos con situaciones en que el mismo query ejecutado en MongoDB emitia una salida que satisfacía el requisito. Sin embargo, se optó por intervenir de forma tal de minimizar los cambios en el código, de forma tal que pueda volverse de Mongo a JPA con la menor cantidad de modificaciones o refactoring. Este critero puede no ser el más performante, pero permitiría asegurar una hipotetica continuidad en el pipeline de la aplicación, sin realizar parsings adicionales. Sin embargo, existe una salvedad indicada y justificada.
+Nos encontramos con situaciones en que el mismo query ejecutado en MongoDB emitía una salida que satisfacía el requisito. Sin embargo, se optó por intervenir de forma tal de minimizar los cambios en el código, de forma tal que pueda volverse de Mongo a JPA con la menor cantidad de modificaciones o refactoring. Este critero puede no ser el más performante al no aprovechar en mayor medida las consultas de MongoDB, pero permitiría asegurar una hipotetica continuidad en el pipeline de la aplicación, sin realizar parsings adicionales. Sin embargo, existe una salvedad indicada y justificada.
 
-##### Requisitos
-• Agregar un ítem a una orden ya creada
+##### Requisitos de sistema - Intervenciones al pasar de JPA a MongoDB
+1 Agregar un ítem a una orden ya creada (=)
+Endpoint: `http://localhost:8081/api/order/{number}/addItem`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
 
-X Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
-
----------------------------------
-X Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá
-
-actualizar la calificación del proveedor.
-
------------------------------
-X Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
-
-------------------------------------
-X Eliminar un producto de los ofrecidos por un proveedor.
-Endpoint: `http://localhost:8081/api/product/{id}`
-Test case: `http://localhost:8081/api/product/62a3847a0b361a202e89576e`
-Sin cambios. Borra de colección el producto, pero mantiene las referencias es items, lo cual es consistente a mi entender para mantener registro del item (producto) vendido..
---------------------------------------
-X Obtener todos los proveedores de un cierto tipo.
-Endpoint: `http://localhost:8081/api/supplier/byTpe/{id}`
-Test case: `http://localhost:8081/api/supplier/byTpe/62a384790b361a202e8956ba`
-Sin cambios.
---------------------------------------
-X Obtener todos los productos y su tipo, de un proveedor específico.
-endpoint: `http://localhost:8081/api/product/bySupplier/{id}`
-test case:  `http://localhost:8081/api/product/bySupplier/62a384790b361a202e89572c`
--------------------
-
-X - Obtener las órdenes con más productos de un proveedor específico.
-
--------------------
-
-X - Obtener la orden de mayor precio total de un día dado.
-Endpoint: `http://localhost:8081/api/order/maxTotalPrice/inDate/{date}`
-test case: `http://localhost:8081/api/order/maxTotalPrice/inDate/2022-06-10`
-
-Nota: sin intervenir solución JPA para Mongo.
-
-----------------------
-
-
-X - Obtener los diez repartidores con mayor puntaje.
-Endpoint and test: `http://localhost:8081/api/deliveryMan/bestTen`
-Nota: sin intervenir solución JPA para Mongo.
------------------------
-
-X - Obtener los diez proveedores que más órdenes despacharon.
-endopoint and test: `http://localhost:8081/api/supplier/bestTenDispatchers` 
-Nota: adecuó el query SupplierRepository de SQL a Mongo.
 ----------------
-
-X - Obtener los precios de un producto entre dos fechas dadas.
-endpoint: `http://localhost:8081/api//product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}` Not crashing.
-testcase: `http://localhost:8081/api/product/62a3847a0b361a202e895784/historicalPrice/betweenDates/2021-06-08/2023-06-11`
-Nota: Sin cambios en relación a la versión JPA.
------------------
-X - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
-Enpoint and test : `http://localhost:8081/api/product/averagePrices/for/allTypes` 
-Se debió adecuar el query del repositorio en ProductRepository. Se mantuvo el código en la implementaciń del servicio.
-
--------------------
-- Obtener la información de los proveedores que tengan al menos una calificación de unaestrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
-
-No se requirió ajustes en el endpoint
-`http://localhost:8081/api/order/{number}}/qualify`
+2 Confirmar un pedido. Esto implica buscar un repartidor libre y asignarle dicho pedido.
+Endpoint: `http://localhost:8081/api/order/{number}/confirm`
+Se intervino la implementación del servicio y el repositorio, unificando dos SQL queries en un sólo query de MongoDB
+`countByFreeTrueAndActiveTrue` + `findByFreeTrueAndActiveTrue` -> `findRandomlyByFreeTrueAndActiveTrue`
+---------------------------------
+3 Añadir una calificación a una orden ya completada. Tenga en cuenta que deberá actualizar la calificación del proveedor.
+Endpoint: `http://localhost:8081/api/order/{number}/qualify`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
 
 Test Qualify
 1) Estado: Orden Confirmada:
-`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/confirm`
+   `http://localhost:8081/api/order/62a3847a0b361a202e8957cc/confirm`
 2) Estado: Orden Entregada:
-`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/deliver`
+   `http://localhost:8081/api/order/62a3847a0b361a202e8957cc/deliver`
 3) Calificar orden completada:
-`http://localhost:8081/api/order/62a3847a0b361a202e8957cc/qualify
-`
+   `http://localhost:8081/api/order/62a3847a0b361a202e8957cc/qualify
+   `
 
 Body califiacación.
 
@@ -242,15 +206,75 @@ Body califiacación.
 "commentary": "alles goede"
 }`
 
+
+-----------------------------
+4 Actualizar los datos de un producto. Tenga en cuenta que puede cambiar su precio.
+Endpoint: `http://localhost:8081/api/product/{id}`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
+------------------------------------
+5 Eliminar un producto de los ofrecidos por un proveedor.
+Endpoint: `http://localhost:8081/api/product/{id}`
+Test case: `http://localhost:8081/api/product/62a3847a0b361a202e89576e`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
+Borra de colección el producto, pero mantiene las referencias en items, lo cual es consistente a mi entender para mantener registro del item (producto) vendido.
+
+--------------------------------------
+6 Obtener todos los proveedores de un cierto tipo.
+Endpoint: `http://localhost:8081/api/supplier/byTpe/{id}`
+Test case: `http://localhost:8081/api/supplier/byTpe/62a384790b361a202e8956ba`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
+--------------------------------------
+7 Obtener todos los productos y su tipo, de un proveedor específico.
+endpoint: `http://localhost:8081/api/product/bySupplier/{id}`
+test case:  `http://localhost:8081/api/product/bySupplier/62a384790b361a202e89572c`
+No se debió intervenir, salvo la gestión del ID long por ObjectID.
+-------------------
+
+8 - Obtener las órdenes con más productos de un proveedor específico.
+endpoint: `http://localhost:8081/api/order/maxItems/supplier/{supplier}`
+Se intervino el query SQL en OrderRepository para migrarlo a MongoDB. En el servicio respectivo, se intervino implementando DBRef.
+
+-------------------
+
+9 - Obtener la orden de mayor precio total de un día dado.
+Endpoint: `http://localhost:8081/api/order/maxTotalPrice/inDate/{date}`
+test case: `http://localhost:8081/api/order/maxTotalPrice/inDate/2022-06-10`
+Sin intervenir solución JPA para Mongo.
+
+----------------------
+
+10 - Obtener los diez repartidores con mayor puntaje.
+Endpoint and test: `http://localhost:8081/api/deliveryMan/bestTen`
+Nota: sin intervenir solución JPA para Mongo.
+-----------------------
+
+11 - Obtener los diez proveedores que más ordenes despacharon.
+endopoint and test: `http://localhost:8081/api/supplier/bestTenDispatchers`
+Se intervino el query SQL en SupplierRepository, optimizando su salida con MongoDB para evitar el parsing del `paging` implementado en JPA.
+
+----------------
+
+12 - Obtener los precios de un producto entre dos fechas dadas.
+endpoint: `http://localhost:8081/api//product/{id}/historicalPrice/betweenDates/{startDateStr}/{finishDateStr}` Not crashing.
+testcase: `http://localhost:8081/api/product/62a3847a0b361a202e895784/historicalPrice/betweenDates/2021-06-08/2023-06-11`
+Analizando el requisito, se modificó el servicio para atender fechas nulas, extrapolando el cambio retroactivo a JPA, y por lo tanto, ambas soluciones son compatibles.
+-----------------
+13 - Obtener el precio promedio de los productos de cada tipo, para todos los tipos.
+Enpoint and test : `http://localhost:8081/api/product/averagePrices/for/allTypes` 
+Se debió adecuar el query del repositorio en ProductRepository. Se mantuvo el código en la implementaciń del servicio.
+
+-------------------
+14 Obtener la información de los proveedores que tengan al menos una calificación de una estrella (la más baja). Es necesario también el número de estas calificaciones que el proveedor posee.
+
 endpoint: `http://localhost:8081/api/supplier/qualification/hasAtLeast/{stars}`
 testcase: `http://localhost:8081/api/supplier/qualification/hasAtLeast/8`
-Nota: se modificó el servicio, atento a que la solución JPA resultaba, si bien operativa, no satisfactoria a nuestro entender, aún contemplando que no se evalua performance en este trabajo.
+Nota: se modificó el servicio, atento a que la solución JPA resultaba, si bien operativa, no satisfactoria a nuestro entender, aún contemplando que no se evalúa performance en este trabajo.
 ------------------------
 
-X - Obtener los proveedores que ofrezcan productos de todos los tipos.
-`http://localhost:8081/api/supplier/allProductTypes`
+15 - Obtener los proveedores que ofrezcan productos de todos los tipos.
+endpoint:  `http://localhost:8081/api/supplier/allProductTypes`
 
-En la implementaión del servicio, debío comentarse parte del código del método getAllSuppliers() donde se inicializaba lazy en JPA con .size
+En la implementaión del servicio, debió comentarse parte del código del método getAllSuppliers() donde se inicializaba lazy en JPA con .size
 `
     @Override
     @Transactional(readOnly = true)
@@ -264,4 +288,9 @@ return suppliers;
 
 Con dicho cambio, el endpoint utilizado funcionó correctamente.
 endpoint y test: `http://localhost:8081/api/supplier/allProductTypes`
-Nota: el resultado con la colección actual [], atento a que ningun proveedor cumple con dicho requisito, sin embargo.
+Nota: el resultado con la colección actual [], atento a que ningún proveedor cumple con dicho requisito, sin embargo.
+
+#### Reflexiones
+El framework sin duda facilita el paso de una base de datos SQL a otra NOSQL como ser MongoDB, con conocimientos básicos, minimizando la intervención del código lo menos posible, atento a que uno de los integrantes del grupo no contaba con experiencia en Java, SQL o Mongo.
+La gestión de repositorios resulta amigable. Las mayores intervenciones se enfocaron en la migracioń de los queries espedificos de SQL a MongoDB, resultando intuitivo donde enfocar los ajustes.
+Una parte importante de la dedicación del TP fue establecer la dinámica para poblar la base de datos mediante cURL, donde el cambio de *ID* de *Long* a *ObjectID* requirió adaptarlo de SQL a MongoDB. 
