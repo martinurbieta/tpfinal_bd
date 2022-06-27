@@ -617,7 +617,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     stream()
                     .map(product -> product.getProductType())
                     .collect(Collectors.toSet());
-            if (allProductTypes.size()==productTypesInThisSupplier.size()){
+            if (allProductTypes.size()-0==productTypesInThisSupplier.size()){
                 suppliersProvidingAllProductTypes.add(supplier);}
               }
         return suppliersProvidingAllProductTypes;
