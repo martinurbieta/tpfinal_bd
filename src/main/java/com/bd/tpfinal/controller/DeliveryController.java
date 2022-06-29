@@ -143,7 +143,7 @@ public class DeliveryController {
         return this.service.finishOrder(number);
     }
 
-    @PostMapping(path = "/order/{number}/qualify")
+    @PutMapping(path = "/order/{number}/qualify")
     public Order qualifyOrder(@PathVariable Long number, @RequestBody Qualification qualification) throws DeliveryException {
         return this.service.qualifyOrder(number, qualification);
     }
@@ -158,6 +158,10 @@ public class DeliveryController {
         return this.service.editProduct(id, product);
     }
 
+    @PutMapping(path = "/product/{id}/addPrice/{price}")  // ok
+    public HistoricalProductPrice addPriceToProduct(@PathVariable Long id, @PathVariable Float price) throws DeliveryException {
+        return this.service.addPriceToProduct(id, price);
+    }
     @GetMapping(path = "/product/bySupplier/{id}")
     public List<Product> getProductBySupplier(@PathVariable Long id){
         return this.service.getProductBySupplier(id);
@@ -169,8 +173,8 @@ public class DeliveryController {
     }
 
     @DeleteMapping(path = "/product/{id}")
-    public void deleteProduct(@PathVariable Long id) throws DeliveryException{
-        this.service.deleteProduct(id);
+    public List<Object> deleteProduct(@PathVariable Long id) throws DeliveryException{
+        return this.service.deleteProduct(id);
     }
 
     @GetMapping(path = "/supplierType/{id}")  // tested_ok
@@ -198,13 +202,12 @@ public class DeliveryController {
         return this.service.createProduct(newProduct);
     }
 
-
     @GetMapping(path = "/productType/{id}") // tested_ok
     public ProductType getProductTypeById(@PathVariable Long id){
         return this.service.getProductTypeById(id);
     }
 
-    @GetMapping(path = "/supplier/byTpe/{id}")
+    @GetMapping(path = "/supplier/byType/{id}")
     public List<Supplier> getSupplierByType(@PathVariable Long id){
         return this.service.getSupplierByType(id);
 
@@ -256,7 +259,7 @@ public class DeliveryController {
     }
 
     @GetMapping(path = "/supplier/qualification/hasAtLeast/{stars}")
-    public List<Supplier>  getSupplierByQualificationValue(@PathVariable Float stars){
+    public List<ArrayList>  getSupplierByQualificationValue(@PathVariable Float stars){
         return this.service.getSupplierByQualificationValue(stars);
     }
 

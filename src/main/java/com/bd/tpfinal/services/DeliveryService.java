@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 
 public interface DeliveryService {
@@ -76,7 +75,7 @@ public interface DeliveryService {
 
     Item createItem(Item newsItem) throws DeliveryException;
 
-    void deleteProduct(Long id) throws DeliveryException;
+    List<Object> deleteProduct(Long id) throws DeliveryException;
 
     SupplierType createSupplierType(SupplierType newsSupplierType);
 
@@ -118,8 +117,8 @@ public interface DeliveryService {
 
      List<Supplier> getSupplierProvidingAllProductType();
 
-    List<Supplier> getSupplierByQualificationValue(Float stars);
+    List<ArrayList> getSupplierByQualificationValue(Float stars);
 
 
-
+    HistoricalProductPrice addPriceToProduct(Long id, Float price) throws DeliveryException;
 }

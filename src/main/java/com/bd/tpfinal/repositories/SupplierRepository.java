@@ -20,4 +20,6 @@ public interface SupplierRepository extends CrudRepository<Supplier, Long> {
         Page<Long> findBestDispatchersSupplierIds(Pageable pageable);
         @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
         List<Long> findByScoreLessThanEqual(@Param("score") Float score);
+        @Query(value = "SELECT count(o.id) FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE s.id = :id AND q.score <= :score GROUP BY s.id")
+        Long countScoreLessThanEqualBySupplier(Long id, Float score);
 }

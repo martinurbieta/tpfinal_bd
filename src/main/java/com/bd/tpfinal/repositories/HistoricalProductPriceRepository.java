@@ -17,5 +17,5 @@ public interface HistoricalProductPriceRepository extends CrudRepository<Histori
     public List<HistoricalProductPrice> findByProductId(Long anId);
     public void deleteByProductId (Long aIdProduct);
     public List<HistoricalProductPrice> findAllByStartDateBetweenAndProductId(Date startDate, Date finishDate, Long id);
-    public List<HistoricalProductPrice> findAllByFinishDateBetweenAndProductId(Date startDate, Date finishDate, Long id);
+    public List<HistoricalProductPrice> findAllByFinishDateBetweenAndProductIdAndIdNotIn(Date startDate, Date finishDate, Long id, List<Long> ids);
 }

@@ -31,7 +31,6 @@ public class Product {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-    @JsonIgnore
     @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
@@ -39,7 +38,6 @@ public class Product {
     @Column(name = "version")
     private int version;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "product_product_type",

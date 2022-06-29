@@ -2,6 +2,8 @@ package com.bd.tpfinal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +25,12 @@ public class HistoricalProductPrice {
     @Column(nullable = false, updatable = false)
     private Date startDate;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = true, updatable = false)
     private Date finishDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
 
