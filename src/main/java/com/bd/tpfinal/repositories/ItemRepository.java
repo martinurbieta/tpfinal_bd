@@ -10,4 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends MongoRepository<Item, ObjectId> {
+    public void deleteByProductId (ObjectId aIdProduct);
 }

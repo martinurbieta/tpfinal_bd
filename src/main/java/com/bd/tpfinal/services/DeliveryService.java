@@ -83,7 +83,7 @@ public interface DeliveryService {
 
     Item createItem(Item newsItem) throws DeliveryException;
 
-    void deleteProduct(ObjectId id) throws DeliveryException;
+    List<Object> deleteProduct(ObjectId id) throws DeliveryException;
 
     SupplierType createSupplierType(SupplierType newsSupplierType);
 
@@ -127,6 +127,6 @@ public interface DeliveryService {
 
     List<ArrayList> getSupplierByQualificationValue(Float stars);
 
-
+    HistoricalProductPrice addPriceToProduct(Long id, Float price) throws DeliveryException;
 
 }

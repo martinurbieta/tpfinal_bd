@@ -2,10 +2,10 @@
     "supplier/byType/supplierType:11" : [{}],
     "product/bySupplier/supplier:5" : [{}],
     "order/maxItems/supplier/supplier:9" : [{}],
-    "order/maxTotalPrice/inDate/2022-06-26" : [{}],
+    "order/maxTotalPrice/inDate/2022-06-30" : [{}],
     "deliveryMan/bestTen" : [{}],
     "supplier/bestTenDispatchers" : [{}],
-    "product/product:8/historicalPrice/betweenDates/2022-06-10/2022-06-30" : [{}],
+    "product/product:2/historicalPrice/betweenDates/2022-06-10/2022-06-30" : [{}],
     "product/averagePrices/for/allTypes" : [{}],
     "supplier/qualification/hasAtLeast/1" : [{}],
     "supplier/allProductTypes" : [{}]

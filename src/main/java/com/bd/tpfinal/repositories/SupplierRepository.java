@@ -31,8 +31,12 @@ public interface SupplierRepository extends MongoRepository<Supplier, ObjectId> 
 
      //   @Query(value = "SELECT s.id FROM Order o JOIN o.supplier s JOIN o.qualification q WHERE q.score <= :score GROUP BY s.id")
         @Aggregation(pipeline = {
-                "{'$match':{'qualification':{'$gte':?0 }}}",
-                "{'$group' :{_id:'$id' ,'resultado':{'$push':{'proveedor':{'$toString':'$_id'},'qualification':{'$round':['$qualification',2]},'calificadores':{'$size':'$supplierOrders'}}}}}"
+                "{'$lookup' : {'from' : 'order','localField' :'_id' ,'foreignField' : 'supplier.$id', 'as' : 'order'}}",
+                "{'$unwind' : { path: '$order' } }",
+                "{'$addFields' : { score: '$order.qualification.score' } }",
+                "{'$match':{'score':{'$lte': ?0}}}",
+                "{'$group' :{ _id : '$_id', 'cantidad' : { '$sum' : 1 }}}",
+                "{'$project' :{ 'result' : [ '$_id', '$cantidad' ] }}"
         })
 
         List<ArrayList>  findByScoreLessThanEqual(@Param("score") Float score);

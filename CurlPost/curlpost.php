@@ -57,6 +57,7 @@ class CurlResponse
 		$response = json_decode($content);
 		if (isset($response->status) && is_numeric($response->status) && $response->status >= 400) {
 			AppCurlPostOutput::getInstance()->saveFile('processed.json');
+			EntityTracer::getInstance()->saveFile('key.processed.json');
 			throw new Exception('Error al enviar '. json_encode($this->request, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES). ' a la direccion '.$this->url);
 		}
 		return $response;
@@ -101,7 +102,14 @@ class AppCurlPostOutput {
 	}
 }
 class EntityTracer {
+	static protected $instance;
 	protected $keys;
+	static function getInstance ($keys=[]) {
+		if (!self::$instance instanceof self) {
+            self::$instance = new self($keys);
+        }
+        return self::$instance;
+	}
 	function __construct ($keys) {
 		$this->keys = $keys;
 	}
@@ -166,7 +174,7 @@ class AppCurlPostClient {
 		$method = explode('.', $config['json']->file());
 		$this->method = strtoupper($method[0]);
 		$this->isValidMethod($this->method);
-		$this->tracker = new EntityTracer($this->getKeys($config['fileKeys']));
+		$this->tracker =  EntityTracer::getInstance($this->getKeys($config['fileKeys']));
 	}
 	function getKeys($fileKeys) {
 		if (!$fileKeys)

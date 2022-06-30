@@ -181,8 +181,8 @@ public class DeliveryController {
 
     //Resuelve el punto 5
     @DeleteMapping(path = "/product/{id}")
-    public void deleteProduct(@PathVariable ObjectId id) throws DeliveryException{
-        this.service.deleteProduct(id);
+    public List<Object> deleteProduct(@PathVariable ObjectId id) throws DeliveryException{
+        return this.service.deleteProduct(id);
     }
 
     @GetMapping(path = "/supplierType/{id}")  // tested_ok

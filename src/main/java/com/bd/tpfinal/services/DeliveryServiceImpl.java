@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -163,7 +164,16 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         return realUser;
     }
-    public void addHistoricalProductPrice(Product product, float price) throws DeliveryException {
+    public HistoricalProductPrice addPriceToProduct (ObjectId id, Float price) throws DeliveryException {
+        Product product = this.getProductById(id);
+        if (product != null) {
+            HistoricalProductPrice newPrice = this.addHistoricalProductPrice(product, price);
+            return newPrice;
+        } else {
+            throw new DeliveryException("No se encontró el producto");
+        }
+    }
+    public HistoricalProductPrice addHistoricalProductPrice(Product product, float price) throws DeliveryException {
         Date now = new Date();
         HistoricalProductPrice actualPrice = this.historicalProductPriceRepository.findFirstByProductIdOrderByStartDateDesc(product.getId()).orElse(null);
         if (actualPrice != null) {
@@ -171,7 +181,8 @@ public class DeliveryServiceImpl implements DeliveryService {
             actualPrice.setFinishDate(now);
             this.historicalProductPriceRepository.save(actualPrice);
             this.historicalProductPriceRepository.save(newPrice);
-        } else {
+            return newPrice;
+         } else {
             throw new DeliveryException("No se encontró el precio histórico");
         }
     }
@@ -413,9 +424,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = this.supplierRepository.findAll();
-        for (Supplier supplier : suppliers) {
-            supplier.getProducts().size();
-        }
         return suppliers;
     }
 
@@ -521,14 +529,24 @@ public class DeliveryServiceImpl implements DeliveryService {
         return true;
     }
 
+    public List<Object> devolverMensajeConObjeto(String mensaje, ObjectId id, MongoRepository<?, ObjectId> repository) throws DeliveryException {
+        Object element = repository.findById(id).orElse(null);
+        ArrayList<Object> resultado = new ArrayList<>();
+        resultado.add(mensaje);
+        resultado.add(element);
+        return resultado;
+    }
     @Override
-    @Transactional
-    public void deleteProduct(ObjectId id) throws DeliveryException {
+    @Transactional(rollbackFor = Exception.class)
+    public List<Object> deleteProduct(ObjectId id) throws DeliveryException {
         try {
-            this.productRepository.deleteById(id);
             this.historicalProductPriceRepository.deleteByProductId(id);
+            this.itemRepository.deleteByProductId(id);
+            List<Object> resultado = this.devolverMensajeConObjeto("Se ha borrado el producto:", id, this.productRepository);
+            this.productRepository.deleteById(id);
+            return resultado;
         } catch (Exception e) {
-            throw new DeliveryException(e.getMessage());
+            throw new DeliveryException("El producto que quiere borrar no existe o ya ha sido borrado.");
         }
     }
 
@@ -569,8 +587,11 @@ public class DeliveryServiceImpl implements DeliveryService {
             c.setTime(finishDate);
             c.add(Calendar.DATE, 1);
             c.add(Calendar.SECOND, -1);
-            List<HistoricalProductPrice> precios = this.historicalProductPriceRepository.findAllByStartDateBetweenAndProductId(startDate, finishDate, id);
-            precios.addAll(this.historicalProductPriceRepository.findAllByFinishDateBetweenAndProductId(startDate, finishDate, id));
+            List<HistoricalProductPrice> precios = this.historicalProductPriceRepository.findAllByStartDateBetweenAndProductId(startDate, c.getTime(), id);
+            List<ObjectId> ids = new ArrayList<ObjectId>();
+            for (HistoricalProductPrice precio : precios) ids.add(precio.getId());
+            precios.addAll(this.historicalProductPriceRepository.findAllByFinishDateBetweenAndProductIdAndIdNotIn(startDate, finishDate, id, ids));
+            Collections.sort(precios, Comparator.comparing(HistoricalProductPrice::getStartDate));
             return precios;
         } catch (ParseException exception) {
             throw new DeliveryException("Error en las fechas enviadas: " + exception.getMessage());
@@ -627,5 +648,10 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Transactional(readOnly = true)
     public List<ArrayList>   getSupplierByQualificationValue(Float stars) {
         return this.supplierRepository.findByScoreLessThanEqual(stars);
+    }
+
+    @Override
+    public HistoricalProductPrice addPriceToProduct(Long id, Float price) throws DeliveryException {
+        return null;
     }
 }
