@@ -86,7 +86,27 @@ y los curl post
 
 [curlpost+jsons.zip](https://github.com/fedediclaudio/tpfinal_bd/files/8690097/curlpost%2Bjsons.zip)
 
+####Mapeos
+Al establecer los mapeos en JPA, se mantuvo en primer lugar la recomendación de la cursada respecto a la estrategia de recuperación  estableciendo en primer lugar un FetchType.LAZY, y evaluar posteriormente la necesidad de cambiar a FetchType.EAGER, en función de los resultados esperados en las consultas. De las trece (13) definiciones de FetchType, 4 se mantuvieron en LAZY y 9 debieron pasarse a EAGER.
 
+En el caso particular de la clase Order, se debió establecer para Ítems el modo en que se seleccionan los datos, estableciendo @Fetch(value = FetchMode.SUBSELECT).
+
+Las operaciones en cascada, por lo general se resolvieron con CascateType.MERGE,  es decir,  las entidades relacionadas se unirán al contexto de persistencia cuando la entidad propietaria se una. Se mantuvo este criterio en base a la API REST de ejemplo utilizada en clase.
+
+En dos ocasiones se resolvió con CascateType.ALL, donde se aplican todos los tipos de cascada.
+
+####Persistencia
+
+En relación a los patrones usualmente requeridos en persistencia, se optó por la utilización de Repositorio, que desde la perspectiva del cliente/usuario, debe verse o comportarse como una colección. Significa que debe admitir operaciones como agregar, eliminar, contener, etc.
+
+Para mantener simplicidad, no se implementó DTOs que operen con el repositorio.
+
+Los repositorios se implementaron extendiendo la interfaz CrudRepository que proporciona toda la funcionalidad CRUD. Éstos se diseñaron de forma que las consultas se resuelvan todas por el motor de la base de datos, para ello éstas se implementaron con Métodos de Consultas Derivadas o Custom Queries.
+
+La elección de esto fue la de priorizar la performance de la aplicación, ya que el esfuerzo de la recuperación de la información lo hace el motor de la base de datos de forma eficiente, en el caso de hacerlo desde la aplicación se debía realizar consultas que luego había que procesar, recuperando más información de la necesaria y que luego había que filtrar con esfuerzo de cómputo. En una aplicación de pocos registros es indistinto, pero cuando esa información crece cada vez es menos performante, incurriendo en más tiempo o más necesidad de hardware para mantener la calidad del servicio en tiempos tolerables.
+
+La implementación de los Métodos de Consultas Derivadas nos permitió no tener que reformular cuando se cambiara la base de datos ya que la conformación de la consulta lo hace el framework, siendo esta la mejor resolución. En los casos que se utilizaba las Custom Queries, se debe reformular la consulta cuando se cambiaba la base de datos, que si bien conlleva tener que tocar la aplicación, esa modificación era fácilmente trazable, siendo la tarea tan sencilla como buscar donde estaba la anotación @Query/@Aggregation (según el caso) y reemplazandolo con la consulta correspondiente al motor que se va a utilizar, teniendo luego una aplicación que en su performance no iba a ser reducida.
+Como para tener una idea del impacto de actualización en el cambio de la base de datos, de 25 consultas sólo 5 se tuvieron que actualizar, que en cantidad y en porcentaje es poco en relación de la búsqueda de performance.
 
 
 [^1]: https://github.com/fedediclaudio/delivery_bd notificado por Ideas el 22/10/21
@@ -97,6 +117,12 @@ y los curl post
 En esta segunda parte, se ha implementado la solución Mongo.
 Se utilizó Robot 3T para operar las collecciones y Postman para evaluar los endpoints.
 La plataforma IDE utilizada fue IntelliJ IDEA Community Edition.
+
+####Mapeos
+
+En mongo, las relaciones fueron resueltas con @DBRef, que son resueltas como EAGER en forma predeterminada, aunque no se especificó lo contrario ( @DBRef(lazy=false) ), ya que el objeto mapeado que se ve igual que si hubiera estado almacenado incrustado (embedded) en nuestro documento maestro.
+
+En relación a implementar embedded al insertar una relación como documento estático, se prefirió mantener un comportamiento similar a la solución JPA. Un conocimiento más profundo de los alcances de la API REST favorecen establecer la conveniencia o no de embedded los documentos o no.
 
 ####Adaptaciones realizadas
 
