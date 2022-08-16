@@ -1,0 +1,184 @@
+{
+"supplier" : [
+	{
+		"address": "Ap #764-2753 Felis. Rd.",
+		"coordX": "47.8619834368",
+		"coordY": "-116.9019265024",
+		"cuit": "30-95066483-2",
+		"name": "Sean Henderson",
+		"qualification": 2.34,
+		"supplierType": { "id" : 573 }
+	},
+	{
+		"address": "357-994 Aliquam St.",
+		"coordX": "72.184464384",
+		"coordY": "-159.54728192",
+		"cuit": "30-20788443-2",
+		"name": "Reuben Orr",
+		"qualification": 6.73,
+		"supplierType": { "id" : 568 }
+	},
+	{
+		"address": "P.O. Box 837, 5309 Eleifend Ave",
+		"coordX": "85.7401880576",
+		"coordY": "-65.9089067008",
+		"cuit": "30-82143233-8",
+		"name": "Garth Mendoza",
+		"qualification": 6.59,
+		"supplierType": { "id" : 567 }
+	},
+	{
+		"address": "550-8599 Orci St.",
+		"coordX": "-56.745893888",
+		"coordY": "140.4464514048",
+		"cuit": "30-46598276-2",
+		"name": "Melodie Albert",
+		"qualification": 9.52,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "Ap #952-5235 Ac Avenue",
+		"coordX": "14.3287386112",
+		"coordY": "64.0611260416",
+		"cuit": "30-63826492-1",
+		"name": "Finn Herring",
+		"qualification": 1.30,
+		"supplierType": { "id" : 565 }
+	},
+	{
+		"address": "Ap #308-4103 Eros. St.",
+		"coordX": "-74.0192172032",
+		"coordY": "-158.352592384",
+		"cuit": "30-54464581-4",
+		"name": "Paul Matthews",
+		"qualification": 7.12,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "122-9760 Lorem, Road",
+		"coordX": "-24.0902746112",
+		"coordY": "-30.9453674496",
+		"cuit": "30-68353438-1",
+		"name": "Lucius York",
+		"qualification": 5.23,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "Ap #254-2362 Eu Avenue",
+		"coordX": "-25.6824822784",
+		"coordY": "-16.0963846144",
+		"cuit": "30-22735452-5",
+		"name": "Ryan Buck",
+		"qualification": 5.20,
+		"supplierType": { "id" : 570 }
+	},
+	{
+		"address": "Ap #419-2886 Semper Road",
+		"coordX": "11.2682172416",
+		"coordY": "-157.7037979648",
+		"cuit": "30-82686280-9",
+		"name": "Illana Webster",
+		"qualification": 1.34,
+		"supplierType": { "id" : 565 }
+	},
+	{
+		"address": "159-4405 Magna Avenue",
+		"coordX": "-19.4845734912",
+		"coordY": "-89.3395591168",
+		"cuit": "30-45209503-3",
+		"name": "Ella Oneil",
+		"qualification": 2.42,
+		"supplierType": { "id" : 571 }
+	},
+	{
+		"address": "Ap #764-2753 Felis. Rd.",
+		"coordX": "47.8619834368",
+		"coordY": "-116.9019265024",
+		"cuit": "30-95066483-2",
+		"name": "Sean Henderson",
+		"qualification": 2.34,
+		"supplierType": { "id" : 573 }
+	},
+	{
+		"address": "357-994 Aliquam St.",
+		"coordX": "72.184464384",
+		"coordY": "-159.54728192",
+		"cuit": "30-20788443-2",
+		"name": "Reuben Orr",
+		"qualification": 6.73,
+		"supplierType": { "id" : 568 }
+	},
+	{
+		"address": "P.O. Box 837, 5309 Eleifend Ave",
+		"coordX": "85.7401880576",
+		"coordY": "-65.9089067008",
+		"cuit": "30-82143233-8",
+		"name": "Garth Mendoza",
+		"qualification": 6.59,
+		"supplierType": { "id" : 567 }
+	},
+	{
+		"address": "550-8599 Orci St.",
+		"coordX": "-56.745893888",
+		"coordY": "140.4464514048",
+		"cuit": "30-46598276-2",
+		"name": "Melodie Albert",
+		"qualification": 9.52,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "Ap #952-5235 Ac Avenue",
+		"coordX": "14.3287386112",
+		"coordY": "64.0611260416",
+		"cuit": "30-63826492-1",
+		"name": "Finn Herring",
+		"qualification": 1.30,
+		"supplierType": { "id" : 565 }
+	},
+	{
+		"address": "Ap #308-4103 Eros. St.",
+		"coordX": "-74.0192172032",
+		"coordY": "-158.352592384",
+		"cuit": "30-54464581-4",
+		"name": "Paul Matthews",
+		"qualification": 7.12,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "122-9760 Lorem, Road",
+		"coordX": "-24.0902746112",
+		"coordY": "-30.9453674496",
+		"cuit": "30-68353438-1",
+		"name": "Lucius York",
+		"qualification": 5.23,
+		"supplierType": { "id" : 575 }
+	},
+	{
+		"address": "Ap #254-2362 Eu Avenue",
+		"coordX": "-25.6824822784",
+		"coordY": "-16.0963846144",
+		"cuit": "30-22735452-5",
+		"name": "Ryan Buck",
+		"qualification": 5.20,
+		"supplierType": { "id" : 570 }
+	},
+	{
+		"address": "Ap #419-2886 Semper Road",
+		"coordX": "11.2682172416",
+		"coordY": "-157.7037979648",
+		"cuit": "30-82686280-9",
+		"name": "Illana Webster",
+		"qualification": 1.34,
+		"supplierType": { "id" : 565 }
+	},
+	{
+		"address": "159-4405 Magna Avenue",
+		"coordX": "-19.4845734912",
+		"coordY": "-89.3395591168",
+		"cuit": "30-45209503-3",
+		"name": "Ella Oneil",
+		"qualification": 2.42,
+		"supplierType": { "id" : 571 }
+	}
+]
+}
