@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tpfinal_bd_JPA" />
         <module name="tpfinal" />
         <module name="tpfinal_bd" />
       </profile>
@@ -15,6 +16,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="tpfinal" options="-parameters" />
       <module name="tpfinal_bd" options="-parameters" />
+      <module name="tpfinal_bd_JPA" options="-parameters" />
     </option>
   </component>
 </project>

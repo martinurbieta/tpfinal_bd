@@ -26,6 +26,7 @@ com/bd/tpfinal/model/OrderStatus.class
 com/bd/tpfinal/services/DeliveryService.class
 com/bd/tpfinal/repositories/ProductRepository.class
 com/bd/tpfinal/model/Product.class
+com/bd/tpfinal/utils/ControllerExceptionHandler.class
 com/bd/tpfinal/repositories/OrderRepository.class
 com/bd/tpfinal/services/DeliveryServiceImpl$1.class
 com/bd/tpfinal/model/Client.class
